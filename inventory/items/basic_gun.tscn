@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cyhp1fclowct4"]
+
+[ext_resource type="Script" uid="uid://bbmpue6e5wyim" path="res://inventory/items/basic_gun.gd" id="1_4l3ef"]
+[ext_resource type="Texture2D" uid="uid://egeurjwiyx0o" path="res://icon.svg" id="2_yg028"]
+
+[node name="BasicGun" type="Node2D" unique_id=1566287180]
+script = ExtResource("1_4l3ef")
+metadata/_custom_type_script = "uid://d4nrfgk437v0g"
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=636612723]
+scale = Vector2(1, 0.31578946)
+texture = ExtResource("2_yg028")
+
+[node name="CooldownTimer" type="Timer" parent="." unique_id=171885978]
+wait_time = 0.2
+one_shot = true
