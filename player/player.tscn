@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://bbisusbmx1xg"]
+
+[ext_resource type="Script" uid="uid://chycswj4i15xl" path="res://player/player.gd" id="1_onrkg"]
+[ext_resource type="Script" uid="uid://d21uawntskjl" path="res://scripts/health_node.gd" id="2_g1dw6"]
+[ext_resource type="Script" uid="uid://cvckbnaop65w8" path="res://player/gun.gd" id="2_i3pqv"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_tlwt5"]
+radius = 4.0
+height = 8.0
+
+[sub_resource type="GDScript" id="GDScript_hqtel"]
+script/source = "extends MeshInstance2D
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dwbse"]
+radius = 4.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_aqk2v"]
+radius = 0.898
+height = 5.054
+
+[node name="Player" type="CharacterBody2D" unique_id=2021635855]
+script = ExtResource("1_onrkg")
+
+[node name="HealthNode" type="Node" parent="." unique_id=1005555752]
+script = ExtResource("2_g1dw6")
+metadata/_custom_type_script = "uid://d21uawntskjl"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1693923564]
+zoom = Vector2(2, 2)
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=1614150980]
+mesh = SubResource("SphereMesh_tlwt5")
+script = SubResource("GDScript_hqtel")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1424844302]
+shape = SubResource("CircleShape2D_dwbse")
+
+[node name="GunRotate" type="Node2D" parent="." unique_id=959357907]
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="GunRotate" unique_id=147589093]
+position = Vector2(3, 0)
+rotation = 1.5707964
+mesh = SubResource("CapsuleMesh_aqk2v")
+
+[node name="Gun" type="Marker2D" parent="GunRotate" unique_id=1980679244]
+position = Vector2(5, 0)
+script = ExtResource("2_i3pqv")
+
+[node name="CooldownTimer" type="Timer" parent="GunRotate/Gun" unique_id=990455896]
+wait_time = 0.3
+one_shot = true
