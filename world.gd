@@ -4,12 +4,19 @@ class_name World
 @onready var projectiles:Node2D = $Projectiles
 @onready var tilemap:TileMapLayer = $TileMapLayer
 
+@onready var enemy_movement:EntityMovement = $BasicEnemy/EntityMovement
+
 var astar := AStarGrid2D.new()
+
 
 var path:PackedVector2Array
 
+var other_path:PackedVector2Array
+
 func _ready() -> void:
 	setup_astar()
+
+	enemy_movement.set_target(Vector2(0, 0))
 
 func setup_astar():
 	var used_rect: Rect2i = tilemap.get_used_rect()
@@ -33,8 +40,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			var tilemap_end:Vector2i = tilemap.local_to_map(tilemap.get_local_mouse_position())
-			print(tilemap.get_local_mouse_position())
-			print(tilemap_end)
 			if path.is_empty():
 				path.append(tilemap_end)
 			else:
@@ -51,3 +56,16 @@ func _draw() -> void:
 			draw_line(point, path[i - 1] + Vector2(6, 6), Color.WHITE)
 
 		i += 1
+
+	i = 0
+	for point in other_path:
+		# point += Vector2(6, 6)
+		draw_circle(point, 2, Color.WHITE)
+		if i > 0:
+			draw_line(point, other_path[i - 1], Color.WHITE)
+
+		i += 1
+
+func draw_path(p:PackedVector2Array):
+	other_path = p
+	queue_redraw()

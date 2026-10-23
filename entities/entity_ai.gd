@@ -1,5 +1,5 @@
 extends Node
 class_name EntityAI
 
-func ai_update():
+func _ai_update():
 	pass

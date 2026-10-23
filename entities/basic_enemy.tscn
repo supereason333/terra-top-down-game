@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://c4j1livh1e7bi"]
+
+[ext_resource type="Script" uid="uid://d351llsyq56p4" path="res://entities/chase_ai.gd" id="1_xiaos"]
+[ext_resource type="Texture2D" uid="uid://egeurjwiyx0o" path="res://icon.svg" id="1_xnv5r"]
+[ext_resource type="Script" uid="uid://dnkbq0v4ul0ls" path="res://entities/entity_movement.gd" id="2_lwwv0"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_xiaos"]
+radius = 4.0
+height = 8.0
+
+[sub_resource type="GDScript" id="GDScript_lwwv0"]
+script/source = "extends MeshInstance2D
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_x3g6g"]
+radius = 4.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xiaos"]
+radius = 100.0
+
+[node name="BasicEnemy" type="RigidBody2D" unique_id=1694842887]
+collision_mask = 5
+linear_damp = 5.006
+
+[node name="ChaseAI" type="Node" parent="." unique_id=1836059770 node_paths=PackedStringArray("vision", "movement")]
+script = ExtResource("1_xiaos")
+vision = NodePath("../Area2D")
+movement = NodePath("../EntityMovement")
+
+[node name="EntityMovement" type="Node" parent="." unique_id=259640243]
+script = ExtResource("2_lwwv0")
+speed = 60.0
+force = 150.0
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=795723733]
+modulate = Color(1, 0, 0, 1)
+mesh = SubResource("SphereMesh_xiaos")
+script = SubResource("GDScript_lwwv0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1905739985]
+shape = SubResource("CircleShape2D_x3g6g")
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=202004061]
+position = Vector2(3, 0)
+scale = Vector2(0.21052632, 0.10526316)
+texture = ExtResource("1_xnv5r")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=360215132]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1880783119]
+shape = SubResource("CircleShape2D_xiaos")
