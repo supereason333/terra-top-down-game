@@ -16,7 +16,7 @@ var other_path:PackedVector2Array
 func _ready() -> void:
 	setup_astar()
 
-	enemy_movement.set_target(Vector2(0, 0))
+	# enemy_movement.set_target(Vector2(0, 0))
 
 func setup_astar():
 	var used_rect: Rect2i = tilemap.get_used_rect()
@@ -36,16 +36,16 @@ func setup_astar():
 func register_projectile(proj:Projectile):
 	projectiles.add_child(proj)
 
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			var tilemap_end:Vector2i = tilemap.local_to_map(tilemap.get_local_mouse_position())
-			if path.is_empty():
-				path.append(tilemap_end)
-			else:
-				path = astar.get_point_path(tilemap.local_to_map(path[path.size() - 1]), tilemap_end)
-				print(path)
-				queue_redraw()
+# func _unhandled_input(event: InputEvent) -> void:
+# 	if event is InputEventMouseButton:
+# 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+# 			var tilemap_end:Vector2i = tilemap.local_to_map(tilemap.get_local_mouse_position())
+# 			if path.is_empty():
+# 				path.append(tilemap_end)
+# 			else:
+# 				path = astar.get_point_path(tilemap.local_to_map(path[path.size() - 1]), tilemap_end)
+# 				print(path)
+				# queue_redraw()
 
 func _draw() -> void:
 	var i = 0

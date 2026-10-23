@@ -6,6 +6,7 @@ func _ready() -> void:
 	var update_timer := Timer.new()
 	update_timer.wait_time = 0.1
 	update_timer.autostart = true
+	update_timer.one_shot = false
 	update_timer.timeout.connect(update)
 	update_timer.name = "UpdateTimer"
 	add_child(update_timer)
@@ -24,4 +25,4 @@ func on_agent_exiting_tree(agent:EntityAI):
 
 func update():
 	for agent in agents:
-		agent.ai_update()
+		agent._ai_update()

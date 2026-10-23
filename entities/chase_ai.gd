@@ -14,11 +14,15 @@ var idle_move_timer:Timer
 func _ready() -> void:
 	if !vision:
 		printerr("Entity AI has no vision")
+		queue_free()
 		return
 	world = GameMngr.get_world()
 	if !world:
 		printerr("Entity AI cannot get world")
+		queue_free()
 		return
+	AiMngr.register(self)
+
 	vision.body_entered.connect(_on_body_entered_vision)
 	vision.body_exited.connect(_on_body_exited_vision)
 	var timer := Timer.new()
@@ -38,7 +42,11 @@ func _ready() -> void:
 
 func _ai_update():
 	if player:
-		pass
+		if movement.path.is_empty():
+			movement.set_target(player.position)
+		elif player.position.distance_squared_to(movement.path[movement.path.size() - 1]) >= 64: # 6^2 * 2
+			movement.set_target(player.position)
+			print("AWDAWDAWD")
 	else:
 		if idle_move_timer.is_stopped():
 			idle_move_timer.wait_time = randf_range(3, 10)
@@ -55,3 +63,4 @@ func _on_body_exited_vision(body:Node2D) -> void:
 
 func _on_out_of_vision_timeout() -> void:
 	player = null
+	movement.clear_path()
