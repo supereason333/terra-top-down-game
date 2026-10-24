@@ -65,6 +65,12 @@ inventory={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="physics"
+2d_physics/layer_2="player"
+2d_physics/layer_3="entities"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

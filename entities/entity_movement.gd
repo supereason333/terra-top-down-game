@@ -32,7 +32,7 @@ func set_path(p:PackedVector2Array):
 	path = p
 	# print("Path set to:")
 	# print(path)
-	world.draw_path(path)
+	# world.draw_path(path)
 	tracking_point = -1
 
 func set_target(targ:Vector2):
@@ -46,7 +46,7 @@ func set_target(targ:Vector2):
 
 func clear_path():
 	path.clear()
-	world.draw_path(path)
+	# world.draw_path(path)
 
 func _physics_process(_delta: float) -> void:
 	if path.is_empty(): return

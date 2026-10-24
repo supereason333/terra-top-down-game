@@ -13,15 +13,15 @@ func _ready() -> void:
 
 func register(agent:EntityAI):
 	agents.append(agent)
-	agent.child_exiting_tree.connect(on_agent_exiting_tree.bind(agent))
+	agent.tree_exiting.connect(on_agent_exiting_tree.bind(agent))
 
 func remove(agent:EntityAI):
 	agents.erase(agent)
-	agent.child_exiting_tree.disconnect(on_agent_exiting_tree)
+	agent.tree_exiting.disconnect(on_agent_exiting_tree)
 
 func on_agent_exiting_tree(agent:EntityAI):
 	agents.erase(agent)
-	agent.child_exiting_tree.disconnect(on_agent_exiting_tree)
+	agent.tree_exiting.disconnect(on_agent_exiting_tree)
 
 func update():
 	for agent in agents:

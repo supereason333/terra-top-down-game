@@ -46,7 +46,6 @@ func _ai_update():
 			movement.set_target(player.position)
 		elif player.position.distance_squared_to(movement.path[movement.path.size() - 1]) >= 64: # 6^2 * 2
 			movement.set_target(player.position)
-			print("AWDAWDAWD")
 	else:
 		if idle_move_timer.is_stopped():
 			idle_move_timer.wait_time = randf_range(3, 10)

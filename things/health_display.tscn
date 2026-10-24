@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://ce5760s4ch8ln"]
+
+[ext_resource type="Script" uid="uid://xx8d50ueill7" path="res://things/health_display.gd" id="1_d7hg3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rmb6n"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4s0qi"]
+bg_color = Color(0, 1, 0, 1)
+
+[node name="HealthDisplay" type="ProgressBar" unique_id=510401543 node_paths=PackedStringArray("health")]
+offset_left = -8.0
+offset_top = -10.0
+offset_right = 9.0
+offset_bottom = -6.0
+theme_override_styles/background = SubResource("StyleBoxFlat_rmb6n")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4s0qi")
+show_percentage = false
+script = ExtResource("1_d7hg3")
+health = NodePath("")
+metadata/_custom_type_script = "uid://xx8d50ueill7"

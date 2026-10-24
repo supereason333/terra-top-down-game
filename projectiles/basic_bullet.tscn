@@ -5,14 +5,15 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jjt3o"]
 size = Vector2(10, 2)
 
-[node name="BasicBullet" type="Node2D" unique_id=1896907163]
+[node name="BasicBullet" type="Node2D" unique_id=1896907163 node_paths=PackedStringArray("area")]
 script = ExtResource("1_2fakh")
 speed = 256
+area = NodePath("Area2D")
 metadata/_custom_type_script = "uid://2iocur7jh0g4"
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1377009390]
 collision_layer = 0
-collision_mask = 3
+collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1516343922]
 shape = SubResource("RectangleShape2D_jjt3o")

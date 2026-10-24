@@ -1,8 +1,11 @@
 [gd_scene format=3 uid="uid://c4j1livh1e7bi"]
 
-[ext_resource type="Script" uid="uid://d351llsyq56p4" path="res://entities/chase_ai.gd" id="1_xiaos"]
-[ext_resource type="Texture2D" uid="uid://egeurjwiyx0o" path="res://icon.svg" id="1_xnv5r"]
-[ext_resource type="Script" uid="uid://dnkbq0v4ul0ls" path="res://entities/entity_movement.gd" id="2_lwwv0"]
+[ext_resource type="Script" uid="uid://0ixytojx7jjt" path="res://entities/entity.gd" id="1_4qd2v"]
+[ext_resource type="Script" uid="uid://d351llsyq56p4" path="res://entities/chase_ai.gd" id="2_6if4x"]
+[ext_resource type="Script" uid="uid://dnkbq0v4ul0ls" path="res://entities/entity_movement.gd" id="3_e4w74"]
+[ext_resource type="Script" uid="uid://d21uawntskjl" path="res://scripts/health_node.gd" id="4_4n6jn"]
+[ext_resource type="Texture2D" uid="uid://egeurjwiyx0o" path="res://icon.svg" id="5_m7qsk"]
+[ext_resource type="PackedScene" uid="uid://ce5760s4ch8ln" path="res://things/health_display.tscn" id="6_oblg6"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_xiaos"]
 radius = 4.0
@@ -18,19 +21,26 @@ radius = 4.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_xiaos"]
 radius = 100.0
 
-[node name="BasicEnemy" type="RigidBody2D" unique_id=1694842887]
-collision_mask = 5
+[node name="BasicEnemy" type="RigidBody2D" unique_id=1562989671 node_paths=PackedStringArray("health_node")]
+collision_layer = 5
 linear_damp = 5.006
+script = ExtResource("1_4qd2v")
+health_node = NodePath("HealthNode")
+metadata/_custom_type_script = "uid://0ixytojx7jjt"
 
 [node name="ChaseAI" type="Node" parent="." unique_id=1836059770 node_paths=PackedStringArray("vision", "movement")]
-script = ExtResource("1_xiaos")
+script = ExtResource("2_6if4x")
 vision = NodePath("../Area2D")
 movement = NodePath("../EntityMovement")
 
 [node name="EntityMovement" type="Node" parent="." unique_id=259640243]
-script = ExtResource("2_lwwv0")
+script = ExtResource("3_e4w74")
 speed = 120.0
 force = 150.0
+
+[node name="HealthNode" type="Node" parent="." unique_id=2029076493]
+script = ExtResource("4_4n6jn")
+metadata/_custom_type_script = "uid://d21uawntskjl"
 
 [node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=795723733]
 modulate = Color(1, 0, 0, 1)
@@ -43,11 +53,15 @@ shape = SubResource("CircleShape2D_x3g6g")
 [node name="Icon" type="Sprite2D" parent="." unique_id=202004061]
 position = Vector2(3, 0)
 scale = Vector2(0.21052632, 0.10526316)
-texture = ExtResource("1_xnv5r")
+texture = ExtResource("5_m7qsk")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=360215132]
+visible = false
 collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1880783119]
 shape = SubResource("CircleShape2D_xiaos")
+
+[node name="HealthDisplay" parent="." unique_id=510401543 node_paths=PackedStringArray("health") instance=ExtResource("6_oblg6")]
+health = NodePath("../HealthNode")
