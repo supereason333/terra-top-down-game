@@ -12,6 +12,6 @@ func _use():
 		attack_disp.show()
 		get_tree().create_timer(0.1).timeout.connect(attack_disp.hide)
 
-		# for body in attack_area.get_overlapping_bodies():
-		# 	if body is Player:
-		#
+		for body in attack_area.get_overlapping_bodies():
+			if body is Player:
+				body.health_node.damage(10)

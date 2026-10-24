@@ -1,7 +1,7 @@
 extends Item2D
 
 @onready var cooldown_timer:Timer = $CooldownTimer
-
+@onready var shoot:Marker2D = $Shoot
 var world:World
 
 var firing := false
@@ -11,8 +11,8 @@ func _ready() -> void:
 
 func fire():
 	var proj:LinearProjectile = Projectiles.BASIC_BULLET.instantiate()
-	proj.position = global_position
-	proj.rotation = global_rotation
+	proj.position = shoot.global_position
+	proj.rotation = shoot.global_rotation
 	world.register_projectile(proj)
 
 func _use():
