@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://c4j1livh1e7bi"]
 
-[ext_resource type="Script" uid="uid://0ixytojx7jjt" path="res://entities/entity.gd" id="1_4qd2v"]
+[ext_resource type="Script" uid="uid://c2keo484icgua" path="res://entities/basic_enemy/basic_enemy.gd" id="1_4qd2v"]
 [ext_resource type="Script" uid="uid://d351llsyq56p4" path="res://entities/chase_ai.gd" id="2_6if4x"]
 [ext_resource type="Script" uid="uid://dnkbq0v4ul0ls" path="res://entities/entity_movement.gd" id="3_e4w74"]
 [ext_resource type="Script" uid="uid://d21uawntskjl" path="res://scripts/health_node.gd" id="4_4n6jn"]
+[ext_resource type="Script" uid="uid://5xdeiu0krqs0" path="res://inventory/inventory.gd" id="5_6if4x"]
 [ext_resource type="Texture2D" uid="uid://egeurjwiyx0o" path="res://icon.svg" id="5_m7qsk"]
 [ext_resource type="PackedScene" uid="uid://ce5760s4ch8ln" path="res://things/health_display.tscn" id="6_oblg6"]
+[ext_resource type="Script" uid="uid://dq8rc4gvg1cwg" path="res://inventory/equip_point.gd" id="8_e4w74"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_xiaos"]
 radius = 4.0
@@ -23,15 +25,19 @@ radius = 100.0
 
 [node name="BasicEnemy" type="RigidBody2D" unique_id=1562989671 node_paths=PackedStringArray("health_node")]
 collision_layer = 5
+lock_rotation = true
 linear_damp = 5.006
 script = ExtResource("1_4qd2v")
 health_node = NodePath("HealthNode")
 metadata/_custom_type_script = "uid://0ixytojx7jjt"
 
-[node name="ChaseAI" type="Node" parent="." unique_id=1836059770 node_paths=PackedStringArray("vision", "movement")]
+[node name="ChaseAI" type="Node" parent="." unique_id=1836059770 node_paths=PackedStringArray("vision", "movement", "rotate_node", "inventory", "equip_point")]
 script = ExtResource("2_6if4x")
 vision = NodePath("../Area2D")
 movement = NodePath("../EntityMovement")
+rotate_node = NodePath("../Rotate")
+inventory = NodePath("../Inventory")
+equip_point = NodePath("../Rotate/EquipPoint")
 
 [node name="EntityMovement" type="Node" parent="." unique_id=259640243]
 script = ExtResource("3_e4w74")
@@ -42,6 +48,13 @@ force = 150.0
 script = ExtResource("4_4n6jn")
 metadata/_custom_type_script = "uid://d21uawntskjl"
 
+[node name="Inventory" type="Node" parent="." unique_id=730460916 node_paths=PackedStringArray("equip_point")]
+script = ExtResource("5_6if4x")
+preload_inv = Array[StringName]([&"basic_knife"])
+equip_0 = true
+equip_point = NodePath("../Rotate/EquipPoint")
+metadata/_custom_type_script = "uid://5xdeiu0krqs0"
+
 [node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=795723733]
 modulate = Color(1, 0, 0, 1)
 mesh = SubResource("SphereMesh_xiaos")
@@ -49,11 +62,6 @@ script = SubResource("GDScript_lwwv0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1905739985]
 shape = SubResource("CircleShape2D_x3g6g")
-
-[node name="Icon" type="Sprite2D" parent="." unique_id=202004061]
-position = Vector2(3, 0)
-scale = Vector2(0.21052632, 0.10526316)
-texture = ExtResource("5_m7qsk")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=360215132]
 visible = false
@@ -65,3 +73,15 @@ shape = SubResource("CircleShape2D_xiaos")
 
 [node name="HealthDisplay" parent="." unique_id=510401543 node_paths=PackedStringArray("health") instance=ExtResource("6_oblg6")]
 health = NodePath("../HealthNode")
+
+[node name="Rotate" type="Node2D" parent="." unique_id=1857921105]
+
+[node name="Icon" type="Sprite2D" parent="Rotate" unique_id=202004061]
+position = Vector2(3, 0)
+scale = Vector2(0.21052632, 0.10526316)
+texture = ExtResource("5_m7qsk")
+
+[node name="EquipPoint" type="Marker2D" parent="Rotate" unique_id=475076235]
+position = Vector2(4, 0)
+script = ExtResource("8_e4w74")
+metadata/_custom_type_script = "uid://dq8rc4gvg1cwg"

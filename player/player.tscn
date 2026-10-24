@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://chycswj4i15xl" path="res://player/player.gd" id="1_onrkg"]
 [ext_resource type="Script" uid="uid://d21uawntskjl" path="res://scripts/health_node.gd" id="2_g1dw6"]
-[ext_resource type="Script" uid="uid://5xdeiu0krqs0" path="res://player/inventory.gd" id="3_yw30f"]
+[ext_resource type="Script" uid="uid://5xdeiu0krqs0" path="res://inventory/inventory.gd" id="3_yw30f"]
+[ext_resource type="Script" uid="uid://j7jn31174bm2" path="res://player/equip_point.gd" id="4_yw30f"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_tlwt5"]
 radius = 4.0
@@ -30,6 +31,7 @@ metadata/_custom_type_script = "uid://d21uawntskjl"
 [node name="Inventory" type="Node" parent="." unique_id=1657453317 node_paths=PackedStringArray("equip_point")]
 script = ExtResource("3_yw30f")
 preload_inv = Array[StringName]([&"basic_gun"])
+equip_0 = true
 equip_point = NodePath("../GunRotate/EquipPoint")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1693923564]
@@ -53,8 +55,10 @@ position = Vector2(3, 0)
 rotation = 1.5707964
 mesh = SubResource("CapsuleMesh_aqk2v")
 
-[node name="EquipPoint" type="Marker2D" parent="GunRotate" unique_id=2117085691]
+[node name="EquipPoint" type="Marker2D" parent="GunRotate" unique_id=1222505087]
 position = Vector2(5, 0)
+script = ExtResource("4_yw30f")
+metadata/_custom_type_script = "uid://dq8rc4gvg1cwg"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1291887443]
 
