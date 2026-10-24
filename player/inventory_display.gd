@@ -11,6 +11,10 @@ func _ready() -> void:
 	inventory.items_changed.connect(update_items)
 	update_items()
 
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("inventory"):
+		$"../../..".visible = !$"../../..".visible
+
 func update_items():
 	for child in get_children(): child.queue_free()
 	disps.clear()

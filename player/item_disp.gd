@@ -17,3 +17,5 @@ func _ready() -> void:
 	btn.button_pressed = selected
 	if item:
 		label.text = item.id
+		if item.amount > 1:
+			label.text += " [%d]" % item.amount

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://83dobecmdoxu" path="res://inventory/items/test_item.tscn" id="3_s37w5"]
 [ext_resource type="PackedScene" uid="uid://cyhp1fclowct4" path="res://inventory/items/basic_gun.tscn" id="4_vspku"]
 [ext_resource type="PackedScene" uid="uid://cp4i5fyo2minb" path="res://inventory/items/basic_knife.tscn" id="5_s37w5"]
+[ext_resource type="PackedScene" uid="uid://c6sg5hvl7msdm" path="res://inventory/items/magazine.tscn" id="6_uw0gs"]
 
 [sub_resource type="Resource" id="Resource_s37w5"]
 script = ExtResource("2_vspku")
@@ -24,10 +25,18 @@ display_name = "Knife"
 item_scene = ExtResource("5_s37w5")
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 
+[sub_resource type="Resource" id="Resource_tt642"]
+script = ExtResource("2_vspku")
+display_name = "Magazine"
+item_scene = ExtResource("6_uw0gs")
+stackable = true
+metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
+
 [node name="ItemManager" type="Node" unique_id=1794726547]
 script = ExtResource("1_vxptn")
 lib = Dictionary[StringName, ExtResource("2_vspku")]({
 &"basic_gun": SubResource("Resource_s37w5"),
 &"basic_knife": SubResource("Resource_hp0ml"),
+&"magazine": SubResource("Resource_tt642"),
 &"test_item": SubResource("Resource_uw0gs")
 })

@@ -6,7 +6,7 @@ signal item_removed(item:Item2D)
 signal equipped_changed(slot_new:int, slot_old:int)
 signal items_changed
 
-@export var preload_inv:Array[StringName]
+@export var preload_inv:Dictionary[StringName, int]
 @export var equip_0:bool = false
 @export var equip_point:EquipPoint
 
@@ -14,10 +14,12 @@ var inv:Array[Item2D]
 var equipped:int = -1
 
 func _ready() -> void:
-	for item in preload_inv:
+	for item in preload_inv.keys():
 		var itm := ItemMngr.get_item_node(item)
 		if itm:
-			inv.append(itm)
+			if itm.stackable:
+				itm.amount = preload_inv[item]
+			add_item(itm)
 		else:
 			print_debug("Item get node null")
 	# print("SIGNAL")
@@ -35,3 +37,18 @@ func set_equipped(slot:int):
 	equip_point.equip(inv[slot])
 	equipped_changed.emit(slot, equipped)
 	equipped = slot
+
+func add_item(new:Item2D):
+	if new.unique or !new.stackable:
+		inv.append(new)
+		item_added.emit(new)
+		items_changed.emit()
+		return
+	for item in inv:
+		if item.id == new.id and !item.unique:
+			item.amount += new.amount
+			items_changed.emit()
+			return
+	inv.append(new)
+	item_added.emit(new)
+	items_changed.emit()

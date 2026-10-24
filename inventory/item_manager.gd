@@ -8,5 +8,6 @@ func get_item_node(id:StringName) -> Item2D:
 		return null
 	var node:Item2D = item.item_scene.instantiate()
 	node.id = id
+	node.stackable = item.stackable
 
 	return node

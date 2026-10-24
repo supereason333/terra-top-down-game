@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://c6sg5hvl7msdm"]
+
+[ext_resource type="Script" uid="uid://dlpuqd28704dt" path="res://inventory/items/magazine.gd" id="1_4vetx"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_0htsh"]
+
+[node name="Magazine" type="Node2D" unique_id=2108815506]
+script = ExtResource("1_4vetx")
+metadata/_custom_type_script = "uid://d4nrfgk437v0g"
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=1939821077]
+modulate = Color(0.51, 0.51, 0.51, 1)
+mesh = SubResource("QuadMesh_0htsh")
