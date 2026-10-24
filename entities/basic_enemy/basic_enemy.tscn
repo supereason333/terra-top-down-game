@@ -81,7 +81,8 @@ position = Vector2(3, 0)
 scale = Vector2(0.21052632, 0.10526316)
 texture = ExtResource("5_m7qsk")
 
-[node name="EquipPoint" type="Marker2D" parent="Rotate" unique_id=475076235]
+[node name="EquipPoint" type="Marker2D" parent="Rotate" unique_id=475076235 node_paths=PackedStringArray("source")]
 position = Vector2(4, 0)
 script = ExtResource("8_e4w74")
+source = NodePath("../..")
 metadata/_custom_type_script = "uid://dq8rc4gvg1cwg"

@@ -11,6 +11,9 @@ extends EntityAI
 @export var direct_chase_radius := 16.0
 var direct_chase_radius_sq: float:
 	get(): return direct_chase_radius * direct_chase_radius
+@export var attack_radius := 10.0
+var attack_radius_sq: float:
+	get(): return attack_radius * attack_radius
 @export var attack_cooldown:float = 1.0
 
 
@@ -51,6 +54,7 @@ func _ready() -> void:
 	add_child(idle_move_timer)
 
 	attack_cooldown_timer = Timer.new()
+	attack_cooldown_timer.wait_time = attack_cooldown
 	attack_cooldown_timer.name = "AttackCooldownTimer"
 	attack_cooldown_timer.one_shot = true
 	attack_cooldown_timer.autostart = false
@@ -59,12 +63,13 @@ func _ready() -> void:
 func _ai_update():
 	if player:
 		var dist_sq := entity.position.distance_squared_to(player.position)
-
+		# print(sqrt(dist_sq))
 		# if close go straight to player
 		if dist_sq <= direct_chase_radius_sq:
 			movement.set_target(player.position, false)
-			if attack_cooldown_timer.is_stopped():
-				equip_point.use()
+		if dist_sq <= attack_radius_sq && attack_cooldown_timer.is_stopped():
+			equip_point.use()
+			attack_cooldown_timer.start()
 		# if far, pathfinds and only update if players not on that path
 		elif movement.path.is_empty() \
 		or movement.path_type != EntityMovement.PathType.POINTS \

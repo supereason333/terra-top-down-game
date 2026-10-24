@@ -1,14 +1,16 @@
 extends Marker2D
 class_name EquipPoint
 
+@export var source:Entity
+
 var equipped:Item2D
 
 func use():
 	if equipped:
-		equipped.use()
-	_use()
+		equipped.use(source)
+	_use(source)
 
-func _use():
+func _use(_source:Entity):
 	pass
 
 func equip(new:Item2D) -> void:

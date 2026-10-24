@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://c8efhshtwf38q"]
+
+[ext_resource type="Script" uid="uid://cj8lye8hkcmvc" path="res://player/item_disp.gd" id="1_e5qki"]
+[ext_resource type="Texture2D" uid="uid://egeurjwiyx0o" path="res://icon.svg" id="1_m5jpc"]
+
+[node name="ItemDisp" type="HBoxContainer" unique_id=1228023334]
+script = ExtResource("1_e5qki")
+
+[node name="ItemTexture" type="TextureRect" parent="." unique_id=1360904151]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("1_m5jpc")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="." unique_id=325827625]
+layout_mode = 2
+text = "Name"
+
+[node name="Control" type="Control" parent="." unique_id=593232535]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EquipCheck" type="CheckBox" parent="." unique_id=1794571874]
+layout_mode = 2
+text = "equipped"

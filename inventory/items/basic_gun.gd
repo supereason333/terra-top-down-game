@@ -15,7 +15,7 @@ func fire():
 	proj.rotation = shoot.global_rotation
 	world.register_projectile(proj)
 
-func _use():
+func _use(_source:Entity):
 	if cooldown_timer.is_stopped():
 		fire()
 		cooldown_timer.start()

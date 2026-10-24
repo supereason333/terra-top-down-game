@@ -5,7 +5,7 @@ extends Item2D
 @onready var attack_disp:MeshInstance2D = $AttackDisp
 
 
-func _use():
+func _use(source:Entity):
 	if cooldown_timer.is_stopped():
 		cooldown_timer.start()
 
@@ -13,5 +13,8 @@ func _use():
 		get_tree().create_timer(0.1).timeout.connect(attack_disp.hide)
 
 		for body in attack_area.get_overlapping_bodies():
-			if body is Player:
-				body.health_node.damage(10)
+			print(body)
+			if body == source: continue
+			if body is Entity:
+				if body.health_node:
+					body.health_node.damage(10)
