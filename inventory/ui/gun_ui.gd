@@ -4,7 +4,7 @@ extends ItemUI
 
 func _ready() -> void:
 	if !item: return
-	if !item.get(&"ammo") or !item.get(&"mag_size"):
+	if item.get(&"ammo") == null or item.get(&"mag_size") == null:
 		ammo_label.text = "_/_"
 		item = null
 		return

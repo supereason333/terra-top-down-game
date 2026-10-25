@@ -76,6 +76,15 @@ metadata/_custom_type_script = "uid://dq8rc4gvg1cwg"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1291887443]
 
+[node name="ItemUI" type="Control" parent="CanvasLayer" unique_id=1209727759]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="UI" type="Control" parent="CanvasLayer" unique_id=1479984846]
 layout_mode = 3
 anchors_preset = 15
@@ -132,14 +141,6 @@ offset_right = 567.0
 offset_bottom = 72.0
 text = "Press \"e\" to inventory"
 
-[node name="Label2" type="Label" parent="CanvasLayer/UI/Inventory" unique_id=584434713]
-layout_mode = 0
-offset_left = 399.0
-offset_top = 76.0
-offset_right = 606.0
-offset_bottom = 99.0
-text = "reequip gun fixes ammo ui"
-
 [node name="HealthBar" parent="CanvasLayer/UI" unique_id=510401543 node_paths=PackedStringArray("health") instance=ExtResource("5_qjkh3")]
 layout_mode = 0
 offset_left = 441.0
@@ -159,12 +160,3 @@ offset_right = 40.0
 offset_bottom = 26.0
 grow_vertical = 0
 text = "HP: 0/0"
-
-[node name="ItemUI" type="Control" parent="CanvasLayer" unique_id=1209727759]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2

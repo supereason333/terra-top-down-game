@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://b0ywshyd5um4o"]
+
+[ext_resource type="Script" uid="uid://2k7b423aqwbe" path="res://restart.gd" id="1_if853"]
+[ext_resource type="Texture2D" uid="uid://egeurjwiyx0o" path="res://icon.svg" id="1_y0ggs"]
+[ext_resource type="AudioStream" uid="uid://dmhm7gqiul4mw" path="res://assets/audio/nastelbom-no-copyright-music-606703.mp3" id="2_ex68u"]
+[ext_resource type="Script" uid="uid://dn5c717onld6l" path="res://wave_label.gd" id="2_hhlqb"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_f562y"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(350, 10, 1)
+gravity = Vector3(0, 98, 0)
+
+[node name="DeathScreen" type="Control" unique_id=1336624854]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=378588420]
+position = Vector2(314, -26)
+amount = 342
+texture = ExtResource("1_y0ggs")
+lifetime = 3.3
+process_material = SubResource("ParticleProcessMaterial_f562y")
+
+[node name="Label" type="Label" parent="." unique_id=852021734]
+layout_mode = 0
+offset_left = 264.0
+offset_top = 88.0
+offset_right = 345.0
+offset_bottom = 111.0
+text = "You died :("
+
+[node name="WaveLabel" type="Label" parent="." unique_id=1987005138]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 138.0
+offset_right = 428.0
+offset_bottom = 161.0
+text = "You made it to wave 0!!!!"
+script = ExtResource("2_hhlqb")
+
+[node name="Button" type="Button" parent="." unique_id=452957911]
+layout_mode = 0
+offset_left = 275.0
+offset_top = 206.0
+offset_right = 340.0
+offset_bottom = 237.0
+text = "Restart"
+script = ExtResource("1_if853")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2101370572]
+stream = ExtResource("2_ex68u")
+autoplay = true
+
+[connection signal="finished" from="AudioStreamPlayer" to="AudioStreamPlayer" method="play"]

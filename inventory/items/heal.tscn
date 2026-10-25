@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://big63wy2akqdd"]
+
+[ext_resource type="Script" uid="uid://bqke20jm3y0og" path="res://inventory/items/heal.gd" id="1_s3mxb"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_0htsh"]
+size = Vector2(7, 7)
+
+[node name="Heal" type="Node2D" unique_id=2108815506]
+script = ExtResource("1_s3mxb")
+metadata/_custom_type_script = "uid://d4nrfgk437v0g"
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=1939821077]
+modulate = Color(0, 0.85882354, 0, 1)
+mesh = SubResource("QuadMesh_0htsh")

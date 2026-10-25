@@ -31,6 +31,7 @@ func _ready() -> void:
 	set_process(false)
 
 func start() -> void:
+	GameMngr.wave = 0
 	wave_label.show()
 	death_label.show()
 	wave = 0
@@ -62,6 +63,7 @@ func _process(delta: float) -> void:
 
 func _begin_wave() -> void:
 	wave += 1
+	GameMngr.wave = wave
 	spawn_target = base_enemies + (wave - 1) * enemies_per_wave
 	spawned = 0
 	alive = 0

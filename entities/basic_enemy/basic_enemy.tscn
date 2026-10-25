@@ -26,7 +26,6 @@ radius = 250.0
 [node name="BasicEnemy" type="RigidBody2D" unique_id=1562989671 node_paths=PackedStringArray("health_node")]
 collision_layer = 5
 lock_rotation = true
-linear_damp = 5.006
 script = ExtResource("1_4qd2v")
 health_node = NodePath("HealthNode")
 metadata/_custom_type_script = "uid://0ixytojx7jjt"
@@ -41,8 +40,8 @@ equip_point = NodePath("../Rotate/EquipPoint")
 
 [node name="EntityMovement" type="Node" parent="." unique_id=259640243]
 script = ExtResource("3_e4w74")
-speed = 120.0
-force = 150.0
+speed = 180.0
+force = 250.0
 
 [node name="HealthNode" type="Node" parent="." unique_id=2029076493]
 script = ExtResource("4_4n6jn")

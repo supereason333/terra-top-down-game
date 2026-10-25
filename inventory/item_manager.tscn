@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cp4i5fyo2minb" path="res://inventory/items/basic_knife.tscn" id="5_s37w5"]
 [ext_resource type="PackedScene" uid="uid://c6sg5hvl7msdm" path="res://inventory/items/magazine.tscn" id="6_uw0gs"]
 [ext_resource type="PackedScene" uid="uid://bellf2ol2jiqj" path="res://inventory/items/big_knife.tscn" id="8_tt642"]
+[ext_resource type="PackedScene" uid="uid://big63wy2akqdd" path="res://inventory/items/heal.tscn" id="9_nagdf"]
 
 [sub_resource type="Resource" id="Resource_s37w5"]
 script = ExtResource("2_vspku")
@@ -41,12 +42,20 @@ display_name = "BIG Knife"
 item_scene = ExtResource("8_tt642")
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 
+[sub_resource type="Resource" id="Resource_0d4y2"]
+script = ExtResource("2_vspku")
+display_name = "Heal"
+item_scene = ExtResource("9_nagdf")
+stackable = true
+metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
+
 [node name="ItemManager" type="Node" unique_id=1794726547]
 script = ExtResource("1_vxptn")
 lib = Dictionary[StringName, ExtResource("2_vspku")]({
 &"basic_gun": SubResource("Resource_s37w5"),
 &"basic_knife": SubResource("Resource_hp0ml"),
 &"big_knife": SubResource("Resource_nagdf"),
+&"heal": SubResource("Resource_0d4y2"),
 &"magazine": SubResource("Resource_tt642"),
 &"test_item": SubResource("Resource_uw0gs")
 })

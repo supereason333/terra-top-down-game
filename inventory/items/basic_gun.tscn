@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://bbmpue6e5wyim" path="res://inventory/items/basic_gun.gd" id="1_4l3ef"]
 [ext_resource type="Texture2D" uid="uid://egeurjwiyx0o" path="res://icon.svg" id="2_yg028"]
+[ext_resource type="AudioStream" uid="uid://dvhq81yfjwry0" path="res://assets/audio/eaglaxle-gun-shot-1-530788.mp3" id="3_yg028"]
 
 [node name="BasicGun" type="Node2D" unique_id=1566287180]
 script = ExtResource("1_4l3ef")
+audio = ExtResource("3_yg028")
 metadata/_custom_type_script = "uid://d4nrfgk437v0g"
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=636612723]

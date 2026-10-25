@@ -20,7 +20,7 @@ func _process(_dt: float) -> void:
 	gun_rotate.rotation = get_local_mouse_position().angle()
 
 func _kill():
-	pass
+	get_tree().change_scene_to_file("res://death_screen.tscn")
 
 func get_inventory() -> Inventory:
 	return %Inventory

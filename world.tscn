@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c4j1livh1e7bi" path="res://entities/basic_enemy/basic_enemy.tscn" id="4_aqk2v"]
 [ext_resource type="Script" uid="uid://bc5f8rm2grmg2" path="res://start_trigger.gd" id="5_dwbse"]
 [ext_resource type="Script" uid="uid://dtgbmgj2hl30l" path="res://game_spawner.gd" id="6_pkg7o"]
+[ext_resource type="AudioStream" uid="uid://bhhbhya0vx37f" path="res://assets/audio/Succubus.mp3" id="7_pkg7o"]
 
 [sub_resource type="Environment" id="Environment_tlwt5"]
 
@@ -91,6 +92,14 @@ offset_bottom = 17.0
 text = "Start game (walk here) =>"
 label_settings = SubResource("LabelSettings_036b0")
 
+[node name="Label2" type="Label" parent="StartTrigger" unique_id=1227542912]
+offset_left = -164.0
+offset_top = -34.0
+offset_right = 33.0
+offset_bottom = -11.0
+text = "red guys are bad"
+label_settings = SubResource("LabelSettings_036b0")
+
 [node name="MeshInstance2D" type="MeshInstance2D" parent="StartTrigger" unique_id=354406391]
 modulate = Color(0, 1, 0, 0.39215687)
 mesh = SubResource("SphereMesh_gbfbk")
@@ -116,4 +125,9 @@ label_settings = SubResource("LabelSettings_036b0")
 [node name="GameSpawner" type="Node" parent="." unique_id=568494447]
 script = ExtResource("6_pkg7o")
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1820308513]
+stream = ExtResource("7_pkg7o")
+autoplay = true
+
 [connection signal="body_entered" from="StartTrigger" to="StartTrigger" method="_on_body_entered"]
+[connection signal="finished" from="AudioStreamPlayer" to="AudioStreamPlayer" method="play"]
