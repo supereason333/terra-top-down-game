@@ -124,6 +124,22 @@ offset_right = 40.0
 offset_bottom = 264.0
 script = ExtResource("7_hg6s5")
 
+[node name="Label" type="Label" parent="CanvasLayer/UI/Inventory" unique_id=717641743]
+layout_mode = 0
+offset_left = 399.0
+offset_top = 49.0
+offset_right = 567.0
+offset_bottom = 72.0
+text = "Press \"e\" to inventory"
+
+[node name="Label2" type="Label" parent="CanvasLayer/UI/Inventory" unique_id=584434713]
+layout_mode = 0
+offset_left = 399.0
+offset_top = 76.0
+offset_right = 606.0
+offset_bottom = 99.0
+text = "reequip gun fixes ammo ui"
+
 [node name="HealthBar" parent="CanvasLayer/UI" unique_id=510401543 node_paths=PackedStringArray("health") instance=ExtResource("5_qjkh3")]
 layout_mode = 0
 offset_left = 441.0

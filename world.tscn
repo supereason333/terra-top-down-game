@@ -4,6 +4,8 @@
 [ext_resource type="TileSet" uid="uid://ddwes7uf6gynk" path="res://tile_set.tres" id="3_aqk2v"]
 [ext_resource type="PackedScene" uid="uid://bbisusbmx1xg" path="res://player/player.tscn" id="3_tlwt5"]
 [ext_resource type="PackedScene" uid="uid://c4j1livh1e7bi" path="res://entities/basic_enemy/basic_enemy.tscn" id="4_aqk2v"]
+[ext_resource type="Script" uid="uid://bc5f8rm2grmg2" path="res://start_trigger.gd" id="5_dwbse"]
+[ext_resource type="Script" uid="uid://dtgbmgj2hl30l" path="res://game_spawner.gd" id="6_pkg7o"]
 
 [sub_resource type="Environment" id="Environment_tlwt5"]
 
@@ -19,10 +21,21 @@ normal = Vector2(0, 1)
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_dwbse"]
 normal = Vector2(1, 0)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_aqk2v"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_036b0"]
+font_size = 9
+
+[sub_resource type="SphereMesh" id="SphereMesh_gbfbk"]
+radius = 9.45
+height = 19.49
+
 [node name="World" type="Node2D" unique_id=346744270]
 script = ExtResource("1_f3sb7")
 
 [node name="Projectiles" type="Node2D" parent="." unique_id=717879450]
+
+[node name="Entities" type="Node2D" parent="." unique_id=1502440022]
 
 [node name="Player" parent="." unique_id=2021635855 instance=ExtResource("3_tlwt5")]
 
@@ -62,7 +75,45 @@ disabled = true
 position = Vector2(-59, -61)
 
 [node name="StartTrigger" type="Area2D" parent="." unique_id=1222132213]
+position = Vector2(63, -53)
 collision_layer = 0
 collision_mask = 2
+script = ExtResource("5_dwbse")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StartTrigger" unique_id=1075881592]
+shape = SubResource("CircleShape2D_aqk2v")
+
+[node name="Label" type="Label" parent="StartTrigger" unique_id=1590588137]
+offset_left = -127.0
+offset_top = -6.0
+offset_right = 70.0
+offset_bottom = 17.0
+text = "Start game (walk here) =>"
+label_settings = SubResource("LabelSettings_036b0")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="StartTrigger" unique_id=354406391]
+modulate = Color(0, 1, 0, 0.39215687)
+mesh = SubResource("SphereMesh_gbfbk")
+
+[node name="WaveLabel" type="Label" parent="." unique_id=924739460]
+visible = false
+offset_left = -92.0
+offset_top = 41.0
+offset_right = 105.0
+offset_bottom = 64.0
+text = "wave: 0"
+label_settings = SubResource("LabelSettings_036b0")
+
+[node name="DeathCounter" type="Label" parent="." unique_id=1277935861]
+visible = false
+offset_left = -91.0
+offset_top = 56.0
+offset_right = 106.0
+offset_bottom = 79.0
+text = "0/0"
+label_settings = SubResource("LabelSettings_036b0")
+
+[node name="GameSpawner" type="Node" parent="." unique_id=568494447]
+script = ExtResource("6_pkg7o")
+
+[connection signal="body_entered" from="StartTrigger" to="StartTrigger" method="_on_body_entered"]

@@ -21,7 +21,7 @@ script/source = "extends MeshInstance2D
 radius = 4.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xiaos"]
-radius = 100.0
+radius = 250.0
 
 [node name="BasicEnemy" type="RigidBody2D" unique_id=1562989671 node_paths=PackedStringArray("health_node")]
 collision_layer = 5
@@ -50,7 +50,9 @@ metadata/_custom_type_script = "uid://d21uawntskjl"
 
 [node name="Inventory" type="Node" parent="." unique_id=730460916 node_paths=PackedStringArray("equip_point")]
 script = ExtResource("5_6if4x")
-preload_inv = Array[StringName]([&"basic_knife"])
+preload_inv = Dictionary[StringName, int]({
+&"big_knife": 1
+})
 equip_0 = true
 equip_point = NodePath("../Rotate/EquipPoint")
 metadata/_custom_type_script = "uid://5xdeiu0krqs0"
