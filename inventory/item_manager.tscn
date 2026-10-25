@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dbsmkpfckf7al" path="res://inventory/item_manager.gd" id="1_vxptn"]
 [ext_resource type="Script" uid="uid://cknn0t4h4pu1e" path="res://inventory/class_defs/item_resource.gd" id="2_vspku"]
 [ext_resource type="PackedScene" uid="uid://83dobecmdoxu" path="res://inventory/items/test_item.tscn" id="3_s37w5"]
+[ext_resource type="PackedScene" uid="uid://qypq30bhaga" path="res://inventory/ui/gun_ui.tscn" id="4_hp0ml"]
 [ext_resource type="PackedScene" uid="uid://cyhp1fclowct4" path="res://inventory/items/basic_gun.tscn" id="4_vspku"]
 [ext_resource type="PackedScene" uid="uid://cp4i5fyo2minb" path="res://inventory/items/basic_knife.tscn" id="5_s37w5"]
 [ext_resource type="PackedScene" uid="uid://c6sg5hvl7msdm" path="res://inventory/items/magazine.tscn" id="6_uw0gs"]
@@ -11,6 +12,7 @@
 script = ExtResource("2_vspku")
 display_name = "Pistol"
 item_scene = ExtResource("4_vspku")
+ui_scene = ExtResource("4_hp0ml")
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 
 [sub_resource type="Resource" id="Resource_uw0gs"]

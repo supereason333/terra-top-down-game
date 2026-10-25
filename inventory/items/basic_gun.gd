@@ -4,6 +4,9 @@ extends Item2D
 @onready var shoot:Marker2D = $Shoot
 var world:World
 
+var ammo:int = 0
+var mag_size:int = 12
+
 var firing := false
 
 func _ready() -> void:
@@ -17,5 +20,12 @@ func fire():
 
 func _use(_source:Entity):
 	if cooldown_timer.is_stopped():
-		fire()
-		cooldown_timer.start()
+		if ammo > 0:
+			ammo -= 1
+			fire()
+			cooldown_timer.start()
+		else:
+			var inv:Inventory = GameMngr.get_player_inv()
+			if inv:
+				if inv.take_magazine():
+					ammo = mag_size

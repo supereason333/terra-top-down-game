@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://qypq30bhaga"]
+
+[ext_resource type="Script" uid="uid://duakpi3tyaunc" path="res://inventory/ui/gun_ui.gd" id="1_jdqj0"]
+
+[node name="GunUI" type="Control" unique_id=1076767634]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_jdqj0")
+metadata/_custom_type_script = "uid://df3m3owduken0"
+
+[node name="Label" type="Label" parent="." unique_id=311488737]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 410.0
+offset_right = 72.0
+offset_bottom = 433.0
+text = "Ammo"
+
+[node name="AmmoLabel" type="Label" parent="." unique_id=1110364151]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 435.0
+offset_right = 72.0
+offset_bottom = 458.0
+text = "0/12"

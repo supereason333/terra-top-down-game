@@ -1,8 +1,6 @@
 extends Node
 class_name Inventory
 
-signal item_added(item:Item2D)
-signal item_removed(item:Item2D)
 signal equipped_changed(slot_new:int, slot_old:int)
 signal items_changed
 
@@ -15,7 +13,7 @@ var equipped:int = -1
 
 func _ready() -> void:
 	for item in preload_inv.keys():
-		var itm := ItemMngr.get_item_node(item)
+		var itm:Item2D = ItemMngr.get_item_node(item)
 		if itm:
 			if itm.stackable:
 				itm.amount = preload_inv[item]
@@ -41,7 +39,6 @@ func set_equipped(slot:int):
 func add_item(new:Item2D):
 	if new.unique or !new.stackable:
 		inv.append(new)
-		item_added.emit(new)
 		items_changed.emit()
 		return
 	for item in inv:
@@ -50,5 +47,38 @@ func add_item(new:Item2D):
 			items_changed.emit()
 			return
 	inv.append(new)
-	item_added.emit(new)
 	items_changed.emit()
+
+func take_item(slot:int, count:int = 0) -> Item2D:
+	if slot < 0 or slot >= inv.size(): return null
+	var item:Item2D = inv[slot]
+	if count == 0 or item.amount <= count or !item.stackable:
+		if equipped == slot:
+			set_equipped(-1)
+		inv.remove_at(slot)
+		items_changed.emit()
+		return item
+	item.amount -= count
+
+	var new:Item2D
+	if item.unique:
+		new = item.duplicate()
+	else:
+		new = ItemMngr.get_item_node(item.id)
+	new.amount = count
+	items_changed.emit()
+	return new
+
+
+func find_magazine() -> int:
+	var i := 0
+	for item in inv:
+		if item.id == &"magazine":
+			return i
+		i += 1
+	return -1
+
+func take_magazine() -> Item2D:
+	var slot := find_magazine()
+	if slot == -1: return null
+	return take_item(slot, 1)

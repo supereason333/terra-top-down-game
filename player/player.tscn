@@ -24,7 +24,7 @@ radius = 4.0
 radius = 0.898
 height = 5.054
 
-[node name="Player" type="RigidBody2D" unique_id=156792555]
+[node name="Player" type="RigidBody2D" unique_id=156792555 groups=["player"]]
 collision_layer = 3
 lock_rotation = true
 script = ExtResource("1_onrkg")
@@ -40,7 +40,7 @@ script = ExtResource("3_yw30f")
 preload_inv = Dictionary[StringName, int]({
 &"basic_gun": 1,
 &"basic_knife": 1,
-&"magazine": 100
+&"magazine": 2
 })
 equip_0 = true
 equip_point = NodePath("../GunRotate/EquipPoint")
@@ -66,9 +66,10 @@ position = Vector2(3, 0)
 rotation = 1.5707964
 mesh = SubResource("CapsuleMesh_aqk2v")
 
-[node name="EquipPoint" type="Marker2D" parent="GunRotate" unique_id=1222505087 node_paths=PackedStringArray("source")]
+[node name="EquipPoint" type="Marker2D" parent="GunRotate" unique_id=1222505087 node_paths=PackedStringArray("ui_root", "source")]
 position = Vector2(5, 0)
 script = ExtResource("4_yw30f")
+ui_root = NodePath("../../CanvasLayer/ItemUI")
 source = NodePath("../..")
 metadata/_custom_type_script = "uid://dq8rc4gvg1cwg"
 
@@ -116,15 +117,16 @@ script = ExtResource("5_rgyib")
 [node name="ItemDisp" parent="CanvasLayer/UI/Inventory/MarginContainer/ScrollContainer/InventoryDisplay" unique_id=1228023334 instance=ExtResource("6_hg6s5")]
 layout_mode = 2
 
-[node name="HealthBar" parent="CanvasLayer" unique_id=510401543 node_paths=PackedStringArray("health") instance=ExtResource("5_qjkh3")]
+[node name="HealthBar" parent="CanvasLayer/UI" unique_id=510401543 node_paths=PackedStringArray("health") instance=ExtResource("5_qjkh3")]
+layout_mode = 0
 offset_left = 441.0
 offset_top = 12.0
 offset_right = 625.0
 offset_bottom = 28.0
 script = ExtResource("7_boad6")
-health = NodePath("../../HealthNode")
+health = NodePath("../../../HealthNode")
 
-[node name="Label" type="Label" parent="CanvasLayer/HealthBar" unique_id=1140102605]
+[node name="Label" type="Label" parent="CanvasLayer/UI/HealthBar" unique_id=1140102605]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -134,3 +136,12 @@ offset_right = 40.0
 offset_bottom = 26.0
 grow_vertical = 0
 text = "HP: 0/0"
+
+[node name="ItemUI" type="Control" parent="CanvasLayer" unique_id=1209727759]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

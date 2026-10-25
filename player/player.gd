@@ -21,3 +21,9 @@ func _process(_dt: float) -> void:
 
 func _kill():
 	pass
+
+func get_inventory() -> Inventory:
+	return %Inventory
+
+func get_health() -> HealthNode:
+	return %HealthNode
