@@ -60,3 +60,9 @@ disabled = true
 
 [node name="BasicEnemy" parent="." unique_id=1694842887 instance=ExtResource("4_aqk2v")]
 position = Vector2(-59, -61)
+
+[node name="StartTrigger" type="Area2D" parent="." unique_id=1222132213]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StartTrigger" unique_id=1075881592]

@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://bellf2ol2jiqj"]
+
+[ext_resource type="Script" uid="uid://d04soxc0vqde6" path="res://inventory/items/basic_knife.gd" id="1_l3es3"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_aeb26"]
+radius = 8.0
+height = 26.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_41ffu"]
+radius = 7.983
+height = 25.936
+
+[sub_resource type="PrismMesh" id="PrismMesh_nfv62"]
+size = Vector3(2.46, 17.6, 1)
+
+[node name="BasicKnife" type="Node2D" unique_id=1417258992]
+script = ExtResource("1_l3es3")
+metadata/_custom_type_script = "uid://d4nrfgk437v0g"
+
+[node name="Area2D" type="Area2D" parent="." unique_id=906980359]
+position = Vector2(3, 0)
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=323976079]
+position = Vector2(5, 0)
+shape = SubResource("CapsuleShape2D_aeb26")
+
+[node name="CooldownTimer" type="Timer" parent="." unique_id=698985946]
+wait_time = 0.2
+one_shot = true
+
+[node name="AttackDisp" type="MeshInstance2D" parent="." unique_id=324411087]
+visible = false
+modulate = Color(1, 0, 0, 0.33333334)
+position = Vector2(8, 0)
+mesh = SubResource("CapsuleMesh_41ffu")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=1930371596]
+position = Vector2(8, 0)
+rotation = -1.5707964
+mesh = SubResource("PrismMesh_nfv62")
