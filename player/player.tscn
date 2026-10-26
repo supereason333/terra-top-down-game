@@ -128,9 +128,10 @@ layout_mode = 2
 
 [node name="ItemGiver" type="VBoxContainer" parent="CanvasLayer/UI/Inventory" unique_id=741654375]
 layout_mode = 0
-offset_top = 224.0
-offset_right = 40.0
-offset_bottom = 264.0
+offset_left = 404.0
+offset_top = 87.0
+offset_right = 444.0
+offset_bottom = 127.0
 script = ExtResource("7_hg6s5")
 
 [node name="Label" type="Label" parent="CanvasLayer/UI/Inventory" unique_id=717641743]
