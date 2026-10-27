@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://rpbx6eau15nk"]
+
+[ext_resource type="Script" uid="uid://di525ngy6k1qb" path="res://autoloads/globals.gd" id="1_26amj"]
+[ext_resource type="Resource" uid="uid://8c7wqgnkck6d" path="res://world/default_library.tres" id="2_cv6mo"]
+
+[node name="Globals" type="Node" unique_id=955661336]
+script = ExtResource("1_26amj")
+tile_library = ExtResource("2_cv6mo")

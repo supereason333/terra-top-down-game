@@ -148,7 +148,7 @@ metadata/_edit_lock_ = true
 color = Color(0, 0, 0, 1)
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="." unique_id=295296453]
-editor_only = true
+energy = 0.32
 
 [connection signal="body_entered" from="StartTrigger" to="StartTrigger" method="_on_body_entered"]
 [connection signal="finished" from="AudioStreamPlayer" to="AudioStreamPlayer" method="play"]

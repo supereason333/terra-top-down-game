@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="TileLibrary" format=3 uid="uid://8c7wqgnkck6d"]
+
+[ext_resource type="Script" uid="uid://edutqjuu4dqw" path="res://world/class_defs/tile_data.gd" id="1_qqinv"]
+[ext_resource type="Script" uid="uid://ojt026mtmq8j" path="res://world/class_defs/tile_library.gd" id="2_dbthp"]
+
+[sub_resource type="Resource" id="Resource_qqinv"]
+script = ExtResource("1_qqinv")
+display_name = "Wall"
+id = &"wall"
+metadata/_custom_type_script = "uid://edutqjuu4dqw"
+
+[resource]
+script = ExtResource("2_dbthp")
+library = Dictionary[int, ExtResource("1_qqinv")]({
+1: SubResource("Resource_qqinv")
+})
+metadata/_custom_type_script = "uid://ojt026mtmq8j"
