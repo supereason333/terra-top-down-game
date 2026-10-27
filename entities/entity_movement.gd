@@ -9,7 +9,7 @@ enum PathType {
 
 @onready var entity:RigidBody2D = $".."
 
-@export var follow_radius := 6.0
+@export var follow_radius := 8.0
 var follow_radius_sq:
 	get(): return follow_radius * follow_radius
 @export var tracking_lose_radius := 8.0

@@ -1,10 +1,10 @@
 class_name WorldGenerator
 
-const MAX_SIZE_TILES = 50
-const MIN_SIZE_TILES = 30
+const MAX_SIZE_TILES = 100
+const MIN_SIZE_TILES = 80
 
 const MAX_ROOM_SIZE = 10	# for 10x10 room
-const MIN_ROOM_SIZE = 3		# for 3x3 room
+const MIN_ROOM_SIZE = 4		# for 3x3 room
 
 @warning_ignore_start("integer_division")
 static func generate_level(level_seed:int) -> LevelData:
@@ -19,7 +19,7 @@ static func generate_level(level_seed:int) -> LevelData:
 	rooms.append(Rect2i(Vector2i.ZERO, level_size))
 
 	# 36 is ave room size (6*6), how many divisions for BSP
-	var room_target:int = level_size.x * level_size.y / 36
+	var room_target:int = level_size.x * level_size.y / 64
 	var large_rooms:Array[int] = [0]	# Rooms that are large enough to divide
 
 	# Divide rooms
@@ -51,26 +51,28 @@ static func generate_level(level_seed:int) -> LevelData:
 	# TODO: Find and create doorways
 
 	# Create mask of solid or not
-	var mask:Array[PackedByteArray]
-	mask.resize(level_size.x)
-	var y_bytes:int = ceili(level_size.y / 8.0)
-	for x in mask.size():
-		mask[x].resize(y_bytes)
-		mask[x].fill(0b11111111)
+	var y_bytes := ceili(level_size.y / 8.0)
+	var mask: Array[PackedByteArray] = []
+	for x in level_size.x:
+		var column := PackedByteArray()
+		column.resize(y_bytes)
+		column.fill(0xFF)
+		mask.append(column)
 
+	var bounds := Rect2i(Vector2i.ZERO, level_size)
 	for room in rooms:
-		for x in room.size.x:
-			for y in room.size.y:
-				var pos := room.position + Vector2i(x, y)
-				var byte:int = y / 8
-				var bit:int = y % 8
-				mask[pos.x][byte] &= ~(1 << bit)
+		var r := room.abs().intersection(bounds)
+		for x in range(r.position.x, r.end.x):
+			var column := mask[x]
+			for y in range(r.position.y, r.end.y):
+				column[y >> 3] &= ~(1 << (y & 7))
+			mask[x] = column
 	level.rooms = rooms
 
 	# Create tiles based on wether tile is solid or not
 	for x in level_size.x:
 		for y in level_size.y:
-			var solid = mask[x][y / 8] >> (y % 8) & 1
+			var solid = mask[x][y >> 3] >> (y % 8) & 1
 			# print(solid)
 			if solid:
 				level.world_tiles[x][y] = 1

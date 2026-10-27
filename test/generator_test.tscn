@@ -8,9 +8,9 @@
 script = ExtResource("1_shdia")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=583712242]
-visible = false
 tile_map_data = PackedByteArray(0, 0, 4, 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, 0)
 tile_set = ExtResource("2_jjdam")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=67735665]
+zoom = Vector2(0.5, 0.5)
 script = ExtResource("3_itq8k")
