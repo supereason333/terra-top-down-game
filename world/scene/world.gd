@@ -65,6 +65,8 @@ func load_level(level_pos:PackedInt32Array):
 
 	# Load new data
 	level_position = level_pos
+	# "UwU"
+	#  - Zach Brevoort
 	current_level_data = WorldGenerator.generate_level(world_data.world_seed, level_position)
 	branching = WorldGenerator.get_branching(world_data.world_seed, level_position)
 
