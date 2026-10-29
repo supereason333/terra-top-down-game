@@ -10,9 +10,13 @@ texture = ExtResource("1_deknx")
 1:0/0 = 0
 1:0/0/occlusion_layer_0/polygon_0/polygon = SubResource("OccluderPolygon2D_7ocn2")
 1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0/custom_data_0 = 1
 0:0/0 = 0
+0:0/0/custom_data_0 = 2
 
 [resource]
 occlusion_layer_0/light_mask = 1
 physics_layer_0/collision_layer = 1
+custom_data_layer_0/name = "tile_id"
+custom_data_layer_0/type = 2
 sources/0 = SubResource("TileSetAtlasSource_sf0x4")

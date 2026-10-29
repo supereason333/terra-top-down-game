@@ -1,3 +1,4 @@
+# Data for levels, generated only if player goes to that level
 extends Resource
 class_name LevelData
 

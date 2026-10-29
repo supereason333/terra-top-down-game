@@ -3,10 +3,10 @@ class_name WorldGenerator
 const MAX_SIZE_TILES = 100
 const MIN_SIZE_TILES = 80
 
-const MAX_ROOM_SIZE = 10	# for 10x10 room
 const MIN_ROOM_SIZE = 4		# for 3x3 room
 
 @warning_ignore_start("integer_division")
+# static func generate_level(level_seed:int, settings:LevelGeneratorSettings) -> LevelData:
 static func generate_level(level_seed:int) -> LevelData:
 	var rand := RandomNumberGenerator.new()
 	rand.seed = level_seed
@@ -81,3 +81,15 @@ static func generate_level(level_seed:int) -> LevelData:
 
 	return level
 @warning_ignore_restore("integer_division")
+
+
+static func get_branching(world_seed:int, position:PackedInt32Array) -> Array[LevelDisplayData]:
+	var base_seed := SeedUtil.combine(world_seed, hash(position))
+	var rand := SeedUtil.rng_for(base_seed)
+	var branches := rand.randi_range(2, 5)
+	for b in branches:
+		var pos = position.duplicate()
+		pos.append(b)
+		var branch = LevelDisplayData.new(pos)
+
+	return []
