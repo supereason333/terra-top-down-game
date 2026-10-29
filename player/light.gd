@@ -7,12 +7,13 @@ extends PointLight2D
 @export var update := false:
 	set(value):
 		bake_texture(sector_angle, feather_deg)
+@export var resource_path := ""
 
 func _ready() -> void:
 	texture = load_tex()
 
 func load_tex() -> ImageTexture:
-	return ResourceLoader.load("res://player/point_light_tex.res")
+	return ResourceLoader.load(resource_path)
 
 func bake_texture(angle_deg: float, feather: float):
 	var img := Image.create(tex_size, tex_size, false, Image.FORMAT_RGBA8)
@@ -29,4 +30,4 @@ func bake_texture(angle_deg: float, feather: float):
 			img.set_pixel(x, y, Color(v, v, v, v))
 	var tex := ImageTexture.create_from_image(img)
 
-	ResourceSaver.save(tex, "res://player/point_light_tex.res")
+	ResourceSaver.save(tex, resource_path)

@@ -1,6 +1,8 @@
 extends Entity
 class_name Player
 
+@onready var ui_canvas:CanvasLayer = $CanvasLayer
+
 @onready var gun_rotate: Node2D = $GunRotate
 
 @export var walk_speed := 40.0
@@ -27,3 +29,9 @@ func get_inventory() -> Inventory:
 
 func get_health() -> HealthNode:
 	return %HealthNode
+
+func hide_ui_canvas():
+	ui_canvas.hide()
+
+func show_ui_canvas():
+	ui_canvas.show()
