@@ -11,8 +11,10 @@
 [ext_resource type="PackedScene" uid="uid://c8efhshtwf38q" path="res://player/item_disp.tscn" id="6_hg6s5"]
 [ext_resource type="Script" uid="uid://lwnf1w8qw5ja" path="res://player/health_display.gd" id="7_boad6"]
 [ext_resource type="Script" uid="uid://d2m7ar4io4ilt" path="res://player/item_giver.gd" id="7_hg6s5"]
+[ext_resource type="Texture2D" uid="uid://cekfonq7en3ml" path="res://player/l_point_light_tex.res" id="7_wodsf"]
 [ext_resource type="Script" uid="uid://c5gmw4e1vqxd7" path="res://player/inventory_ui.gd" id="7_yllr7"]
 [ext_resource type="Script" uid="uid://b5fd4ncs1f8no" path="res://player/interaction.gd" id="12_ebec5"]
+[ext_resource type="Script" uid="uid://djr3uqmxi7d64" path="res://player/map.gd" id="14_32hag"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_tlwt5"]
 radius = 4.0
@@ -106,7 +108,7 @@ resource_path = "res://player/point_light_tex.res"
 energy = 0.1
 shadow_enabled = true
 shadow_filter = 1
-texture = ExtResource("5_2ieo8")
+texture = ExtResource("7_wodsf")
 script = ExtResource("5_8t03j")
 sector_angle = 100.0
 feather_deg = 30.0
@@ -132,6 +134,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="Map" type="ColorRect" parent="CanvasLayer/UI" unique_id=487732027]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0, 0, 0, 1)
+script = ExtResource("14_32hag")
 
 [node name="Inventory" type="ColorRect" parent="CanvasLayer/UI" unique_id=906600287]
 visible = false

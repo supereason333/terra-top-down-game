@@ -49,7 +49,6 @@ script = ExtResource("1_f3sb7")
 [node name="Entities" type="Node2D" parent="." unique_id=1502440022]
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="." unique_id=295296453]
-visible = false
 energy = 0.32
 
 [node name="Player" parent="." unique_id=2021635855 instance=ExtResource("3_tlwt5")]

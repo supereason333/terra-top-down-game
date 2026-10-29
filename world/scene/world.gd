@@ -20,7 +20,9 @@ var current_level_data:LevelData
 var branching:Array[LevelDisplayData]
 
 func _ready() -> void:
-	init_world(123123)
+	var s := randi()
+	print("Seed: %d" % s)
+	init_world(s)
 
 func setup_astar():
 	var used_rect: Rect2i = tilemap.get_used_rect()
