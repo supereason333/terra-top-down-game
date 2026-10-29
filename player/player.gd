@@ -2,8 +2,8 @@ extends Entity
 class_name Player
 
 @onready var ui_canvas:CanvasLayer = $CanvasLayer
-
 @onready var gun_rotate: Node2D = $GunRotate
+@onready var camera:Camera2D = $Camera2D
 
 @export var walk_speed := 40.0
 @export var sprint_speed := 60.0
@@ -35,3 +35,10 @@ func hide_ui_canvas():
 
 func show_ui_canvas():
 	ui_canvas.show()
+
+func set_camera_rect(rect:Rect2i):
+	rect = rect.abs()
+	camera.limit_left = rect.position.x
+	camera.limit_right = rect.end.x
+	camera.limit_top = rect.position.y
+	camera.limit_bottom = rect.end.y

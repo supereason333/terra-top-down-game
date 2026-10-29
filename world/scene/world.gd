@@ -1,8 +1,13 @@
 extends Node2D
 class_name World
 
+signal loaded_new_level(pos:PackedInt32Array)
+
+@onready var player:Player = $Player
+
 @onready var projectiles:Node2D = $Projectiles
-@onready var tilemap:TileMapLayer = $TileMapLayer
+@onready var entities:Node2D = $Entities
+var tilemap:TileMapLayer
 
 @onready var enemy_movement:EntityMovement = $BasicEnemy/EntityMovement
 
@@ -10,23 +15,12 @@ var astar := AStarGrid2D.new()
 
 # game world stuff
 var world_data:WorldData
-var current_position:PackedInt32Array
+var level_position:PackedInt32Array
 var current_level_data:LevelData
-var next_options:PackedInt32Array
+var branching:Array[LevelDisplayData]
 
 func _ready() -> void:
-	world_data = WorldData.new(123123123)
-	current_position = []
-
-	print(tilemap.tile_set.get_source_id(0))
-
-	var source = tilemap.tile_set.get_source(0)
-	print(source.get_tiles_count())
-	print(source.get_tile_id(0))
-	print(source.get_tile_id(1))
-	print(source.get_tile_id(2))
-	print(source.get_tile_id(3))
-
+	init_world(123123)
 
 func setup_astar():
 	var used_rect: Rect2i = tilemap.get_used_rect()
@@ -46,12 +40,39 @@ func setup_astar():
 func register_projectile(proj:Projectile):
 	projectiles.add_child(proj)
 
-func next_level(id:int):
-	unload_level()
-	load_next(id)
+func init_world(world_seed:int):
+	world_data = WorldData.new(world_seed)
+	level_position = []
+	branching = WorldGenerator.get_branching(world_data.world_seed, [])
 
-func unload_level() -> void:
-	pass
+	load_level([])
 
-func load_next(id:int) -> void:
-	pass
+func load_level(level_pos:PackedInt32Array):
+	# Unload level
+	for child in projectiles.get_children():
+		child.queue_free()
+	for child in entities.get_children():
+		child.queue_free()
+
+	if tilemap:
+		tilemap.queue_free()
+		tilemap = null
+
+	current_level_data = null
+
+	# Load new data
+	level_position = level_pos
+	current_level_data = WorldGenerator.generate_level(world_data.world_seed, level_position)
+	branching = WorldGenerator.get_branching(world_data.world_seed, level_position)
+
+	# Load new level
+	tilemap = LevelBuilder.build_tilemap(current_level_data)
+	tilemap.collision_enabled = false
+	add_child(tilemap)
+
+	var rect:Rect2i = tilemap.get_used_rect()
+	rect.position *= tilemap.tile_set.tile_size
+	rect.size *= tilemap.tile_set.tile_size
+	player.set_camera_rect(rect)
+
+	loaded_new_level.emit(level_position)
