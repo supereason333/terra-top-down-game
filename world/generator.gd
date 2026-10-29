@@ -1,9 +1,9 @@
 class_name WorldGenerator
 
-const MAX_SIZE_TILES = 100
-const MIN_SIZE_TILES = 80
+const MAX_SIZE_TILES = 200
+const MIN_SIZE_TILES = 100
 
-const MIN_ROOM_SIZE = 4		# for 3x3 room
+const MIN_ROOM_SIZE = 6		# for 3x3 room
 
 @warning_ignore_start("integer_division")
 # static func generate_level(level_seed:int, settings:LevelGeneratorSettings) -> LevelData:
@@ -19,7 +19,7 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 	rooms.append(Rect2i(Vector2i.ZERO, level_size))
 
 	# 36 is ave room size (6*6), how many divisions for BSP
-	var room_target:int = level_size.x * level_size.y / 64
+	var room_target:int = level_size.x * level_size.y / 80
 	var large_rooms:Array[int] = [0]	# Rooms that are large enough to divide
 
 	# Divide rooms
@@ -65,7 +65,7 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 	var door_tree:Array[PackedInt32Array]
 	door_tree.resize(rooms.size())
 
-	for s in 10:
+	for s in 40:
 		var from := rand.randi_range(0, rooms.size() - 1)
 		if s > 0:
 			while door_tree[from].is_empty():
@@ -124,8 +124,6 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 			column[pos.y >> 3] &= ~(1 << (pos.y & 7))
 			mask[pos.x] = column
 
-	level.rooms = rooms
-
 	# Create tiles based on wether tile is solid or not
 	for x in level_size.x:
 		for y in level_size.y:
@@ -136,6 +134,20 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 			else:
 				level.world_tiles[x][y] = 0
 
+
+	var best := -1
+	var dist:float = INF
+	for r in rooms.size():
+		if door_tree[r].is_empty(): continue
+		if rooms[r].has_point(level_size / 2):
+			level.spawn_room = rooms[r]
+			break
+		var new_dist := rooms[r].position.distance_squared_to(level_size / 2)
+		if new_dist < dist:
+			dist = new_dist
+		best = r
+	if !level.spawn_room:
+		level.spawn_room = rooms[best]
 	return level
 @warning_ignore_restore("integer_division")
 

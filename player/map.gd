@@ -1,6 +1,6 @@
 extends ColorRect
 
-const RECT_SIZE = 2
+const RECT_SIZE = 1
 
 func _ready() -> void:
 	GameMngr.get_world().loaded_new_level.connect(_on_new_level)

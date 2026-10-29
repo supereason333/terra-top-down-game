@@ -4,6 +4,7 @@ class_name World
 signal loaded_new_level(pos:PackedInt32Array)
 
 @onready var player:Player = $Player
+@onready var teleport_thing:Node2D = $TeleportThing
 
 @onready var projectiles:Node2D = $Projectiles
 @onready var entities:Node2D = $Entities
@@ -69,12 +70,15 @@ func load_level(level_pos:PackedInt32Array):
 
 	# Load new level
 	tilemap = LevelBuilder.build_tilemap(current_level_data)
-	tilemap.collision_enabled = false
+	# tilemap.collision_enabled = false
 	add_child(tilemap)
 
 	var rect:Rect2i = tilemap.get_used_rect()
 	rect.position *= tilemap.tile_set.tile_size
 	rect.size *= tilemap.tile_set.tile_size
 	player.set_camera_rect(rect)
+
+	player.queue_pos_reset((current_level_data.spawn_room.position + current_level_data.spawn_room.end ) * 8)
+	teleport_thing.position = (current_level_data.spawn_room.position + current_level_data.spawn_room.end ) * 8
 
 	loaded_new_level.emit(level_position)

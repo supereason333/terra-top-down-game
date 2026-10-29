@@ -5,6 +5,7 @@ class_name LevelData
 var level_size:Vector2i
 var world_tiles:Array[PackedInt32Array]
 var rooms:Array[Rect2i]
+var spawn_room:Rect2
 
 func _init(size: Vector2i) -> void:
     level_size = size
