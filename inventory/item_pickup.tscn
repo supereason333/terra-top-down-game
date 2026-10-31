@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://rk4bwjytop44"]
+
+[ext_resource type="Script" uid="uid://cu1x6wq75b8fc" path="res://inventory/item_pickup.gd" id="1_ml2i6"]
+[ext_resource type="PackedScene" uid="uid://7kst73f3hpyy" path="res://player/interact/interact_area.tscn" id="2_icnl8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_04tde"]
+
+[node name="ItemPickup" type="Node2D" unique_id=1219243399]
+script = ExtResource("1_ml2i6")
+
+[node name="InteractArea" parent="." unique_id=738046041 instance=ExtResource("2_icnl8")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea" unique_id=1530909066]
+shape = SubResource("CircleShape2D_04tde")
+
+[connection signal="interacted" from="InteractArea" to="." method="_on_interact_area_interacted"]

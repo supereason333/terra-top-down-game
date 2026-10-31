@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bl6lyihcta73p"]
+
+[ext_resource type="Script" uid="uid://d4nrfgk437v0g" path="res://inventory/class_defs/item_node.gd" id="1_iqtny"]
+[ext_resource type="Texture2D" uid="uid://cdv5ghlmxlwfx" path="res://assets/battery.png" id="2_2hqh1"]
+
+[node name="PowerCell" type="Node2D" unique_id=582811552]
+script = ExtResource("1_iqtny")
+metadata/_custom_type_script = "uid://d4nrfgk437v0g"
+
+[node name="Battery" type="Sprite2D" parent="." unique_id=627377435]
+scale = Vector2(0.042, 0.042)
+texture = ExtResource("2_2hqh1")

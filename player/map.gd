@@ -23,3 +23,7 @@ func _draw() -> void:
 		world.current_level_data.world_tiles.size() * RECT_SIZE,
 		world.current_level_data.world_tiles[0].size() * RECT_SIZE
 	)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("map"):
+		visible = !visible

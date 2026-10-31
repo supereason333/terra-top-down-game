@@ -50,6 +50,10 @@ func init_world(world_seed:int):
 
 	load_level([])
 
+func load_next(id:int):
+	level_position.append(id)
+	load_level(level_position)
+
 func load_level(level_pos:PackedInt32Array):
 	# Unload level
 	for child in projectiles.get_children():
@@ -82,5 +86,5 @@ func load_level(level_pos:PackedInt32Array):
 
 	player.queue_pos_reset((current_level_data.spawn_room.position + current_level_data.spawn_room.end ) * 8)
 	teleport_thing.position = (current_level_data.spawn_room.position + current_level_data.spawn_room.end ) * 8
-
+	# print("emit")
 	loaded_new_level.emit(level_position)

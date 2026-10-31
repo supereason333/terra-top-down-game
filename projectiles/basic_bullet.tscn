@@ -5,6 +5,19 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jjt3o"]
 size = Vector2(10, 2)
 
+[sub_resource type="Gradient" id="Gradient_2fakh"]
+interpolation_mode = 2
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_jjt3o"]
+gradient = SubResource("Gradient_2fakh")
+width = 40
+height = 40
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+metadata/_snap_enabled = true
+
 [node name="BasicBullet" type="Node2D" unique_id=1896907163 node_paths=PackedStringArray("area")]
 script = ExtResource("1_2fakh")
 speed = 256
@@ -23,6 +36,11 @@ offset_left = -5.0
 offset_top = -1.0
 offset_right = 5.0
 offset_bottom = 1.0
-color = Color(1, 1, 0, 1)
+color = Color(3.740801, 5.494058, 0, 1)
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=632429047]
+color = Color(0.9826667, 1, 0.48000002, 1)
+energy = 0.05
+texture = SubResource("GradientTexture2D_jjt3o")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
