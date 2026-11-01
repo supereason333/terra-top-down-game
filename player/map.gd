@@ -3,7 +3,9 @@ extends ColorRect
 const RECT_SIZE = 1
 
 func _ready() -> void:
-	GameMngr.get_world().loaded_new_level.connect(_on_new_level)
+	var world := GameMngr.get_world()
+	if !world: return
+	world.loaded_new_level.connect(_on_new_level)
 	queue_redraw()
 
 func _on_new_level(_pos:PackedInt32Array):

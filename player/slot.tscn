@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://6ijehex8tf3r"]
+
+[ext_resource type="Script" uid="uid://b7wf3hhqylewu" path="res://player/slot.gd" id="1_u1kom"]
+
+[node name="Slot" type="ColorRect" unique_id=1672692269]
+custom_minimum_size = Vector2(32, 32)
+offset_right = 32.0
+offset_bottom = 32.0
+color = Color(0.42557132, 0.42557135, 0.42557132, 1)
+script = ExtResource("1_u1kom")
+
+[node name="NameLabel" type="Label" parent="." unique_id=941865098]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "[null]"

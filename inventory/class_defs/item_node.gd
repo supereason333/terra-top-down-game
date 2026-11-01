@@ -5,11 +5,8 @@ signal used
 
 var id:StringName
 
-# Unique items cannot stack
-var unique:bool = false
-var stackable:bool = true
-
-var amount:int = 1
+var weight := 1.0
+var size:Vector2i = Vector2i(1, 1)
 
 func use(source:Entity):
 	_use(source)

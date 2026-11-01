@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://chycswj4i15xl" path="res://player/player.gd" id="1_onrkg"]
 [ext_resource type="Script" uid="uid://d21uawntskjl" path="res://scripts/health_node.gd" id="2_g1dw6"]
-[ext_resource type="Script" uid="uid://5xdeiu0krqs0" path="res://inventory/inventory.gd" id="3_yw30f"]
+[ext_resource type="Script" uid="uid://gtsy1dgtmb5b" path="res://player/inventory.gd" id="3_kb6p2"]
+[ext_resource type="Script" uid="uid://bnrs6x0luox18" path="res://inventory/class_defs/preload_inv_item.gd" id="4_32hag"]
 [ext_resource type="Script" uid="uid://qqc2r738vc0w" path="res://player/power.gd" id="4_ebec5"]
 [ext_resource type="Script" uid="uid://j7jn31174bm2" path="res://player/equip_point.gd" id="4_yw30f"]
 [ext_resource type="Texture2D" uid="uid://5lx68ntene5w" path="res://player/point_light_tex.res" id="5_2ieo8"]
@@ -10,8 +11,17 @@
 [ext_resource type="PackedScene" uid="uid://ce5760s4ch8ln" path="res://things/health_display.tscn" id="5_qjkh3"]
 [ext_resource type="Script" uid="uid://lwnf1w8qw5ja" path="res://player/health_display.gd" id="7_boad6"]
 [ext_resource type="Texture2D" uid="uid://cekfonq7en3ml" path="res://player/l_point_light_tex.res" id="7_wodsf"]
+[ext_resource type="Script" uid="uid://2fqvlmwa6ef2" path="res://player/inventory_ui.gd" id="7_yllr7"]
 [ext_resource type="Script" uid="uid://b5fd4ncs1f8no" path="res://player/interaction.gd" id="12_ebec5"]
+[ext_resource type="Script" uid="uid://q412ta41yaf4" path="res://player/inventory_grid.gd" id="13_kb6p2"]
 [ext_resource type="Script" uid="uid://djr3uqmxi7d64" path="res://player/map.gd" id="14_32hag"]
+[ext_resource type="PackedScene" uid="uid://ie2w7o88drlw" path="res://player/inv_item_disp.tscn" id="14_wodsf"]
+[ext_resource type="PackedScene" uid="uid://6ijehex8tf3r" path="res://player/slot.tscn" id="16_tqiix"]
+
+[sub_resource type="Resource" id="Resource_32hag"]
+script = ExtResource("4_32hag")
+id = &"basic_gun"
+metadata/_custom_type_script = "uid://bnrs6x0luox18"
 
 [sub_resource type="SphereMesh" id="SphereMesh_tlwt5"]
 radius = 4.0
@@ -49,16 +59,13 @@ unique_name_in_owner = true
 script = ExtResource("2_g1dw6")
 metadata/_custom_type_script = "uid://d21uawntskjl"
 
-[node name="Inventory" type="Node" parent="." unique_id=1657453317 node_paths=PackedStringArray("equip_point")]
+[node name="Inventory" type="Node" parent="." unique_id=1657453317]
 unique_name_in_owner = true
-script = ExtResource("3_yw30f")
+script = ExtResource("3_kb6p2")
+preload_grid = Array[ExtResource("4_32hag")]([SubResource("Resource_32hag")])
 preload_inv = Dictionary[StringName, int]({
-&"basic_gun": 1,
-&"basic_knife": 1,
-&"magazine": 2
+&"big_knife": 1
 })
-equip_0 = true
-equip_point = NodePath("../GunRotate/EquipPoint")
 
 [node name="Power" type="Node" parent="." unique_id=1981558158]
 script = ExtResource("4_ebec5")
@@ -178,7 +185,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.29, 0.29, 0.29, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/UI/Inventory" unique_id=1540737107]
+[node name="Inventory" type="MarginContainer" parent="CanvasLayer/UI/Inventory" unique_id=1540737107 node_paths=PackedStringArray("body_slots")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -189,144 +196,179 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
+script = ExtResource("7_yllr7")
+body_slots = [NodePath(""), NodePath(""), NodePath(""), NodePath(""), null, NodePath(""), NodePath(""), NodePath("")]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI/Inventory/MarginContainer" unique_id=473902688]
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UI/Inventory/Inventory" unique_id=473902688]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer" unique_id=1806420907]
+[node name="InfoBar" type="HBoxContainer" parent="CanvasLayer/UI/Inventory/Inventory/VBox" unique_id=1806420907]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer" unique_id=88582574]
+[node name="Label" type="Label" parent="CanvasLayer/UI/Inventory/Inventory/VBox/InfoBar" unique_id=88582574]
 layout_mode = 2
 text = "Weight: 0/0"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer" unique_id=1319820842]
+[node name="MainBody" type="HBoxContainer" parent="CanvasLayer/UI/Inventory/Inventory/VBox" unique_id=1319820842]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=2088642834]
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody" unique_id=2088642834]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="Inventory" type="GridContainer" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer" unique_id=1992504439]
+[node name="InventoryGrid" type="MarginContainer" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer" unique_id=206146532]
+custom_minimum_size = Vector2(176.91, 0)
 layout_mode = 2
-columns = 3
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+script = ExtResource("13_kb6p2")
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=488461330]
+[node name="Grid" type="GridContainer" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid" unique_id=1992504439]
+layout_mode = 2
+columns = 5
+
+[node name="Slot1" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=1014717921]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="ColorRect13" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=833246577]
+[node name="Slot2" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=703071814]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="ColorRect2" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=1393989281]
+[node name="Slot3" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=652552173]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="ColorRect3" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=1975659251]
+[node name="Slot4" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=720001404]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="ColorRect4" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=1674549085]
+[node name="Slot5" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=1730216264]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="ColorRect5" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=1032164672]
+[node name="Slot6" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=244571157]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="ColorRect6" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=1651262953]
+[node name="Slot7" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=2006345895]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="ColorRect7" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=800939588]
+[node name="Slot8" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=1195901077]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="ColorRect8" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=1727684744]
+[node name="Slot9" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=2118419889]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="ColorRect9" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=273090501]
+[node name="Slot10" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=519321487]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="ColorRect10" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=1339119677]
+[node name="Slot11" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=964839406]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="ColorRect11" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=1374018861]
+[node name="Slot12" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=995495950]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="ColorRect12" type="ColorRect" parent="CanvasLayer/UI/Inventory/MarginContainer/VBoxContainer/HBoxContainer2/ScrollContainer/Inventory" unique_id=164302848]
+[node name="Slot13" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=1400192515]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
 
-[node name="HeadSlot" type="ColorRect" parent="CanvasLayer/UI/Inventory" unique_id=681680231]
+[node name="Slot14" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=364943892]
 custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
+
+[node name="Slot15" type="ColorRect" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/Grid" unique_id=1239974229]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+color = Color(0.55095845, 0.5509585, 0.55095845, 1)
+
+[node name="ItemDisp" type="Control" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid" unique_id=1830591518]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="InvItemDisp" parent="CanvasLayer/UI/Inventory/Inventory/VBox/MainBody/ScrollContainer/InventoryGrid/ItemDisp" unique_id=2101888702 instance=ExtResource("14_wodsf")]
+layout_mode = 0
+offset_right = 36.0
+offset_bottom = 36.0
+
+[node name="HeadSlot" parent="CanvasLayer/UI/Inventory" unique_id=1672692269 instance=ExtResource("16_tqiix")]
+layout_mode = 0
+offset_left = 488.8686
+offset_top = 40.0
+offset_right = 520.8686
+offset_bottom = 72.0
+
+[node name="RHandSlot" parent="CanvasLayer/UI/Inventory" unique_id=892628484 instance=ExtResource("16_tqiix")]
+layout_mode = 0
+offset_left = 421.8686
+offset_top = 151.0
+offset_right = 453.8686
+offset_bottom = 183.0
+
+[node name="LHandSlot" parent="CanvasLayer/UI/Inventory" unique_id=53123424 instance=ExtResource("16_tqiix")]
+layout_mode = 0
+offset_left = 548.8686
+offset_top = 148.0
+offset_right = 580.8686
+offset_bottom = 180.0
+
+[node name="RHipSlot" parent="CanvasLayer/UI/Inventory" unique_id=2046748483 instance=ExtResource("16_tqiix")]
+layout_mode = 0
+offset_left = 448.8686
+offset_top = 219.0
+offset_right = 480.8686
+offset_bottom = 251.0
+
+[node name="LHipSlot" parent="CanvasLayer/UI/Inventory" unique_id=1122412877 instance=ExtResource("16_tqiix")]
+layout_mode = 0
+offset_left = 527.8686
+offset_top = 218.0
+offset_right = 559.8686
+offset_bottom = 250.0
+
+[node name="TorsoSlot" parent="CanvasLayer/UI/Inventory" unique_id=1115875427 instance=ExtResource("16_tqiix")]
 layout_mode = 0
 offset_left = 486.8686
-offset_top = 47.0
+offset_top = 121.0
 offset_right = 518.8686
-offset_bottom = 79.0
+offset_bottom = 153.0
 
-[node name="RHandSlot" type="ColorRect" parent="CanvasLayer/UI/Inventory" unique_id=599079377]
-custom_minimum_size = Vector2(32, 32)
+[node name="LeftSlot" parent="CanvasLayer/UI/Inventory" unique_id=501392179 instance=ExtResource("16_tqiix")]
 layout_mode = 0
-offset_left = 404.8686
-offset_top = 140.0
-offset_right = 436.8686
-offset_bottom = 172.0
+offset_left = 491.8686
+offset_top = 286.0
+offset_right = 523.8686
+offset_bottom = 318.0
 
-[node name="LHandSlot" type="ColorRect" parent="CanvasLayer/UI/Inventory" unique_id=1931183089]
-custom_minimum_size = Vector2(32, 32)
+[node name="FootSlot" parent="CanvasLayer/UI/Inventory" unique_id=2093765599 instance=ExtResource("16_tqiix")]
 layout_mode = 0
-offset_left = 558.8686
-offset_top = 143.0
-offset_right = 590.8686
-offset_bottom = 175.0
-
-[node name="RHipSlot" type="ColorRect" parent="CanvasLayer/UI/Inventory" unique_id=1529218690]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 0
-offset_left = 442.8686
-offset_top = 211.0
-offset_right = 474.8686
-offset_bottom = 243.0
-
-[node name="LHipSlot" type="ColorRect" parent="CanvasLayer/UI/Inventory" unique_id=1728922765]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 0
-offset_left = 526.8686
-offset_top = 212.0
-offset_right = 558.8686
-offset_bottom = 244.0
-
-[node name="TorsoSlot" type="ColorRect" parent="CanvasLayer/UI/Inventory" unique_id=1035912561]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 0
-offset_left = 485.8686
-offset_top = 142.0
-offset_right = 517.8686
-offset_bottom = 174.0
-
-[node name="LegSlot" type="ColorRect" parent="CanvasLayer/UI/Inventory" unique_id=926338989]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 0
-offset_left = 487.8686
-offset_top = 268.0
-offset_right = 519.8686
-offset_bottom = 300.0
-
-[node name="FootSlot" type="ColorRect" parent="CanvasLayer/UI/Inventory" unique_id=1772336506]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 0
-offset_left = 489.8686
-offset_top = 363.0
-offset_right = 521.8686
-offset_bottom = 395.0
+offset_left = 493.8686
+offset_top = 366.0
+offset_right = 525.8686
+offset_bottom = 398.0
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1059147995]
 visible = false

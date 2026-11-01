@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://ie2w7o88drlw"]
+
+[ext_resource type="Script" uid="uid://bi3llb6dr6xsv" path="res://player/inv_item_disp.gd" id="1_b2ycv"]
+[ext_resource type="Texture2D" uid="uid://egeurjwiyx0o" path="res://icon.svg" id="1_c3jna"]
+
+[node name="InvItemDisp" type="ColorRect" unique_id=2101888702]
+custom_minimum_size = Vector2(36, 36)
+mouse_filter = 2
+script = ExtResource("1_b2ycv")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=862576379]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_c3jna")
+stretch_mode = 3

@@ -22,37 +22,37 @@ metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 script = ExtResource("2_vspku")
 display_name = "Knife"
 item_scene = ExtResource("5_s37w5")
+item_size = Vector2i(1, 2)
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 
 [sub_resource type="Resource" id="Resource_nagdf"]
 script = ExtResource("2_vspku")
 display_name = "BIG Knife"
 item_scene = ExtResource("8_tt642")
+item_size = Vector2i(1, 2)
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 
 [sub_resource type="Resource" id="Resource_0d4y2"]
 script = ExtResource("2_vspku")
 display_name = "Heal"
 item_scene = ExtResource("9_nagdf")
-stackable = true
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 
 [sub_resource type="Resource" id="Resource_tt642"]
 script = ExtResource("2_vspku")
 display_name = "Magazine"
 item_scene = ExtResource("6_uw0gs")
-stackable = true
+metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
+
+[sub_resource type="Resource" id="Resource_x8gnd"]
+script = ExtResource("2_vspku")
+item_scene = ExtResource("10_0d4y2")
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 
 [sub_resource type="Resource" id="Resource_uw0gs"]
 script = ExtResource("2_vspku")
 display_name = "Test Item"
 item_scene = ExtResource("3_s37w5")
-metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
-
-[sub_resource type="Resource" id="Resource_x8gnd"]
-script = ExtResource("2_vspku")
-item_scene = ExtResource("10_0d4y2")
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 
 [node name="ItemManager" type="Node" unique_id=1794726547]

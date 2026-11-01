@@ -15,11 +15,11 @@ func _ready() -> void:
 	for item in preload_inv.keys():
 		var itm:Item2D = ItemMngr.get_item_node(item)
 		if itm:
-			if itm.stackable:
-				itm.amount = preload_inv[item]
-			add_item(itm)
+			for i in preload_inv[item]:
+				add_item(itm.duplicate())
 		else:
 			print_debug("Item get node null")
+		itm.free()	# stupid
 
 # Retursn weather added or not
 # slot is for adding to reserved slots
@@ -32,42 +32,36 @@ func add_item(new:Item2D, slot:int = -1) -> bool:
 		items_changed.emit()
 		return true
 	# just append to inv, no items or not stackable
-	if inv.size() <= reserved_slots or !new.stackable or new.unique:
+	if inv.size() <= reserved_slots:
 		if inv.size() < reserved_slots:
 			inv.resize(reserved_slots)
 		inv.append(new)
 		items_changed.emit()
 		return true
 
-	# search for same item to stack with
-	for i in range(reserved_slots, inv.size()):
-		if inv[i].id == new.id:
-			inv[i].amount += new.amount
-			items_changed.emit()
-			return true
-
 	inv.append(new)
+	items_changed.emit()
 	return true
 
+func swap_item(a:int, b:int):
+	if a < 0 or a >= inv.size(): return
+	if b < 0 or b >= inv.size(): return
 
-func take_item(slot:int, count:int = 0) -> Item2D:
+	var a_item := inv[a]
+	inv[a] = inv[b]
+	inv[b] = a_item
+
+	items_changed.emit()
+
+func take_item(slot:int) -> Item2D:
 	if slot < 0 or slot >= inv.size(): return null
-	if !inv[slot]:
-		if slot >= reserved_slots:
-			inv.remove_at(slot)
-			items_changed.emit()
-			return null
-		return null
-	if count <= 0 or count >= inv[slot].amount or !inv[slot].stackable:
-		var parent:Node = inv[slot].get_parent()
-		if parent:
-			parent.remove_child(inv[slot])
-		var itm := inv.pop_at(slot) as Item2D
+	if slot >= reserved_slots:
+		var itm = inv.pop_at(slot)
 		items_changed.emit()
 		return itm
-	inv[slot].amount -= count
-	var item := ItemMngr.get_item_node(inv[slot].id)
-	item.amount = count
+
+	var item = inv[slot]
+	inv[slot] = null
 	items_changed.emit()
 	return item
 
@@ -79,6 +73,17 @@ func find_item(id:StringName, in_reserved:bool = false) -> int:
 	if in_reserved: r = range(0, inv.size())
 	else: r = range(reserved_slots, inv.size())
 	for i in r:
+		if !inv[i]: continue
 		if inv[i].id == id:
+			return i
+	return -1
+
+func find_item_class(item:Item2D, in_reserved:bool = false) -> int:
+	var r:Array
+	if inv.size() < reserved_slots: inv.resize(reserved_slots)
+	if in_reserved: r = range(0, inv.size())
+	else: r = range(reserved_slots, inv.size())
+	for i in r:
+		if inv[i] == item:
 			return i
 	return -1
