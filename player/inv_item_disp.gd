@@ -12,3 +12,8 @@ func _ready() -> void:
 		(item.size.y * (36 + 4)) - 4
 	)
 	tooltip_text = item.id
+
+	var item_res:InventoryItem = ItemMngr.lib.get(item.id)
+	if item_res:
+		if item_res.icon:
+			texture_rect.texture = item_res.icon

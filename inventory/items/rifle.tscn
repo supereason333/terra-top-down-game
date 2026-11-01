@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://cdquepfy2xafo"]
+
+[ext_resource type="Script" uid="uid://ce21ksnhhfhnx" path="res://inventory/items/rifle.gd" id="1_44xeg"]
+[ext_resource type="Texture2D" uid="uid://djpyfp5tkg2ry" path="res://assets/textures/rifle_top.png" id="2_fdmbd"]
+
+[node name="Rifle" type="Node2D" unique_id=297601599]
+script = ExtResource("1_44xeg")
+metadata/_custom_type_script = "uid://d4nrfgk437v0g"
+
+[node name="RifleTop" type="Sprite2D" parent="." unique_id=213102588]
+position = Vector2(4, 0)
+texture = ExtResource("2_fdmbd")

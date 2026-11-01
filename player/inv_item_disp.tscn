@@ -6,6 +6,7 @@
 [node name="InvItemDisp" type="ColorRect" unique_id=2101888702]
 custom_minimum_size = Vector2(36, 36)
 mouse_filter = 2
+color = Color(0.6872153, 0.68721485, 0.68721515, 1)
 script = ExtResource("1_b2ycv")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=862576379]

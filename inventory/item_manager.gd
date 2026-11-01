@@ -10,5 +10,6 @@ func get_item_node(id:StringName) -> Item2D:
 	node.id = id
 	node.weight = item.item_weight
 	node.size = item.item_size
+	node.tags = item.tags.duplicate_deep()
 
 	return node

@@ -36,7 +36,6 @@ radius = 0.898
 height = 5.054
 
 [sub_resource type="Gradient" id="Gradient_8t03j"]
-interpolation_mode = 2
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_2ieo8"]
@@ -65,8 +64,9 @@ unique_name_in_owner = true
 script = ExtResource("3_kb6p2")
 preload_grid = Array[ExtResource("4_32hag")]([SubResource("Resource_32hag")])
 preload_inv = Dictionary[StringName, int]({
-&"big_knife": 1,
-&"headlamp": 1
+&"basic_knife": 1,
+&"headlamp": 1,
+&"power_cell": 1
 })
 
 [node name="Power" type="Node" parent="." unique_id=1981558158]
@@ -329,6 +329,7 @@ offset_left = 488.8686
 offset_top = 40.0
 offset_right = 520.8686
 offset_bottom = 72.0
+filter_tags = Array[StringName]([&"head_slot"])
 
 [node name="RHandSlot" parent="CanvasLayer/UI/Inventory" unique_id=892628484 instance=ExtResource("16_tqiix")]
 layout_mode = 0
@@ -364,6 +365,7 @@ offset_left = 486.8686
 offset_top = 121.0
 offset_right = 518.8686
 offset_bottom = 153.0
+filter_tags = Array[StringName]([&"torso_slot"])
 
 [node name="LegSlot" parent="CanvasLayer/UI/Inventory" unique_id=501392179 instance=ExtResource("16_tqiix")]
 layout_mode = 0
@@ -371,6 +373,7 @@ offset_left = 491.8686
 offset_top = 286.0
 offset_right = 523.8686
 offset_bottom = 318.0
+filter_tags = Array[StringName]([&"leg_slot"])
 
 [node name="FootSlot" parent="CanvasLayer/UI/Inventory" unique_id=2093765599 instance=ExtResource("16_tqiix")]
 layout_mode = 0
@@ -378,6 +381,7 @@ offset_left = 493.8686
 offset_top = 366.0
 offset_right = 525.8686
 offset_bottom = 398.0
+filter_tags = Array[StringName]([&"foot_slot"])
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1059147995]
 visible = false
@@ -394,12 +398,8 @@ offset_bottom = 220.21277
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="DirectionalLight2D" type="DirectionalLight2D" parent="." unique_id=479765138]
-editor_only = true
-blend_mode = 1
-
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1429787048]
-energy = 0.14
+energy = 0.15
 shadow_enabled = true
 shadow_filter = 1
 texture = SubResource("GradientTexture2D_2ieo8")

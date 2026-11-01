@@ -3,6 +3,9 @@ class_name PlayerSlot
 
 signal item_changed(new:Item2D)
 
+## Empty means anything
+@export var filter_tags:Array[StringName]
+
 @onready var name_label:Label = $NameLabel
 
 var item:Item2D
@@ -10,10 +13,15 @@ var item:Item2D
 func _ready() -> void:
 	item_changed.connect(_item_changed)
 	name_label.text = name
+	_item_changed(item)
 
 func _item_changed(itm:Item2D):
-	if itm: name_label.text = item.id
-	else: name_label.text = name
+	if itm:
+		name_label.text = item.id
+		name_label.modulate = Color.WHITE
+	else:
+		name_label.text = name
+		name_label.modulate = Color.DARK_SALMON
 
 func _get_drag_data(_at_position: Vector2) -> Variant:
 	if !item: return null
@@ -29,7 +37,11 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if item: return false
 	if data is not InvDragData: return false
-	return true
+	var d:InvDragData = data
+	if filter_tags.is_empty(): return true
+	for tag in filter_tags:
+		if d.item.tags.has(tag): return true
+	return false
 
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	if item: return
