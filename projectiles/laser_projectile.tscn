@@ -35,4 +35,5 @@ width = 1.0
 color = Color(18.892157, 18.892157, 0, 1)
 end_gradient = SubResource("GradientTexture2D_c7er8")
 join_gradient = SubResource("GradientTexture2D_enurp")
+penetration = 3
 metadata/_custom_type_script = "uid://v3asvry3sxv"

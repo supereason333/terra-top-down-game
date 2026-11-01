@@ -35,6 +35,9 @@ radius = 4.0
 radius = 0.898
 height = 5.054
 
+[sub_resource type="LabelSettings" id="LabelSettings_e7oew"]
+font_size = 13
+
 [sub_resource type="Gradient" id="Gradient_8t03j"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
 
@@ -49,10 +52,11 @@ fill_to = Vector2(0.5, 0)
 [sub_resource type="CircleShape2D" id="CircleShape2D_2ieo8"]
 radius = 7.0
 
-[node name="Player" type="RigidBody2D" unique_id=156792555 groups=["player"]]
+[node name="Player" type="RigidBody2D" unique_id=156792555 node_paths=PackedStringArray("health_node") groups=["player"]]
 collision_layer = 3
 lock_rotation = true
 script = ExtResource("1_onrkg")
+health_node = NodePath("HealthNode")
 
 [node name="HealthNode" type="Node" parent="." unique_id=1005555752]
 unique_name_in_owner = true
@@ -66,6 +70,7 @@ preload_grid = Array[ExtResource("4_32hag")]([SubResource("Resource_32hag")])
 preload_inv = Dictionary[StringName, int]({
 &"basic_knife": 1,
 &"headlamp": 1,
+&"heal": 3,
 &"power_cell": 1,
 &"rifle": 1
 })
@@ -217,7 +222,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="CanvasLayer/UI/Inventory/Inventory/VBox/InfoBar" unique_id=88582574]
 layout_mode = 2
-text = "Weight: 0/0"
+text = "Inventory"
 
 [node name="MainBody" type="HBoxContainer" parent="CanvasLayer/UI/Inventory/Inventory/VBox" unique_id=1319820842]
 layout_mode = 2
@@ -384,20 +389,45 @@ offset_right = 525.8686
 offset_bottom = 398.0
 filter_tags = Array[StringName]([&"foot_slot"])
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1059147995]
+[node name="TutorialLabel" type="Label" parent="CanvasLayer/UI/Inventory" unique_id=94100778]
+layout_mode = 0
+offset_left = 217.86859
+offset_top = 16.0
+offset_right = 506.8686
+offset_bottom = 139.0
+text = "Drag the headlamp into the head slot
+and the rifle into the right hand
+
+press \"q\" to swap L and R hands
+press 1 or 2 to swap between R hand
+and L and R hips
+
+Press \"f\" to interact and pick 
+up things"
+label_settings = SubResource("LabelSettings_e7oew")
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/UI" unique_id=1059147995]
 visible = false
 z_index = -6
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -207.0
-offset_top = -220.21277
-offset_right = 207.0
-offset_bottom = 220.21277
+offset_left = -527.0
+offset_top = -460.21277
+offset_right = -113.0
+offset_bottom = -19.787231
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="TutorialInv" type="Label" parent="CanvasLayer/UI" unique_id=1103121575]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Press \"e\" for inventory"
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1429787048]
 energy = 0.15
@@ -413,6 +443,9 @@ script = ExtResource("12_ebec5")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Interaction" unique_id=1150304554]
 shape = SubResource("CircleShape2D_2ieo8")
 
-[connection signal="ready" from="ColorRect" to="ColorRect" method="hide"]
+[connection signal="death" from="HealthNode" to="." method="_on_health_node_death"]
+[connection signal="visibility_changed" from="CanvasLayer/UI/Inventory" to="CanvasLayer/UI/TutorialInv" method="hide"]
+[connection signal="ready" from="CanvasLayer/UI/ColorRect" to="CanvasLayer/UI/ColorRect" method="hide"]
+[connection signal="ready" from="CanvasLayer/UI/TutorialInv" to="CanvasLayer/UI/TutorialInv" method="show"]
 [connection signal="area_entered" from="Interaction" to="Interaction" method="_on_area_entered"]
 [connection signal="area_exited" from="Interaction" to="Interaction" method="_on_area_exited"]

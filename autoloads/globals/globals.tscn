@@ -4,9 +4,11 @@
 [ext_resource type="Resource" uid="uid://8c7wqgnkck6d" path="res://autoloads/globals/tile_library.tres" id="2_cv6mo"]
 [ext_resource type="Resource" uid="uid://bi17htpt0wkyh" path="res://autoloads/globals/item_library.tres" id="3_do6o6"]
 [ext_resource type="Resource" uid="uid://b45eye25a2tfm" path="res://autoloads/globals/projectile_library.tres" id="4_mg556"]
+[ext_resource type="Resource" uid="uid://ctq7h7ssmfevy" path="res://autoloads/globals/entity_library.tres" id="5_mg556"]
 
 [node name="Globals" type="Node" unique_id=955661336]
 script = ExtResource("1_26amj")
 tile_library = ExtResource("2_cv6mo")
 item_library = ExtResource("3_do6o6")
 projectile_library = ExtResource("4_mg556")
+entity_library = ExtResource("5_mg556")

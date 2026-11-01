@@ -10,6 +10,7 @@ var equipped:Item2D
 func _ready() -> void:
 	if !inventory: return
 	inventory.items_changed.connect(_on_items_changed)
+	_on_items_changed()
 
 func _on_items_changed() -> void:
 	if inventory.inv[equipped_slot] == equipped: return

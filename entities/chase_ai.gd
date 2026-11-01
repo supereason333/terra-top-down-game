@@ -7,6 +7,7 @@ extends EntityAI
 @export var rotate_node:Node2D
 @export var inventory:Inventory
 @export var equip_point:EquipPoint
+@export var vision_raycast:RayCast2D
 
 @export var direct_chase_radius := 16.0
 var direct_chase_radius_sq: float:
@@ -19,6 +20,8 @@ var attack_radius_sq: float:
 
 # null = idle, else chase
 var player:Player
+var last_seen_pos:Vector2
+var seen_player:bool = false
 var world:World
 var out_of_vision_timer:Timer
 var idle_move_timer:Timer
@@ -61,21 +64,33 @@ func _ready() -> void:
 	add_child(attack_cooldown_timer)
 
 func _ai_update():
+	# if !is_node_ready(): return
 	if player:
-		var dist_sq := entity.position.distance_squared_to(player.position)
-		# print(sqrt(dist_sq))
-		# if close go straight to player
-		if dist_sq <= direct_chase_radius_sq:
-			movement.set_target(player.position, false)
-		if dist_sq <= attack_radius_sq && attack_cooldown_timer.is_stopped():
-			equip_point.use()
-			attack_cooldown_timer.start()
-		# if far, pathfinds and only update if players not on that path
-		elif movement.path.is_empty() \
-		or movement.path_type != EntityMovement.PathType.POINTS \
-		or player.position.distance_squared_to(movement.path[movement.path.size() - 1]) >= 64:
+		vision_raycast.target_position = vision_raycast.to_local(player.global_position)
+		vision_raycast.force_raycast_update()
+		var see_player := vision_raycast.get_collider() is Player
 
-			movement.set_target(player.position)
+		var target_pos: Vector2
+		if see_player:
+			target_pos = player.global_position
+			last_seen_pos = target_pos
+			seen_player = true
+		else:
+			target_pos = last_seen_pos
+
+		if seen_player:
+			var dist_sq := entity.global_position.distance_squared_to(target_pos)
+
+			if see_player and dist_sq <= attack_radius_sq and attack_cooldown_timer.is_stopped():
+				equip_point.use()
+				attack_cooldown_timer.start()
+
+			if see_player and dist_sq <= direct_chase_radius_sq:
+				movement.set_target(target_pos, false)
+			elif movement.path.is_empty() \
+			or movement.path_type != EntityMovement.PathType.POINTS \
+			or target_pos.distance_squared_to(movement.path[movement.path.size() - 1]) >= 64:
+				movement.set_target(target_pos)
 	else:
 		if idle_move_timer.is_stopped():
 			idle_move_timer.wait_time = randf_range(3, 10)
@@ -97,3 +112,4 @@ func _on_body_exited_vision(body:Node2D) -> void:
 func _on_out_of_vision_timeout() -> void:
 	player = null
 	movement.clear_path()
+	seen_player = false

@@ -13,7 +13,6 @@ func _use(source:Entity):
 		get_tree().create_timer(0.1).timeout.connect(attack_disp.hide)
 
 		for body in attack_area.get_overlapping_bodies():
-			print(body)
 			if body == source: continue
 			if body is Entity:
 				if body.health_node:

@@ -7,8 +7,10 @@ func _ready() -> void:
 	if !item:
 		queue_free()
 		return
+	add_child(item)
 
 func _on_interact_area_interacted(player: Player) -> void:
 	var inv := player.get_inventory()
-	inv.add_item(item)
-	queue_free()
+	if inv.add_item(item):
+		remove_child(item)
+		queue_free()

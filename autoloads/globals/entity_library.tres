@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EntityLibrary" format=3 uid="uid://ctq7h7ssmfevy"]
+
+[ext_resource type="Script" uid="uid://cr1q1641t1cyx" path="res://entities/entity_resource.gd" id="1_6d7w5"]
+[ext_resource type="Script" uid="uid://dw1jxoyhp0dw" path="res://entities/entity_library.gd" id="1_ory0k"]
+[ext_resource type="PackedScene" uid="uid://c4j1livh1e7bi" path="res://entities/basic_enemy/basic_enemy.tscn" id="2_fgsbu"]
+
+[sub_resource type="Resource" id="Resource_y56tx"]
+script = ExtResource("1_6d7w5")
+entity_scene = ExtResource("2_fgsbu")
+metadata/_custom_type_script = "uid://cr1q1641t1cyx"
+
+[resource]
+script = ExtResource("1_ory0k")
+lib = Dictionary[StringName, ExtResource("1_6d7w5")]({
+&"basic_enemy": SubResource("Resource_y56tx")
+})
+metadata/_custom_type_script = "uid://dw1jxoyhp0dw"

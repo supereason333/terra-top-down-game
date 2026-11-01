@@ -4,7 +4,7 @@ class_name LevelData
 
 var level_size:Vector2i
 var world_tiles:Array[PackedInt32Array]
-var rooms:Array[Rect2i]
+var rooms:Array[RoomData]
 var spawn_room:Rect2
 
 
@@ -15,9 +15,3 @@ func _init(size: Vector2i) -> void:
 		var column := PackedInt32Array()
 		column.resize(size.y)
 		world_tiles[x] = column
-
-class ItemPickupResource:
-	extends Resource
-
-	var id:StringName
-	var position:Vector2

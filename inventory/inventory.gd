@@ -12,11 +12,17 @@ func _ready() -> void:
 
 	inv.resize(reserved_slots)
 
+	var added := 0
+
 	for item in preload_inv.keys():
 		var itm:Item2D = Global.item_library.get_item_node(item)
 		if itm:
 			for i in preload_inv[item]:
-				add_item(itm.duplicate())
+				if added == 0:
+					add_item(itm.duplicate(), 0)
+				else:
+					add_item(itm.duplicate())
+				added += 1
 		else:
 			print_debug("Item get node null")
 		itm.free()	# stupid

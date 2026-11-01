@@ -102,7 +102,6 @@ func _damage(entity: Entity) -> void:
 		entity.health_node.damage(base_damage)
 
 func _draw() -> void:
-	print(points)
 	if points.size() >= 2:
 		draw_polyline(points, color, width)
 

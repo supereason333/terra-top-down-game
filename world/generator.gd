@@ -1,7 +1,7 @@
 class_name WorldGenerator
 
-const MAX_SIZE_TILES = 200
-const MIN_SIZE_TILES = 100
+const MAX_SIZE_TILES = 100
+const MIN_SIZE_TILES = 60
 
 const MIN_ROOM_SIZE = 6		# for 3x3 room
 
@@ -91,7 +91,6 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 
 	# var door_already_connected:Array[PackedInt32Array]
 	# door_already_connected.resize(rooms.size())
-
 	for r in rooms.size():
 		# carve rooms, skip if has no doors
 		if !door_tree[r].is_empty():
@@ -135,12 +134,15 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 				level.world_tiles[x][y] = 0
 
 
+	var spawn_room:int
+
 	var best := -1
 	var dist:float = INF
 	for r in rooms.size():
 		if door_tree[r].is_empty(): continue
 		if rooms[r].has_point(level_size / 2):
 			level.spawn_room = rooms[r]
+			spawn_room = r
 			break
 		var new_dist := rooms[r].position.distance_squared_to(level_size / 2)
 		if new_dist < dist:
@@ -148,6 +150,31 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 		best = r
 	if !level.spawn_room:
 		level.spawn_room = rooms[best]
+		spawn_room = best
+
+	# Spawn enemies and stuff PROLLY RUSHED, WORK ON LATER AND MAKE BETTER
+
+	for r in rooms.size():
+		if door_tree[r].is_empty(): continue	# Unused room
+		if r == spawn_room: continue					# spawnr room
+		if door_tree[r].has(spawn_room): continue		# adj to spawn room
+
+		var room := RoomData.new()
+
+		var has_entities:bool = (rand.randf() < 0.5)
+		if has_entities:
+			var entity_count = rand.randi_range(1, 5)
+			room.entities.resize(entity_count)
+			room.entities.fill(&"basic_enemy")
+			room.rect = rooms[r]
+			for e in entity_count:
+				var pos = Vector2(
+					rand.randf_range(0.5, room.rect.size.x + 0.5),
+					rand.randf_range(0.5, room.rect.size.y + 0.5)
+				)
+				room.entity_positions.append(pos)
+
+		level.rooms.append(room)
 	return level
 @warning_ignore_restore("integer_division")
 

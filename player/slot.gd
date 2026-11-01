@@ -3,76 +3,109 @@ class_name PlayerSlot
 
 signal item_changed(new:Item2D)
 
-## Empty means anything
-@export var filter_tags:Array[StringName]
+## empty means anything
+@export var filter_tags: Array[StringName]
 
-@onready var name_label:Label = $NameLabel
+@onready var name_label: Label = $NameLabel
 
-var item:Item2D
+var item: Item2D
 
 func _ready() -> void:
 	item_changed.connect(_item_changed)
-	name_label.text = name
 	_item_changed(item)
 
-func _item_changed(itm:Item2D):
+func _item_changed(itm: Item2D) -> void:
 	if itm:
-		name_label.text = item.id
+		name_label.text = itm.id
 		name_label.modulate = Color.WHITE
 	else:
 		name_label.text = name
 		name_label.modulate = Color.DARK_SALMON
 
 func _get_drag_data(_at_position: Vector2) -> Variant:
-	if !item: return null
+	if not item:
+		return null
 	var data := InvDragData.new(item)
 	data.drop_successful.connect(_drop_successful)
 
 	var label := Label.new()
 	label.text = item.id
 	set_drag_preview(label)
-
 	return data
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
-	if item: return false
-	if data is not InvDragData: return false
-	var d:InvDragData = data
-	if filter_tags.is_empty(): return true
-	for tag in filter_tags:
-		if d.item.tags.has(tag): return true
-	return false
+	if item or data is not InvDragData:
+		return false
+	return accepts((data as InvDragData).item)
 
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
-	if item: return
-	if data is InvDragData:
-		item = data.item
-		data.drop_successful.emit()
-		item_changed.emit(item)
+	var d := data as InvDragData
+	if d and set_item(d.item):
+		d.drop_successful.emit()
 
-func set_item(itm:Item2D) -> bool:
-	if item: return false
+# does filtering and stuff
+func accepts(itm: Item2D) -> bool:
+	if itm == null or filter_tags.is_empty():
+		return true
+	for tag in filter_tags:
+		if itm.tags.has(tag):
+			return true
+	return false
+
+# doesnt work if the slot already has an item
+func set_item(itm: Item2D) -> bool:
+	if item or itm == null or not accepts(itm):
+		return false
+	_watch(itm)
 	item = itm
-	item_changed.emit()
+	item_changed.emit(item)
 	return true
 
 func remove_item() -> Item2D:
-	if !item: return null
-	var i = item
+	if not item:
+		return null
+	var old := item
+	_unwatch(old)
 	item = null
 	item_changed.emit(null)
-	return i
+	return old
 
-# Sets then returns the old one
-func swap_item(slot:PlayerSlot) -> Item2D:
-	if !slot: return
-	var itm = slot.item
-	slot.item = item
-	item = itm
+# swaps with another slot
+func swap_item(slot: PlayerSlot) -> Item2D:
+	if slot == null or slot == self:
+		return null
+	if not accepts(slot.item) or not slot.accepts(item):
+		return null
+
+	var mine := item
+	var theirs := slot.item
+	if mine:
+		_unwatch(mine)
+	if theirs:
+		slot._unwatch(theirs)
+
+	item = theirs
+	slot.item = mine
+
+	if theirs:
+		_watch(theirs)
+	if mine:
+		slot._watch(mine)
+
 	item_changed.emit(item)
 	slot.item_changed.emit(slot.item)
-	return itm
+	return theirs
 
-func _drop_successful():
-	item = null
-	item_changed.emit(null)
+func _watch(itm: Item2D) -> void:
+	if not itm.gonna_be_freed.is_connected(_item_exiting_tree):
+		itm.gonna_be_freed.connect(_item_exiting_tree)
+
+func _unwatch(itm: Item2D) -> void:
+	if itm.gonna_be_freed.is_connected(_item_exiting_tree):
+		itm.gonna_be_freed.disconnect(_item_exiting_tree)
+
+func _drop_successful() -> void:
+	remove_item()
+
+func _item_exiting_tree() -> void:
+	remove_item()

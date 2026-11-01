@@ -3,12 +3,15 @@
 [ext_resource type="Script" uid="uid://ev6k4q8jd1mq" path="res://world/scene/world.gd" id="1_f3sb7"]
 [ext_resource type="Script" uid="uid://qgxs25i32ykw" path="res://world/scene/projectiles.gd" id="2_lprec"]
 [ext_resource type="Environment" uid="uid://c6mqhkdqq5q4b" path="res://enviroment.tres" id="3_lprec"]
+[ext_resource type="Script" uid="uid://b2phdyvauuqs6" path="res://world/scene/entities.gd" id="3_qm0g7"]
 [ext_resource type="PackedScene" uid="uid://bbisusbmx1xg" path="res://player/player.tscn" id="3_tlwt5"]
 [ext_resource type="TileSet" uid="uid://dqubbr6lxdhb0" path="res://assets/textures/tilesets/bland_tileset.tres" id="4_gbfbk"]
+[ext_resource type="Script" uid="uid://ckfvba2j5j6si" path="res://world/scene/items.gd" id="4_qm0g7"]
 [ext_resource type="Texture2D" uid="uid://egeurjwiyx0o" path="res://icon.svg" id="6_dwbse"]
 [ext_resource type="Script" uid="uid://co63ctdilf2fo" path="res://world/scene/teleport_thing.gd" id="6_gbfbk"]
 [ext_resource type="Script" uid="uid://k5cdl3tn2313" path="res://world/scene/teleport_thing_ui.gd" id="8_gbfbk"]
 [ext_resource type="PackedScene" uid="uid://7kst73f3hpyy" path="res://player/interact/interact_area.tscn" id="8_ioo17"]
+[ext_resource type="AudioStream" uid="uid://bhhbhya0vx37f" path="res://assets/audio/Succubus.mp3" id="12_qknne"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tlwt5"]
 normal = Vector2(0, 1)
@@ -47,9 +50,14 @@ script = ExtResource("1_f3sb7")
 script = ExtResource("2_lprec")
 
 [node name="Entities" type="Node2D" parent="." unique_id=1502440022]
+script = ExtResource("3_qm0g7")
+
+[node name="Items" type="Node2D" parent="." unique_id=1795189811]
+script = ExtResource("4_qm0g7")
 
 [node name="DirectionalLight2D" type="DirectionalLight2D" parent="." unique_id=295296453]
-blend_mode = 1
+visible = false
+energy = 0.2
 
 [node name="Player" parent="." unique_id=2021635855 instance=ExtResource("3_tlwt5")]
 
@@ -122,7 +130,6 @@ text = "0/0"
 label_settings = SubResource("LabelSettings_036b0")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=490863453]
-visible = false
 color = Color(0, 0, 0, 1)
 
 [node name="TeleportThing" type="Node2D" parent="." unique_id=1454253237]
@@ -155,6 +162,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("8_gbfbk")
 
+[node name="ColorRect" type="ColorRect" parent="TeleportThing/CanvasLayer/UI" unique_id=200032150]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.1, 0.7490196)
+
 [node name="NextBox" type="VBoxContainer" parent="TeleportThing/CanvasLayer/UI" unique_id=1791934742]
 layout_mode = 0
 offset_left = 355.0
@@ -167,6 +183,35 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 text = "Teleport thing"
+
+[node name="Label2" type="Label" parent="TeleportThing/CanvasLayer/UI" unique_id=2011603678]
+layout_mode = 0
+offset_left = 183.0
+offset_top = 9.0
+offset_right = 609.0
+offset_bottom = 58.0
+text = "you need 3 cells to go to the next level, kill the enemies
+to get them. "
+
+[node name="Label3" type="Label" parent="TeleportThing/CanvasLayer/UI" unique_id=583745022]
+layout_mode = 0
+offset_left = 214.0
+offset_top = 156.0
+offset_right = 640.0
+offset_bottom = 205.0
+text = "Next worlds:"
+
+[node name="CellWarnLabel" type="Label" parent="TeleportThing/CanvasLayer/UI" unique_id=452736239]
+visible = false
+modulate = Color(0, 1, 0, 1)
+layout_mode = 0
+offset_left = 9.0
+offset_top = 93.0
+offset_right = 257.0
+offset_bottom = 168.0
+text = "You need more cells!
+Kill the red guys 
+they drop them"
 
 [node name="PositionLabel" type="Label" parent="TeleportThing/CanvasLayer/UI" unique_id=1267435010]
 layout_mode = 0
@@ -190,9 +235,22 @@ offset_left = 533.0
 offset_top = 156.0
 offset_right = 613.0
 offset_bottom = 187.0
-text = "Give cells"
+text = "Give cell"
+
+[node name="Label" type="Label" parent="TeleportThing" unique_id=1435705249]
+offset_left = -3.0
+offset_top = -12.0
+offset_right = 37.0
+offset_bottom = 11.0
+text = "f"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1220218300]
+stream = ExtResource("12_qknne")
+volume_db = -3.382
+autoplay = true
 
 [connection signal="interacted" from="TeleportThing/InteractArea" to="TeleportThing" method="_on_interacted"]
 [connection signal="player_exited" from="TeleportThing/InteractArea" to="TeleportThing" method="_on_player_exited"]
 [connection signal="visibility_changed" from="TeleportThing/CanvasLayer" to="TeleportThing/CanvasLayer/UI" method="_on_canvas_layer_visibility_changed"]
 [connection signal="pressed" from="TeleportThing/CanvasLayer/UI/GiveCells" to="TeleportThing/CanvasLayer/UI" method="_on_give_cells_pressed"]
+[connection signal="finished" from="AudioStreamPlayer" to="AudioStreamPlayer" method="play" binds= [0.0]]

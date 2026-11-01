@@ -1,6 +1,9 @@
 extends Node2D
 class_name Item2D
 
+# signal to signal when consumable is used it leaves tree yeah yk
+# somethign something something exiting tree didnt work something somethign something
+signal gonna_be_freed
 signal used
 
 var id:StringName

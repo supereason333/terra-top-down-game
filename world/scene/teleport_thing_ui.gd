@@ -8,7 +8,7 @@ const CELLS_NEEDED = 3
 @onready var position_label:Label = $PositionLabel
 @onready var cell_label:Label = $CellLabel
 
-var cells := 0
+var cells:int = 0
 
 func _ready() -> void:
 	_on_canvas_layer_visibility_changed()
@@ -51,22 +51,28 @@ func update_display():
 	position_label.text.trim_suffix(", ")
 	position_label.text += " ]"
 
-	# cell_label.text = "Cells: &d/%d" % [cells, CELLS_NEEDED]
+	cell_label.text = "Cells: %d/%d" % [cells, CELLS_NEEDED]
 
 func _next_world_pressed(id:int):
+	if cells < CELLS_NEEDED:
+		$CellWarnLabel.show()
+		return
+	$CellWarnLabel.hide()
 	var world := GameMngr.get_world()
 	if !world: return
+	cells = 0
 	world.load_next(id)
 
 
 func _on_give_cells_pressed() -> void:
-	# var player := GameMngr.get_player()
-	# if !player: return
-	# var inv := player.get_inventory()
-	# if !inv: return
-	# var loci := inv.find_item(&"power_cell")
-	# if loci == -1: return
-	# var item := inv.take_item(loci, CELLS_NEEDED - cells)
-	# cells += item.amount
+	if cells >= CELLS_NEEDED: return
+	var player := GameMngr.get_player()
+	if !player: return
+	var inv := player.get_inventory()
+	if !inv: return
+	var loci := inv.find_item(&"power_cell")
+	if loci == -1: return
+	inv.take_item(loci)
+	cells += 1
 
 	cell_label.text = "Cells: %d/%d" % [cells, CELLS_NEEDED]

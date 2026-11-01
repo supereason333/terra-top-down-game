@@ -34,7 +34,7 @@ func _process(_dt: float) -> void:
 	gun_rotate.rotation = get_local_mouse_position().angle()
 
 func _kill():
-	get_tree().change_scene_to_file("res://death_screen.tscn")
+	pass
 
 func get_inventory() -> Inventory:
 	return %Inventory
@@ -58,3 +58,6 @@ func set_camera_rect(rect:Rect2i):
 func queue_pos_reset(pos: Vector2):
 	reset_pos = pos
 	pos_reset_queued = true
+
+func _on_health_node_death() -> void:
+	get_tree().change_scene_to_file("res://world/scene/death_screen.tscn")

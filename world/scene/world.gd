@@ -6,8 +6,9 @@ signal loaded_new_level(pos:PackedInt32Array)
 @onready var player:Player = $Player
 @onready var teleport_thing:Node2D = $TeleportThing
 
-@onready var projectiles:Node2D = $Projectiles
-@onready var entities:Node2D = $Entities
+@onready var projectiles:ProjectileMngr = $Projectiles
+@onready var entities:EntityMngr = $Entities
+@onready var items:ItemDropMngr = $Items
 var tilemap:TileMapLayer
 
 # @onready var enemy_movement:EntityMovement = $BasicEnemy/EntityMovement
@@ -21,6 +22,7 @@ var current_level_data:LevelData
 var branching:Array[LevelDisplayData]
 
 func _ready() -> void:
+	GameMngr.level = 0
 	var s := randi()
 	print("Seed: %d" % s)
 	init_world(s)
@@ -32,6 +34,9 @@ func setup_astar():
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER # Adjust as needed
 	astar.update()
 
+	update_astar_tiles()
+
+func update_astar_tiles():
 	for cell in tilemap.get_used_cells():
 		var source_id := tilemap.get_cell_source_id(cell)
 		if source_id == -1: continue
@@ -64,6 +69,9 @@ func load_level(level_pos:PackedInt32Array):
 
 	current_level_data = null
 
+	projectiles.clear_projectiles()
+	entities.clear_entities()
+
 	# Load new data
 	level_position = level_pos
 	# "UwU"
@@ -72,13 +80,17 @@ func load_level(level_pos:PackedInt32Array):
 	branching = WorldGenerator.get_branching(world_data.world_seed, level_position)
 
 	# Load new level
-	tilemap = LevelBuilder.build_tilemap(current_level_data)
-	# tilemap.collision_enabled = false
+	var contents = LevelBuilder.build_tilemap(current_level_data)
+	tilemap = contents.tilemap
 	add_child(tilemap)
+
+	for entity in contents.entities:
+		entities.register_entity(entity)
 
 	var rect:Rect2i = tilemap.get_used_rect()
 	rect.position *= tilemap.tile_set.tile_size
 	rect.size *= tilemap.tile_set.tile_size
+	setup_astar()
 	player.set_camera_rect(rect)
 
 	player.queue_pos_reset((current_level_data.spawn_room.position + current_level_data.spawn_room.end ) * 8)
@@ -86,5 +98,13 @@ func load_level(level_pos:PackedInt32Array):
 	# print("emit")
 	loaded_new_level.emit(level_position)
 
+	GameMngr.level += 1
+
 func get_projectiles() -> ProjectileMngr:
 	return projectiles
+
+func get_entities() -> EntityMngr:
+	return entities
+
+func get_items() -> ItemDropMngr:
+	return items

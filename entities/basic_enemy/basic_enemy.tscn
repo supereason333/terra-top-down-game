@@ -24,7 +24,7 @@ script/source = "extends MeshInstance2D
 radius = 4.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xiaos"]
-radius = 250.0
+radius = 150.0
 
 [node name="BasicEnemy" type="RigidBody2D" unique_id=1562989671 node_paths=PackedStringArray("health_node")]
 material = SubResource("CanvasItemMaterial_e4w74")
@@ -34,30 +34,32 @@ script = ExtResource("1_4qd2v")
 health_node = NodePath("HealthNode")
 metadata/_custom_type_script = "uid://0ixytojx7jjt"
 
-[node name="ChaseAI" type="Node" parent="." unique_id=1836059770 node_paths=PackedStringArray("vision", "movement", "rotate_node", "inventory", "equip_point")]
+[node name="ChaseAI" type="Node" parent="." unique_id=1836059770 node_paths=PackedStringArray("vision", "movement", "rotate_node", "inventory", "equip_point", "vision_raycast")]
 script = ExtResource("2_6if4x")
 vision = NodePath("../Area2D")
 movement = NodePath("../EntityMovement")
 rotate_node = NodePath("../Rotate")
 inventory = NodePath("../Inventory")
 equip_point = NodePath("../Rotate/EquipPoint")
+vision_raycast = NodePath("../RayCast2D")
 
 [node name="EntityMovement" type="Node" parent="." unique_id=259640243]
 script = ExtResource("3_e4w74")
+follow_radius = 10.0
+tracking_lose_radius = 10.0
 speed = 180.0
 force = 250.0
 
 [node name="HealthNode" type="Node" parent="." unique_id=2029076493]
 script = ExtResource("4_4n6jn")
+max_health = 40
 metadata/_custom_type_script = "uid://d21uawntskjl"
 
-[node name="Inventory" type="Node" parent="." unique_id=730460916 node_paths=PackedStringArray("equip_point")]
+[node name="Inventory" type="Node" parent="." unique_id=730460916]
 script = ExtResource("5_6if4x")
 preload_inv = Dictionary[StringName, int]({
-&"big_knife": 1
+&"basic_knife": 1
 })
-equip_0 = true
-equip_point = NodePath("../Rotate/EquipPoint")
 metadata/_custom_type_script = "uid://5xdeiu0krqs0"
 
 [node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=795723733]
@@ -89,8 +91,13 @@ position = Vector2(3, 0)
 scale = Vector2(0.21052632, 0.10526316)
 texture = ExtResource("5_m7qsk")
 
-[node name="EquipPoint" type="Marker2D" parent="Rotate" unique_id=475076235 node_paths=PackedStringArray("source")]
+[node name="EquipPoint" type="Marker2D" parent="Rotate" unique_id=475076235 node_paths=PackedStringArray("source", "inventory")]
 position = Vector2(4, 0)
 script = ExtResource("8_e4w74")
 source = NodePath("../..")
+inventory = NodePath("../../Inventory")
 metadata/_custom_type_script = "uid://dq8rc4gvg1cwg"
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=1099533956]
+target_position = Vector2(50, 0)
+collision_mask = 3

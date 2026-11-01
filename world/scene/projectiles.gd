@@ -17,3 +17,7 @@ func register_projectile(id:StringName, new_transform:Transform2D):
 
 func _proj_exit_tree() -> void:
 	projectiles -= 1
+
+func clear_projectiles():
+	for child in get_children():
+		child.queue_free()

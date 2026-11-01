@@ -1,6 +1,6 @@
 extends Node
 
-var wave := 0
+var level := 0
 
 func get_world() -> World:
 	for child in get_parent().get_children():
