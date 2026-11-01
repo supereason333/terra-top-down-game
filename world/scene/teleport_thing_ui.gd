@@ -51,7 +51,7 @@ func update_display():
 	position_label.text.trim_suffix(", ")
 	position_label.text += " ]"
 
-	cell_label.text = "Cells: &d/%d" % [cells, CELLS_NEEDED]
+	# cell_label.text = "Cells: &d/%d" % [cells, CELLS_NEEDED]
 
 func _next_world_pressed(id:int):
 	var world := GameMngr.get_world()
@@ -60,13 +60,13 @@ func _next_world_pressed(id:int):
 
 
 func _on_give_cells_pressed() -> void:
-	var player := GameMngr.get_player()
-	if !player: return
-	var inv := player.get_inventory()
-	if !inv: return
-	var loci := inv.find_item(&"power_cell")
-	if loci == -1: return
-	var item := inv.take_item(loci, CELLS_NEEDED - cells)
-	cells += item.amount
+	# var player := GameMngr.get_player()
+	# if !player: return
+	# var inv := player.get_inventory()
+	# if !inv: return
+	# var loci := inv.find_item(&"power_cell")
+	# if loci == -1: return
+	# var item := inv.take_item(loci, CELLS_NEEDED - cells)
+	# cells += item.amount
 
 	cell_label.text = "Cells: %d/%d" % [cells, CELLS_NEEDED]

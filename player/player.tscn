@@ -5,11 +5,12 @@
 [ext_resource type="Script" uid="uid://gtsy1dgtmb5b" path="res://player/inventory.gd" id="3_kb6p2"]
 [ext_resource type="Script" uid="uid://bnrs6x0luox18" path="res://inventory/class_defs/preload_inv_item.gd" id="4_32hag"]
 [ext_resource type="Script" uid="uid://qqc2r738vc0w" path="res://player/power.gd" id="4_ebec5"]
-[ext_resource type="Script" uid="uid://j7jn31174bm2" path="res://player/equip_point.gd" id="4_yw30f"]
+[ext_resource type="Script" uid="uid://j7jn31174bm2" path="res://player/r_hand_equip.gd" id="4_yw30f"]
 [ext_resource type="Texture2D" uid="uid://5lx68ntene5w" path="res://player/point_light_tex.res" id="5_2ieo8"]
 [ext_resource type="Script" uid="uid://bv7h133sjn7is" path="res://player/light.gd" id="5_8t03j"]
 [ext_resource type="PackedScene" uid="uid://ce5760s4ch8ln" path="res://things/health_display.tscn" id="5_qjkh3"]
 [ext_resource type="Script" uid="uid://lwnf1w8qw5ja" path="res://player/health_display.gd" id="7_boad6"]
+[ext_resource type="Script" uid="uid://dll6h57e8x6hb" path="res://player/head_equip.gd" id="7_e7oew"]
 [ext_resource type="Texture2D" uid="uid://cekfonq7en3ml" path="res://player/l_point_light_tex.res" id="7_wodsf"]
 [ext_resource type="Script" uid="uid://2fqvlmwa6ef2" path="res://player/inventory_ui.gd" id="7_yllr7"]
 [ext_resource type="Script" uid="uid://b5fd4ncs1f8no" path="res://player/interaction.gd" id="12_ebec5"]
@@ -64,7 +65,8 @@ unique_name_in_owner = true
 script = ExtResource("3_kb6p2")
 preload_grid = Array[ExtResource("4_32hag")]([SubResource("Resource_32hag")])
 preload_inv = Dictionary[StringName, int]({
-&"big_knife": 1
+&"big_knife": 1,
+&"headlamp": 1
 })
 
 [node name="Power" type="Node" parent="." unique_id=1981558158]
@@ -92,14 +94,19 @@ position = Vector2(3, 0)
 rotation = 1.5707964
 mesh = SubResource("CapsuleMesh_aqk2v")
 
-[node name="EquipPoint" type="Marker2D" parent="GunRotate" unique_id=1222505087 node_paths=PackedStringArray("ui_root", "source")]
-position = Vector2(5, 0)
+[node name="RHandEquip" type="Marker2D" parent="GunRotate" unique_id=1639073740 node_paths=PackedStringArray("source", "slot")]
+position = Vector2(7, 0)
 script = ExtResource("4_yw30f")
-ui_root = NodePath("../../CanvasLayer/ItemUI")
 source = NodePath("../..")
-metadata/_custom_type_script = "uid://dq8rc4gvg1cwg"
+slot = NodePath("../../CanvasLayer/UI/Inventory/RHandSlot")
+
+[node name="HeadEquip" type="Marker2D" parent="GunRotate" unique_id=1597185107 node_paths=PackedStringArray("source", "slot")]
+script = ExtResource("7_e7oew")
+source = NodePath("../..")
+slot = NodePath("../../CanvasLayer/UI/Inventory/HeadSlot")
 
 [node name="Light" type="PointLight2D" parent="GunRotate" unique_id=410270496]
+visible = false
 energy = 0.37
 shadow_enabled = true
 shadow_filter = 1
@@ -112,6 +119,7 @@ tex_size = 512
 resource_path = "res://player/point_light_tex.res"
 
 [node name="Light2" type="PointLight2D" parent="GunRotate" unique_id=442863856]
+visible = false
 energy = 0.1
 shadow_enabled = true
 shadow_filter = 1
@@ -171,6 +179,7 @@ grow_vertical = 0
 text = "HP: 0/0"
 
 [node name="Inventory" type="ColorRect" parent="CanvasLayer/UI" unique_id=2081910345]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -197,7 +206,7 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 script = ExtResource("7_yllr7")
-body_slots = [NodePath(""), NodePath(""), NodePath(""), NodePath(""), null, NodePath(""), NodePath(""), NodePath("")]
+body_slots = [NodePath("../RHandSlot"), NodePath("../LHandSlot"), NodePath("../RHipSlot"), NodePath("../LHipSlot"), NodePath("../HeadSlot"), NodePath("../TorsoSlot"), NodePath("../LegSlot"), NodePath("../FootSlot")]
 
 [node name="VBox" type="VBoxContainer" parent="CanvasLayer/UI/Inventory/Inventory" unique_id=473902688]
 layout_mode = 2
@@ -356,7 +365,7 @@ offset_top = 121.0
 offset_right = 518.8686
 offset_bottom = 153.0
 
-[node name="LeftSlot" parent="CanvasLayer/UI/Inventory" unique_id=501392179 instance=ExtResource("16_tqiix")]
+[node name="LegSlot" parent="CanvasLayer/UI/Inventory" unique_id=501392179 instance=ExtResource("16_tqiix")]
 layout_mode = 0
 offset_left = 491.8686
 offset_top = 286.0
