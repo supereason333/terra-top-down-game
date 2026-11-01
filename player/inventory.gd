@@ -31,7 +31,7 @@ func _ready() -> void:
 				add_item(item)
 
 func _spawn(id: StringName) -> Item2D:
-	var item := ItemMngr.get_item_node(id)
+	var item := Global.item_library.get_item_node(id)
 	if item == null:
 		print_debug("Item get node null: ", id)
 	return item

@@ -13,7 +13,7 @@ func _ready() -> void:
 	inv.resize(reserved_slots)
 
 	for item in preload_inv.keys():
-		var itm:Item2D = ItemMngr.get_item_node(item)
+		var itm:Item2D = Global.item_library.get_item_node(item)
 		if itm:
 			for i in preload_inv[item]:
 				add_item(itm.duplicate())

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://busadrqn4hivi" path="res://projectiles/basic_bullet.gd" id="1_2fakh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jjt3o"]
-size = Vector2(10, 2)
+size = Vector2(10, 1)
 
 [sub_resource type="Gradient" id="Gradient_2fakh"]
 interpolation_mode = 2
@@ -29,11 +29,11 @@ collision_layer = 0
 collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1516343922]
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_jjt3o")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=104403233]
 offset_left = -5.0
-offset_top = -1.0
 offset_right = 5.0
 offset_bottom = 1.0
 color = Color(3.740801, 5.494058, 0, 1)

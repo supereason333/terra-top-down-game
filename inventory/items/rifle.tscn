@@ -8,5 +8,13 @@ script = ExtResource("1_44xeg")
 metadata/_custom_type_script = "uid://d4nrfgk437v0g"
 
 [node name="RifleTop" type="Sprite2D" parent="." unique_id=213102588]
-position = Vector2(4, 0)
+position = Vector2(-3, -2)
 texture = ExtResource("2_fdmbd")
+centered = false
+
+[node name="CooldownTimer" type="Timer" parent="." unique_id=85433691]
+wait_time = 0.2
+one_shot = true
+
+[node name="Shoot" type="Marker2D" parent="." unique_id=1390206885]
+position = Vector2(10, 0)

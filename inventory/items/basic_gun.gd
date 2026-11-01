@@ -4,20 +4,20 @@ extends Item2D
 
 @onready var cooldown_timer:Timer = $CooldownTimer
 @onready var shoot:Marker2D = $Shoot
-var world:World
+var projectiles:ProjectileMngr
 
 var firing := false
 
 func _ready() -> void:
-	world = GameMngr.get_world()
+	var world := GameMngr.get_world()
+	if !world: return
+	projectiles = world.get_projectiles()
 
 func fire():
-	if !world: return
-	var proj:LinearProjectile = Projectiles.BASIC_BULLET.instantiate()
-	proj.position = shoot.global_position
-	proj.rotation = shoot.global_rotation
-	world.register_projectile(proj)
+	if !projectiles: return
 
+	projectiles.register_projectile(&"basic_bullet", global_transform)
+#
 	var player := AudioStreamPlayer.new()
 	player.stream = audio
 	player.autoplay = true
@@ -28,3 +28,4 @@ func fire():
 func _use(_source:Entity):
 	if cooldown_timer.is_stopped():
 		fire()
+		cooldown_timer.start()

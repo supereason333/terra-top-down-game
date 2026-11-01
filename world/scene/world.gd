@@ -10,7 +10,7 @@ signal loaded_new_level(pos:PackedInt32Array)
 @onready var entities:Node2D = $Entities
 var tilemap:TileMapLayer
 
-@onready var enemy_movement:EntityMovement = $BasicEnemy/EntityMovement
+# @onready var enemy_movement:EntityMovement = $BasicEnemy/EntityMovement
 
 var astar := AStarGrid2D.new()
 
@@ -39,9 +39,6 @@ func setup_astar():
 		if tile == null: continue
 		if tile.get_collision_polygons_count(0) > 0:
 			astar.set_point_solid(cell)
-
-func register_projectile(proj:Projectile):
-	projectiles.add_child(proj)
 
 func init_world(world_seed:int):
 	world_data = WorldData.new(world_seed)
@@ -88,3 +85,6 @@ func load_level(level_pos:PackedInt32Array):
 	teleport_thing.position = (current_level_data.spawn_room.position + current_level_data.spawn_room.end ) * 8
 	# print("emit")
 	loaded_new_level.emit(level_position)
+
+func get_projectiles() -> ProjectileMngr:
+	return projectiles

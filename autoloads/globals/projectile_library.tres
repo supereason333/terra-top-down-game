@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ProjectileLibrary" format=3 uid="uid://b45eye25a2tfm"]
+
+[ext_resource type="Script" uid="uid://nuabiljw2fkh" path="res://projectiles/scripts/projectile_resource.gd" id="1_66d8s"]
+[ext_resource type="Script" uid="uid://h4jtd47t3lna" path="res://projectiles/scripts/projectile_library.gd" id="2_2k7sg"]
+[ext_resource type="PackedScene" uid="uid://b4ytuarolk8du" path="res://projectiles/basic_bullet.tscn" id="2_xl6d8"]
+[ext_resource type="PackedScene" uid="uid://cwsk7tdoffsph" path="res://projectiles/laser_projectile.tscn" id="3_svtti"]
+
+[sub_resource type="Resource" id="Resource_ircds"]
+script = ExtResource("1_66d8s")
+projectile_scene = ExtResource("2_xl6d8")
+metadata/_custom_type_script = "uid://nuabiljw2fkh"
+
+[sub_resource type="Resource" id="Resource_j8hx2"]
+script = ExtResource("1_66d8s")
+projectile_scene = ExtResource("3_svtti")
+metadata/_custom_type_script = "uid://nuabiljw2fkh"
+
+[resource]
+script = ExtResource("2_2k7sg")
+lib = Dictionary[StringName, ExtResource("1_66d8s")]({
+&"basic_bullet": SubResource("Resource_ircds"),
+&"bounce_laser": SubResource("Resource_j8hx2")
+})
+metadata/_custom_type_script = "uid://h4jtd47t3lna"

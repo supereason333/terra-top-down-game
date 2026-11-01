@@ -1,0 +1,92 @@
+[gd_resource type="Resource" script_class="ItemLibrary" format=3 uid="uid://bi17htpt0wkyh"]
+
+[ext_resource type="Script" uid="uid://cknn0t4h4pu1e" path="res://inventory/class_defs/item_resource.gd" id="1_hd2ge"]
+[ext_resource type="PackedScene" uid="uid://cyhp1fclowct4" path="res://inventory/items/basic_gun.tscn" id="2_7ca1n"]
+[ext_resource type="Script" uid="uid://colp0s5rcrs86" path="res://inventory/class_defs/item_library.gd" id="2_a2l5k"]
+[ext_resource type="Script" uid="uid://dpm5230uloh4e" path="res://inventory/class_defs/item_tag.gd" id="3_2062g"]
+[ext_resource type="PackedScene" uid="uid://qypq30bhaga" path="res://inventory/ui/gun_ui.tscn" id="4_uk6kd"]
+[ext_resource type="Texture2D" uid="uid://dkig3gv2n8un5" path="res://assets/textures/knife.png" id="5_flwwb"]
+[ext_resource type="PackedScene" uid="uid://cp4i5fyo2minb" path="res://inventory/items/basic_knife.tscn" id="6_cnulv"]
+[ext_resource type="PackedScene" uid="uid://bellf2ol2jiqj" path="res://inventory/items/big_knife.tscn" id="7_wtgnx"]
+[ext_resource type="Texture2D" uid="uid://c7jcbesqduwt1" path="res://assets/headlamp.png" id="8_aatgo"]
+[ext_resource type="PackedScene" uid="uid://djp5m0u73ir76" path="res://inventory/items/headlamp.tscn" id="9_nk1fe"]
+[ext_resource type="PackedScene" uid="uid://big63wy2akqdd" path="res://inventory/items/heal.tscn" id="10_c7j00"]
+[ext_resource type="Texture2D" uid="uid://cbj8nq8gsj5su" path="res://assets/textures/battery.png" id="11_uoc57"]
+[ext_resource type="PackedScene" uid="uid://bl6lyihcta73p" path="res://inventory/items/power_cell.tscn" id="12_pbycl"]
+[ext_resource type="PackedScene" uid="uid://83dobecmdoxu" path="res://inventory/items/test_item.tscn" id="13_jwe0w"]
+[ext_resource type="Texture2D" uid="uid://bqdb2f85t37te" path="res://assets/textures/rifle.png" id="14_g3wpl"]
+[ext_resource type="PackedScene" uid="uid://cdquepfy2xafo" path="res://inventory/items/rifle.tscn" id="15_jnuiw"]
+
+[sub_resource type="Resource" id="Resource_s37w5"]
+script = ExtResource("1_hd2ge")
+display_name = "Pistol"
+item_scene = ExtResource("2_7ca1n")
+ui_scene = ExtResource("4_uk6kd")
+item_size = Vector2i(2, 1)
+metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
+
+[sub_resource type="Resource" id="Resource_hp0ml"]
+script = ExtResource("1_hd2ge")
+display_name = "Knife"
+icon = ExtResource("5_flwwb")
+item_scene = ExtResource("6_cnulv")
+item_size = Vector2i(1, 2)
+metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
+
+[sub_resource type="Resource" id="Resource_nagdf"]
+script = ExtResource("1_hd2ge")
+display_name = "BIG Knife"
+item_scene = ExtResource("7_wtgnx")
+item_size = Vector2i(1, 2)
+metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
+
+[sub_resource type="Resource" id="Resource_qoaml"]
+script = ExtResource("1_hd2ge")
+display_name = "Headlamp"
+icon = ExtResource("8_aatgo")
+item_scene = ExtResource("9_nk1fe")
+tags = Dictionary[StringName, ExtResource("3_2062g")]({
+&"head_slot": null
+})
+metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
+
+[sub_resource type="Resource" id="Resource_0d4y2"]
+script = ExtResource("1_hd2ge")
+display_name = "Heal"
+item_scene = ExtResource("10_c7j00")
+metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
+
+[sub_resource type="Resource" id="Resource_x8gnd"]
+script = ExtResource("1_hd2ge")
+icon = ExtResource("11_uoc57")
+item_scene = ExtResource("12_pbycl")
+item_size = Vector2i(2, 2)
+metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
+
+[sub_resource type="Resource" id="Resource_uw0gs"]
+script = ExtResource("1_hd2ge")
+display_name = "Test Item"
+item_scene = ExtResource("13_jwe0w")
+metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
+
+[sub_resource type="Resource" id="Resource_w0pcv"]
+script = ExtResource("1_hd2ge")
+display_name = "Energy Rifle"
+icon = ExtResource("14_g3wpl")
+item_scene = ExtResource("15_jnuiw")
+item_size = Vector2i(2, 1)
+metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
+
+[resource]
+script = ExtResource("2_a2l5k")
+lib = Dictionary[StringName, ExtResource("1_hd2ge")]({
+&"basic_gun": SubResource("Resource_s37w5"),
+&"basic_knife": SubResource("Resource_hp0ml"),
+&"big_knife": SubResource("Resource_nagdf"),
+&"headlamp": SubResource("Resource_qoaml"),
+&"heal": SubResource("Resource_0d4y2"),
+&"power_cell": SubResource("Resource_x8gnd"),
+&"rifle": SubResource("Resource_w0pcv"),
+&"test_item": SubResource("Resource_uw0gs")
+})
+metadata/_custom_type_script = "uid://colp0s5rcrs86"
