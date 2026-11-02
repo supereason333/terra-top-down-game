@@ -65,20 +65,20 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 	var door_tree:Array[PackedInt32Array]
 	door_tree.resize(rooms.size())
 
+	var used: Array[int] = [rand.randi_range(0, rooms.size() - 1)]
 	for s in 40:
-		var from := rand.randi_range(0, rooms.size() - 1)
-		if s > 0:
-			while door_tree[from].is_empty():
-				from = rand.randi_range(0, rooms.size() - 1)
+		var from: int = used[rand.randi_range(0, used.size() - 1)]
 		var to := rand.randi_range(0, rooms.size() - 1)
 		var path := astar.get_id_path(from, to)
+		if path.size() < 2:
+			continue  # same room or unreachable
 		for r in path.size():
-			if r > 0:
-				if door_tree[path[r]].find(path[r - 1]) == -1:
-					door_tree[path[r]].append(path[r - 1])
-			if r < path.size() - 1:
-				if door_tree[path[r]].find(path[r + 1]) == -1:
-					door_tree[path[r]].append(path[r + 1])
+			if r > 0 and door_tree[path[r]].find(path[r - 1]) == -1:
+				door_tree[path[r]].append(path[r - 1])
+			if r < path.size() - 1 and door_tree[path[r]].find(path[r + 1]) == -1:
+				door_tree[path[r]].append(path[r + 1])
+			if not used.has(path[r]):
+				used.append(path[r])
 
 	# Create mask of solid or not
 	var y_bytes := ceili(level_size.y / 8.0)
@@ -147,7 +147,7 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 		var new_dist := rooms[r].position.distance_squared_to(level_size / 2)
 		if new_dist < dist:
 			dist = new_dist
-		best = r
+			best = r
 	if !level.spawn_room:
 		level.spawn_room = rooms[best]
 		spawn_room = best
@@ -185,7 +185,7 @@ static func get_neighbour_tree(rooms:Array[Rect2i], max_gap:int, min_overlap:int
 	for r in rooms.size():
 		for n in rooms.size():
 			if r == n: continue
-			if is_neighbour(rooms[r], rooms[n], 1, 3):
+			if is_neighbour(rooms[r], rooms[n], max_gap, min_overlap):
 				neighbours[r].append(n)
 
 	return neighbours
