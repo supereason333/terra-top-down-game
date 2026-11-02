@@ -250,6 +250,31 @@ offset_right = 613.0
 offset_bottom = 187.0
 text = "Give cell"
 
+[node name="EndlessButton" type="Button" parent="TeleportThing/CanvasLayer/UI" unique_id=431599000]
+layout_mode = 0
+offset_left = 295.0
+offset_top = 44.0
+offset_right = 409.0
+offset_bottom = 75.0
+text = "Make endless"
+
+[node name="HideRect" type="ColorRect" parent="TeleportThing/CanvasLayer/UI" unique_id=1437788616]
+visible = false
+layout_mode = 0
+offset_left = 272.0
+offset_top = 86.0
+offset_right = 306.0
+offset_bottom = 117.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="TeleportThing/CanvasLayer/UI/HideRect" unique_id=187546187]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 2.0
+offset_right = 67.0
+offset_bottom = 25.0
+text = "inf"
+
 [node name="Label" type="Label" parent="TeleportThing" unique_id=1435705249]
 offset_left = -3.0
 offset_top = -12.0
@@ -266,4 +291,5 @@ autoplay = true
 [connection signal="player_exited" from="TeleportThing/InteractArea" to="TeleportThing" method="_on_player_exited"]
 [connection signal="visibility_changed" from="TeleportThing/CanvasLayer" to="TeleportThing/CanvasLayer/UI" method="_on_canvas_layer_visibility_changed"]
 [connection signal="pressed" from="TeleportThing/CanvasLayer/UI/GiveCells" to="TeleportThing/CanvasLayer/UI" method="_on_give_cells_pressed"]
+[connection signal="pressed" from="TeleportThing/CanvasLayer/UI/EndlessButton" to="TeleportThing/CanvasLayer/UI" method="_on_endless_button_pressed"]
 [connection signal="finished" from="AudioStreamPlayer" to="AudioStreamPlayer" method="play" binds= [0.0]]

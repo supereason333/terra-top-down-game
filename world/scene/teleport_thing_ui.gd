@@ -9,6 +9,7 @@ const CELLS_NEEDED = 3
 @onready var cell_label:Label = $CellLabel
 
 var cells:int = 0
+var endless := false
 
 func _ready() -> void:
 	_on_canvas_layer_visibility_changed()
@@ -60,7 +61,7 @@ func _next_world_pressed(id:int):
 		$CellWarnLabel.show()
 		return
 
-	if GameMngr.level >= 3:
+	if GameMngr.level >= 3 and !endless:
 		get_tree().change_scene_to_file("uid://ccbqaistjn2s2")
 		return
 
@@ -83,3 +84,9 @@ func _on_give_cells_pressed() -> void:
 	cells += 1
 
 	cell_label.text = "Cells: %d/%d" % [cells, CELLS_NEEDED]
+
+
+func _on_endless_button_pressed() -> void:
+	endless = true
+	$EndlessButton.queue_free()
+	$HideRect.show()
