@@ -95,10 +95,11 @@ func load_level(level_pos:PackedInt32Array):
 
 	player.queue_pos_reset((current_level_data.spawn_room.position + current_level_data.spawn_room.end ) * 8)
 	teleport_thing.position = (current_level_data.spawn_room.position + current_level_data.spawn_room.end ) * 8
+	GameMngr.level += 1
 	# print("emit")
 	loaded_new_level.emit(level_position)
 
-	GameMngr.level += 1
+
 
 func get_projectiles() -> ProjectileMngr:
 	return projectiles

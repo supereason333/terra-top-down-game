@@ -16,7 +16,7 @@ func _ready() -> void:
 	if world:
 		world.loaded_new_level.connect(_on_new_level)
 		# print("connect")
-	# update_display()
+	update_display()
 
 func _shortcut_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
@@ -53,10 +53,17 @@ func update_display():
 
 	cell_label.text = "Cells: %d/%d" % [cells, CELLS_NEEDED]
 
+	$LevelLabel.text = "Level: %d" % GameMngr.level
+
 func _next_world_pressed(id:int):
 	if cells < CELLS_NEEDED:
 		$CellWarnLabel.show()
 		return
+
+	if GameMngr.level >= 3:
+		get_tree().change_scene_to_file("uid://ccbqaistjn2s2")
+		return
+
 	$CellWarnLabel.hide()
 	var world := GameMngr.get_world()
 	if !world: return

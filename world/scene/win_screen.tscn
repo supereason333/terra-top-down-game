@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://ccbqaistjn2s2"]
+
+[ext_resource type="Texture2D" uid="uid://dbyc04tp46pid" path="res://assets/textures/brick.png" id="1_xlku8"]
+[ext_resource type="Script" uid="uid://2k7b423aqwbe" path="res://world/scene/restart.gd" id="2_be3k0"]
+[ext_resource type="AudioStream" uid="uid://dmhm7gqiul4mw" path="res://assets/audio/nastelbom-no-copyright-music-606703.mp3" id="3_be3k0"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qm4c3"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(350, 10, 1)
+gravity = Vector3(0, 98, 0)
+
+[node name="WinScreen" type="Control" unique_id=826427233]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=1384604361]
+z_index = -7
+position = Vector2(314, -26)
+amount = 342
+texture = ExtResource("1_xlku8")
+lifetime = 3.3
+process_material = SubResource("ParticleProcessMaterial_qm4c3")
+
+[node name="Label" type="Label" parent="." unique_id=406980982]
+layout_mode = 0
+offset_left = 201.0
+offset_top = 115.0
+offset_right = 361.0
+offset_bottom = 138.0
+text = "You win the game!!!!!
+
+You made it to level 4"
+
+[node name="RestartButton" type="Button" parent="." unique_id=1261215900]
+layout_mode = 0
+offset_left = 193.0
+offset_top = 272.0
+offset_right = 380.0
+offset_bottom = 303.0
+text = "Restart from beginning"
+script = ExtResource("2_be3k0")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2143618111]
+stream = ExtResource("3_be3k0")
+autoplay = true
+
+[connection signal="finished" from="AudioStreamPlayer" to="AudioStreamPlayer" method="play"]

@@ -65,18 +65,18 @@ item_scene = ExtResource("12_pbycl")
 item_size = Vector2i(2, 2)
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 
-[sub_resource type="Resource" id="Resource_uw0gs"]
-script = ExtResource("1_hd2ge")
-display_name = "Test Item"
-item_scene = ExtResource("13_jwe0w")
-metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
-
 [sub_resource type="Resource" id="Resource_w0pcv"]
 script = ExtResource("1_hd2ge")
 display_name = "Energy Rifle"
 icon = ExtResource("14_g3wpl")
 item_scene = ExtResource("15_jnuiw")
 item_size = Vector2i(2, 1)
+metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
+
+[sub_resource type="Resource" id="Resource_uw0gs"]
+script = ExtResource("1_hd2ge")
+display_name = "Test Item"
+item_scene = ExtResource("13_jwe0w")
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 
 [resource]
