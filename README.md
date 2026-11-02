@@ -1,6 +1,15 @@
 # Top down shooter game
 
-this is a prototype rougelike game made in godot. You play as a person exploring a place for whatever reason. You have to get gather resources at each level and kill the enemies and survive to go to the next level. Levels will be procedually generated so each game will be different. The world is also very dark, limiting your view as you can only see what is lit up.
+this is a prototype rougelike game made in godot. You play as a person in a prodecually generated complex and you fight red circles which case you. To win the game, you have to get to level 4 which and each level requires 3 power cells to power the teleporter in order to proced into the next level.
+
+## Controls
+
+- "f" to interact and pick up stuff
+- "e" to open inventory
+- "shift" to sprint
+- "q" to switch L and R hands
+- "1" and "2" to switch R hand with L and R hip slots
+- WASD to move and point and click
 
 ## How it was made
 
@@ -12,7 +21,13 @@ You can download the release binaries for the latest build from the release or p
 
 ## TODO list
 - Add new weapons
-- Improve Projectile system (add owner, etc)
-- Procedually generated levels
-- Improve item system (Logic for like consumables and stuff)
+- Add new tools
+  - flares, lights, etc
+- Add owner system to projectiles
+- Fill procedually generated world with more stuff
+  - different rooms
+  - chests and loot
+  - different enemies
+- enemy spawning in each level on top of pregeneration
 - Character classes
+- Final bossfight?????
