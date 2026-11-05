@@ -195,6 +195,7 @@ static func _gen_spawn_room(room:Rect2i, level:LevelData, rand:RandomNumberGener
 		rand.randf_range(1, room.size.x - 1),
 		rand.randf_range(1, room.size.x - 1)
 	) + Vector2(room.position)
+	# level.teleport_thing_pos *= 16
 	level.spawn_pos = level.teleport_thing_pos
 
 static func _gen_spawn_adj_room(room:Rect2i, level:LevelData, rand:RandomNumberGenerator):

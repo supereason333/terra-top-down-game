@@ -17,15 +17,13 @@ func _item_changed(item:Item2D):
 	if item:
 		add_child(item)
 
-# func _unhandled_input(event: InputEvent) -> void:
-# 	if event is InputEventMouseButton:
-# 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-# 			use()
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_released("use_head_slot"):
+		use()
 
-# func use():
-# 	if equipped:
-# 		equipped.use(source)
-# 	_use(source)
+func use():
+	if equipped:
+		equipped.use(source)
 #
 # func _use(_source:Entity):
 # 	pass

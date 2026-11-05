@@ -4,7 +4,7 @@ const ITEM_DISP = preload("uid://ie2w7o88drlw")
 
 @onready var parent:ColorRect = $"../"
 @onready var inventory:GridInventory = %Inventory
-@onready var equipped_disp:Control = $"../../EquippedDisp"
+@onready var info_things:Control = $"../../InfoThings"
 # @onready var inv_grid:GridContainer = %InventoryGrid
 
 @export var body_slots:Array[PlayerSlot]
@@ -15,7 +15,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("inventory"):
 		parent.visible = !parent.visible
-		equipped_disp.visible = !parent.visible
+		info_things.visible = !parent.visible
 		if !parent.visible:
 			get_viewport().gui_cancel_drag()
 	if event.is_action_pressed("hand_swap"):

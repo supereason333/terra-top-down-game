@@ -5,17 +5,17 @@
 [ext_resource type="Script" uid="uid://colp0s5rcrs86" path="res://inventory/class_defs/item_library.gd" id="2_a2l5k"]
 [ext_resource type="Script" uid="uid://dpm5230uloh4e" path="res://inventory/class_defs/item_tag.gd" id="3_2062g"]
 [ext_resource type="PackedScene" uid="uid://qypq30bhaga" path="res://inventory/ui/gun_ui.tscn" id="4_uk6kd"]
-[ext_resource type="Texture2D" uid="uid://dkig3gv2n8un5" path="res://assets/textures/items/icons_32/knife.png" id="5_flwwb"]
+[ext_resource type="Texture2D" uid="uid://dkig3gv2n8un5" path="res://assets/textures/items/icons_32/knife.png" id="5_2062g"]
 [ext_resource type="PackedScene" uid="uid://cp4i5fyo2minb" path="res://inventory/items/basic_knife.tscn" id="6_cnulv"]
 [ext_resource type="PackedScene" uid="uid://bellf2ol2jiqj" path="res://inventory/items/big_knife.tscn" id="7_wtgnx"]
-[ext_resource type="Texture2D" uid="uid://c7jcbesqduwt1" path="res://assets/textures/items/icons_32/headlamp.png" id="8_aatgo"]
+[ext_resource type="Texture2D" uid="uid://c7jcbesqduwt1" path="res://assets/textures/items/icons_32/headlamp.png" id="8_uk6kd"]
 [ext_resource type="PackedScene" uid="uid://djp5m0u73ir76" path="res://inventory/items/headlamp.tscn" id="9_nk1fe"]
-[ext_resource type="Texture2D" uid="uid://c5axcn332e0vw" path="res://assets/textures/items/icons_32/canned_food.png" id="10_2062g"]
 [ext_resource type="PackedScene" uid="uid://big63wy2akqdd" path="res://inventory/items/heal.tscn" id="10_c7j00"]
-[ext_resource type="Texture2D" uid="uid://cbj8nq8gsj5su" path="res://assets/textures/items/icons/battery.png" id="11_uoc57"]
+[ext_resource type="Texture2D" uid="uid://c5axcn332e0vw" path="res://assets/textures/items/icons_32/canned_food.png" id="10_flwwb"]
+[ext_resource type="Texture2D" uid="uid://cbj8nq8gsj5su" path="res://assets/textures/items/icons/battery.png" id="12_cnulv"]
 [ext_resource type="PackedScene" uid="uid://bl6lyihcta73p" path="res://inventory/items/power_cell.tscn" id="12_pbycl"]
 [ext_resource type="PackedScene" uid="uid://83dobecmdoxu" path="res://inventory/items/test_item.tscn" id="13_jwe0w"]
-[ext_resource type="Texture2D" uid="uid://bqdb2f85t37te" path="res://assets/textures/items/icons/rifle.png" id="14_g3wpl"]
+[ext_resource type="Texture2D" uid="uid://bqdb2f85t37te" path="res://assets/textures/items/icons/rifle.png" id="14_wtgnx"]
 [ext_resource type="PackedScene" uid="uid://cdquepfy2xafo" path="res://inventory/items/rifle.tscn" id="15_jnuiw"]
 
 [sub_resource type="Resource" id="Resource_s37w5"]
@@ -29,7 +29,8 @@ metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 [sub_resource type="Resource" id="Resource_hp0ml"]
 script = ExtResource("1_hd2ge")
 display_name = "Knife"
-icon = ExtResource("5_flwwb")
+icon_32 = ExtResource("5_2062g")
+icon = ExtResource("5_2062g")
 item_scene = ExtResource("6_cnulv")
 item_size = Vector2i(1, 2)
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
@@ -44,7 +45,8 @@ metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 [sub_resource type="Resource" id="Resource_qoaml"]
 script = ExtResource("1_hd2ge")
 display_name = "Headlamp"
-icon = ExtResource("8_aatgo")
+icon_32 = ExtResource("8_uk6kd")
+icon = ExtResource("8_uk6kd")
 item_scene = ExtResource("9_nk1fe")
 tags = Dictionary[StringName, ExtResource("3_2062g")]({
 &"head_slot": null
@@ -54,13 +56,14 @@ metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 [sub_resource type="Resource" id="Resource_0d4y2"]
 script = ExtResource("1_hd2ge")
 display_name = "Heal"
-icon = ExtResource("10_2062g")
+icon_32 = ExtResource("10_flwwb")
+icon = ExtResource("10_flwwb")
 item_scene = ExtResource("10_c7j00")
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 
 [sub_resource type="Resource" id="Resource_x8gnd"]
 script = ExtResource("1_hd2ge")
-icon = ExtResource("11_uoc57")
+icon = ExtResource("12_cnulv")
 item_scene = ExtResource("12_pbycl")
 item_size = Vector2i(2, 2)
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
@@ -68,7 +71,7 @@ metadata/_custom_type_script = "uid://cknn0t4h4pu1e"
 [sub_resource type="Resource" id="Resource_w0pcv"]
 script = ExtResource("1_hd2ge")
 display_name = "Energy Rifle"
-icon = ExtResource("14_g3wpl")
+icon = ExtResource("14_wtgnx")
 item_scene = ExtResource("15_jnuiw")
 item_size = Vector2i(2, 1)
 metadata/_custom_type_script = "uid://cknn0t4h4pu1e"

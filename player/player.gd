@@ -42,6 +42,9 @@ func get_inventory() -> Inventory:
 func get_health() -> HealthNode:
 	return %HealthNode
 
+func get_power() -> PowerMngr:
+	return %Power
+
 func hide_ui_canvas():
 	ui_canvas.hide()
 

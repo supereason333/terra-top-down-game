@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://q412ta41yaf4" path="res://player/inventory_grid.gd" id="13_kb6p2"]
 [ext_resource type="Script" uid="uid://djr3uqmxi7d64" path="res://player/map.gd" id="14_32hag"]
 [ext_resource type="PackedScene" uid="uid://ie2w7o88drlw" path="res://player/inv_item_disp.tscn" id="14_wodsf"]
+[ext_resource type="Script" uid="uid://blekov1w6efnw" path="res://player/energy_indicator.gd" id="16_65viv"]
 [ext_resource type="PackedScene" uid="uid://6ijehex8tf3r" path="res://player/slot.tscn" id="16_tqiix"]
 [ext_resource type="PackedScene" uid="uid://bf4g3eqg1rjgw" path="res://player/slot_display.tscn" id="18_c35mf"]
 
@@ -38,6 +39,25 @@ height = 5.054
 
 [sub_resource type="LabelSettings" id="LabelSettings_e7oew"]
 font_size = 13
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c35mf"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.15686275, 0.15686275, 0.15686275, 0.34901962)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_65viv"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 0.4)
+corner_detail = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_x7c3f"]
+font_size = 11
 
 [sub_resource type="Gradient" id="Gradient_8t03j"]
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
@@ -77,6 +97,7 @@ preload_inv = Dictionary[StringName, int]({
 })
 
 [node name="Power" type="Node" parent="." unique_id=1981558158]
+unique_name_in_owner = true
 script = ExtResource("4_ebec5")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1693923564]
@@ -164,26 +185,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0, 0, 0, 1)
 script = ExtResource("14_32hag")
-
-[node name="HealthBar" parent="CanvasLayer/UI" unique_id=510401543 node_paths=PackedStringArray("health") instance=ExtResource("5_qjkh3")]
-layout_mode = 0
-offset_left = 441.0
-offset_top = 12.0
-offset_right = 625.0
-offset_bottom = 28.0
-script = ExtResource("7_boad6")
-health = NodePath("../../../HealthNode")
-
-[node name="Label" type="Label" parent="CanvasLayer/UI/HealthBar" unique_id=1140102605]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = 3.0
-offset_right = 40.0
-offset_bottom = 26.0
-grow_vertical = 0
-text = "HP: 0/0"
 
 [node name="Inventory" type="ColorRect" parent="CanvasLayer/UI" unique_id=2081910345]
 visible = false
@@ -429,7 +430,52 @@ offset_right = 40.0
 offset_bottom = 23.0
 text = "Press \"e\" for inventory"
 
-[node name="EquippedDisp" type="GridContainer" parent="CanvasLayer/UI" unique_id=897779723]
+[node name="InfoThings" type="Control" parent="CanvasLayer/UI" unique_id=1046642373]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EnergyIndicator" type="ProgressBar" parent="CanvasLayer/UI/InfoThings" unique_id=270589610]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 302.0
+offset_right = 15.0
+offset_bottom = 469.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_c35mf")
+theme_override_styles/fill = SubResource("StyleBoxFlat_65viv")
+value = 50.0
+fill_mode = 3
+show_percentage = false
+script = ExtResource("16_65viv")
+
+[node name="Labels" type="VBoxContainer" parent="CanvasLayer/UI/InfoThings/EnergyIndicator" unique_id=1675687403]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 11.0
+offset_top = 44.5
+offset_right = 52.0
+offset_bottom = 84.5
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EnergyLabel" type="Label" parent="CanvasLayer/UI/InfoThings/EnergyIndicator/Labels" unique_id=745237726]
+layout_mode = 2
+text = "0/0 E"
+label_settings = SubResource("LabelSettings_x7c3f")
+
+[node name="NetRegenLabel" type="Label" parent="CanvasLayer/UI/InfoThings/EnergyIndicator/Labels" unique_id=39123873]
+layout_mode = 2
+text = "+0.0 E/s"
+label_settings = SubResource("LabelSettings_x7c3f")
+
+[node name="EquippedDisp" type="GridContainer" parent="CanvasLayer/UI/InfoThings" unique_id=897779723]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -441,48 +487,82 @@ offset_top = -70.0
 offset_bottom = 70.0
 grow_horizontal = 0
 grow_vertical = 2
+mouse_filter = 2
 columns = 3
 
-[node name="Control" type="Control" parent="CanvasLayer/UI/EquippedDisp" unique_id=459393869]
+[node name="Control" type="Control" parent="CanvasLayer/UI/InfoThings/EquippedDisp" unique_id=459393869]
 layout_mode = 2
+mouse_filter = 2
 
-[node name="Head" parent="CanvasLayer/UI/EquippedDisp" unique_id=1035088746 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+[node name="Head" parent="CanvasLayer/UI/InfoThings/EquippedDisp" unique_id=1035088746 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
 layout_mode = 2
-target_slot = NodePath("../../Inventory/HeadSlot")
+mouse_filter = 2
+target_slot = NodePath("../../../Inventory/HeadSlot")
 
-[node name="Control2" type="Control" parent="CanvasLayer/UI/EquippedDisp" unique_id=1738018738]
+[node name="Control2" type="Control" parent="CanvasLayer/UI/InfoThings/EquippedDisp" unique_id=1738018738]
 layout_mode = 2
+mouse_filter = 2
 
-[node name="RHand" parent="CanvasLayer/UI/EquippedDisp" unique_id=1768077221 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+[node name="RHand" parent="CanvasLayer/UI/InfoThings/EquippedDisp" unique_id=1768077221 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
 layout_mode = 2
-target_slot = NodePath("../../Inventory/RHandSlot")
+mouse_filter = 2
+color = Color(0.7254902, 1, 0.72156864, 0.3254902)
+target_slot = NodePath("../../../Inventory/RHandSlot")
 
-[node name="Torso" parent="CanvasLayer/UI/EquippedDisp" unique_id=942630958 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+[node name="Torso" parent="CanvasLayer/UI/InfoThings/EquippedDisp" unique_id=942630958 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
 layout_mode = 2
-target_slot = NodePath("../../Inventory/TorsoSlot")
+mouse_filter = 2
+target_slot = NodePath("../../../Inventory/TorsoSlot")
 
-[node name="LHand" parent="CanvasLayer/UI/EquippedDisp" unique_id=1164514249 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+[node name="LHand" parent="CanvasLayer/UI/InfoThings/EquippedDisp" unique_id=1164514249 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
 layout_mode = 2
-target_slot = NodePath("../../Inventory/LHandSlot")
+mouse_filter = 2
+target_slot = NodePath("../../../Inventory/LHandSlot")
 
-[node name="RHip" parent="CanvasLayer/UI/EquippedDisp" unique_id=1711310297 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+[node name="RHip" parent="CanvasLayer/UI/InfoThings/EquippedDisp" unique_id=1711310297 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
 layout_mode = 2
-target_slot = NodePath("../../Inventory/RHipSlot")
+mouse_filter = 2
+target_slot = NodePath("../../../Inventory/RHipSlot")
 
-[node name="Legs" parent="CanvasLayer/UI/EquippedDisp" unique_id=630680859 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+[node name="Legs" parent="CanvasLayer/UI/InfoThings/EquippedDisp" unique_id=630680859 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
 layout_mode = 2
-target_slot = NodePath("../../Inventory/LegSlot")
+mouse_filter = 2
+target_slot = NodePath("../../../Inventory/LegSlot")
 
-[node name="LHip" parent="CanvasLayer/UI/EquippedDisp" unique_id=1963104326 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+[node name="LHip" parent="CanvasLayer/UI/InfoThings/EquippedDisp" unique_id=1963104326 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
 layout_mode = 2
-target_slot = NodePath("../../Inventory/LHipSlot")
+mouse_filter = 2
+target_slot = NodePath("../../../Inventory/LHipSlot")
 
-[node name="Control3" type="Control" parent="CanvasLayer/UI/EquippedDisp" unique_id=1821404636]
+[node name="Control3" type="Control" parent="CanvasLayer/UI/InfoThings/EquippedDisp" unique_id=1821404636]
 layout_mode = 2
+mouse_filter = 2
 
-[node name="Feet" parent="CanvasLayer/UI/EquippedDisp" unique_id=1653556726 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+[node name="Feet" parent="CanvasLayer/UI/InfoThings/EquippedDisp" unique_id=1653556726 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
 layout_mode = 2
-target_slot = NodePath("../../Inventory/FootSlot")
+mouse_filter = 2
+target_slot = NodePath("../../../Inventory/FootSlot")
+
+[node name="HealthBar" parent="CanvasLayer/UI/InfoThings" unique_id=510401543 node_paths=PackedStringArray("health") instance=ExtResource("5_qjkh3")]
+layout_mode = 0
+offset_left = 441.0
+offset_top = 12.0
+offset_right = 625.0
+offset_bottom = 28.0
+mouse_filter = 2
+script = ExtResource("7_boad6")
+health = NodePath("../../../../HealthNode")
+
+[node name="Label" type="Label" parent="CanvasLayer/UI/InfoThings/HealthBar" unique_id=1140102605]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = 3.0
+offset_right = 40.0
+offset_bottom = 26.0
+grow_vertical = 0
+text = "HP: 0/0"
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1429787048]
 energy = 0.15

@@ -1,14 +1,15 @@
 [gd_scene format=3 uid="uid://djp5m0u73ir76"]
 
-[ext_resource type="Script" uid="uid://d4nrfgk437v0g" path="res://inventory/class_defs/item_node.gd" id="1_yrsr2"]
+[ext_resource type="Script" uid="uid://bw7gaqdm6bbb3" path="res://inventory/items/headlamp.gd" id="1_3pw2x"]
 [ext_resource type="Texture2D" uid="uid://c8atvqxr7btak" path="res://inventory/items/headlamp_beam.res" id="2_3pw2x"]
 [ext_resource type="Script" uid="uid://bv7h133sjn7is" path="res://player/light.gd" id="3_2wbeh"]
 
 [node name="Headlamp" type="Node2D" unique_id=1806760367]
-script = ExtResource("1_yrsr2")
+script = ExtResource("1_3pw2x")
 metadata/_custom_type_script = "uid://d4nrfgk437v0g"
 
 [node name="Light" type="PointLight2D" parent="." unique_id=86141653]
+enabled = false
 energy = 0.37
 shadow_enabled = true
 shadow_filter = 1
@@ -19,3 +20,5 @@ sector_angle = 45.0
 feather_deg = 10.0
 tex_size = 512
 resource_path = "res://inventory/items/headlamp_beam.res"
+
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
