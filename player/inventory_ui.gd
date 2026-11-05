@@ -14,6 +14,8 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("inventory"):
 		parent.visible = !parent.visible
+		if !parent.visible:
+			get_viewport().gui_cancel_drag()
 	if event.is_action_pressed("hand_swap"):
 		body_slots[0].swap_item(body_slots[1])
 	if event.is_action_pressed("l_hip_swap"):

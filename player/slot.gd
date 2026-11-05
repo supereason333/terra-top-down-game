@@ -76,6 +76,7 @@ func swap_item(slot: PlayerSlot) -> Item2D:
 		return null
 	if not accepts(slot.item) or not slot.accepts(item):
 		return null
+	if get_viewport().gui_is_dragging(): return null
 
 	var mine := item
 	var theirs := slot.item
@@ -97,15 +98,15 @@ func swap_item(slot: PlayerSlot) -> Item2D:
 	return theirs
 
 func _watch(itm: Item2D) -> void:
-	if not itm.gonna_be_freed.is_connected(_item_exiting_tree):
-		itm.gonna_be_freed.connect(_item_exiting_tree)
+	if not itm.gonna_be_freed.is_connected(_item_gonna_be_freed):
+		itm.gonna_be_freed.connect(_item_gonna_be_freed)
 
 func _unwatch(itm: Item2D) -> void:
-	if itm.gonna_be_freed.is_connected(_item_exiting_tree):
-		itm.gonna_be_freed.disconnect(_item_exiting_tree)
+	if itm.gonna_be_freed.is_connected(_item_gonna_be_freed):
+		itm.gonna_be_freed.disconnect(_item_gonna_be_freed)
 
 func _drop_successful() -> void:
 	remove_item()
 
-func _item_exiting_tree() -> void:
+func _item_gonna_be_freed() -> void:
 	remove_item()
