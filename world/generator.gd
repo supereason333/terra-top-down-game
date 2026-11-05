@@ -3,11 +3,13 @@ class_name WorldGenerator
 const MAX_SIZE_TILES = 100
 const MIN_SIZE_TILES = 60
 
-const MIN_ROOM_SIZE = 6		# for 3x3 room
+const MIN_ROOM_SIZE = 4
+const MAX_ROOM_SIZE = 12
 
 const MIN_ROOM_OVERLAP = 3	# overlap to be considered neighbours
 const DOOR_MIN_DIST_FROM_CORNER = 1	# dooes arnt in the corner of rooms. make sure 2x < MIN_ROOM_OVERLAP
 const WALL_THICKNESS = 2
+const MIN_SPLITTABLE = MIN_ROOM_SIZE * 2 + WALL_THICKNESS
 
 # upgrade thing "plan":
 	# remake so data structures come fies: rooms, doors, etc
@@ -27,36 +29,24 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 		rand.randi_range(MIN_SIZE_TILES, MAX_SIZE_TILES)
 	)
 	var rooms:Array[Rect2i]
-	rooms.append(Rect2i(Vector2i.ZERO, level_size))
+	rooms.append(Rect2i(Vector2i(1, 1), level_size - Vector2i(2, 2)))
 
 	# yeah
-	var room_target:int = level_size.x * level_size.y / 80
-	var large_rooms:PackedInt32Array = [0]	# Rooms that are large enough to divide
+	var large_rooms:PackedInt32Array = [0]	# too large rooms
 
 	# Divide rooms
-	for div in room_target:
+	while !large_rooms.is_empty():
 		if large_rooms.is_empty(): break
-		var i = rand.randi_range(0, large_rooms.size() - 1)
+		var i := large_rooms.size() - 1
 		var room = rooms[large_rooms[i]]
 		var divide := rand.randi_range(MIN_ROOM_SIZE, maxi(room.size.x, room.size.y) - MIN_ROOM_SIZE - WALL_THICKNESS)
-		var new:Rect2i
-		if room.size.x > room.size.y:	# slice room verticaly
-			new = Rect2i(
-				room.position + Vector2i(divide + WALL_THICKNESS, 0),
-				Vector2i(room.size.x - divide - WALL_THICKNESS, room.size.y)
-			)
-			rooms[large_rooms[i]].size.x = divide
-		else:
-			new = Rect2i(
-				room.position + Vector2i(0, divide + WALL_THICKNESS),
-				Vector2i(room.size.x, room.size.y - divide - WALL_THICKNESS)
-			)
-			rooms[large_rooms[i]].size.y = divide
-		rooms.append(new)
-		room = rooms[large_rooms[i]]
-		if maxi(room.size.x, room.size.y) < MIN_ROOM_SIZE + WALL_THICKNESS:
+		var divided = divide_room(room, divide)
+		rooms.append(divided[1])
+		rooms[large_rooms[i]] = divided[0]
+
+		if maxi(divided[0].size.x, divided[0].size.y) <= MAX_ROOM_SIZE:
 			large_rooms.remove_at(i)
-		if maxi(new.size.x, new.size.y) >= MIN_ROOM_SIZE + WALL_THICKNESS:
+		if maxi(divided[1].size.x, divided[1].size.y) > MAX_ROOM_SIZE:
 			large_rooms.append(rooms.size() - 1)
 
 	# find and create doors
@@ -238,6 +228,23 @@ static func generate_doors(a: Rect2i, b: Rect2i, rand: RandomNumberGenerator) ->
 		return [Vector2i(x, a.position.y - 1), Vector2i(x, b.end.y)]
 
 	return []
+
+static func divide_room(room:Rect2i, divide:int) -> Array[Rect2i]:
+	var new:Rect2i
+	if room.size.x > room.size.y:	# slice room verticaly
+		new = Rect2i(
+			room.position + Vector2i(divide + WALL_THICKNESS, 0),
+			Vector2i(room.size.x - divide - WALL_THICKNESS, room.size.y)
+		)
+		room.size.x = divide
+	else:
+		new = Rect2i(
+			room.position + Vector2i(0, divide + WALL_THICKNESS),
+			Vector2i(room.size.x, room.size.y - divide - WALL_THICKNESS)
+		)
+		room.size.y = divide
+
+	return [room, new]
 
 static func get_neighbour_tree(rooms:Array[Rect2i], max_gap:int, min_overlap:int) -> Array[PackedInt32Array]:
 	var neighbours:Array[PackedInt32Array]
