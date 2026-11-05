@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://djr3uqmxi7d64" path="res://player/map.gd" id="14_32hag"]
 [ext_resource type="PackedScene" uid="uid://ie2w7o88drlw" path="res://player/inv_item_disp.tscn" id="14_wodsf"]
 [ext_resource type="PackedScene" uid="uid://6ijehex8tf3r" path="res://player/slot.tscn" id="16_tqiix"]
+[ext_resource type="PackedScene" uid="uid://bf4g3eqg1rjgw" path="res://player/slot_display.tscn" id="18_c35mf"]
 
 [sub_resource type="Resource" id="Resource_32hag"]
 script = ExtResource("4_32hag")
@@ -427,6 +428,61 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 text = "Press \"e\" for inventory"
+
+[node name="EquippedDisp" type="GridContainer" parent="CanvasLayer/UI" unique_id=897779723]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -104.0
+offset_top = -70.0
+offset_bottom = 70.0
+grow_horizontal = 0
+grow_vertical = 2
+columns = 3
+
+[node name="Control" type="Control" parent="CanvasLayer/UI/EquippedDisp" unique_id=459393869]
+layout_mode = 2
+
+[node name="Head" parent="CanvasLayer/UI/EquippedDisp" unique_id=1035088746 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+layout_mode = 2
+target_slot = NodePath("../../Inventory/HeadSlot")
+
+[node name="Control2" type="Control" parent="CanvasLayer/UI/EquippedDisp" unique_id=1738018738]
+layout_mode = 2
+
+[node name="RHand" parent="CanvasLayer/UI/EquippedDisp" unique_id=1768077221 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+layout_mode = 2
+target_slot = NodePath("../../Inventory/RHandSlot")
+
+[node name="Torso" parent="CanvasLayer/UI/EquippedDisp" unique_id=942630958 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+layout_mode = 2
+target_slot = NodePath("../../Inventory/TorsoSlot")
+
+[node name="LHand" parent="CanvasLayer/UI/EquippedDisp" unique_id=1164514249 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+layout_mode = 2
+target_slot = NodePath("../../Inventory/LHandSlot")
+
+[node name="RHip" parent="CanvasLayer/UI/EquippedDisp" unique_id=1711310297 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+layout_mode = 2
+target_slot = NodePath("../../Inventory/RHipSlot")
+
+[node name="Legs" parent="CanvasLayer/UI/EquippedDisp" unique_id=630680859 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+layout_mode = 2
+target_slot = NodePath("../../Inventory/LegSlot")
+
+[node name="LHip" parent="CanvasLayer/UI/EquippedDisp" unique_id=1963104326 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+layout_mode = 2
+target_slot = NodePath("../../Inventory/LHipSlot")
+
+[node name="Control3" type="Control" parent="CanvasLayer/UI/EquippedDisp" unique_id=1821404636]
+layout_mode = 2
+
+[node name="Feet" parent="CanvasLayer/UI/EquippedDisp" unique_id=1653556726 node_paths=PackedStringArray("target_slot") instance=ExtResource("18_c35mf")]
+layout_mode = 2
+target_slot = NodePath("../../Inventory/FootSlot")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1429787048]
 energy = 0.15

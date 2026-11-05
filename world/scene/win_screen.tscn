@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ccbqaistjn2s2"]
 
-[ext_resource type="Texture2D" uid="uid://dbyc04tp46pid" path="res://assets/textures/brick.png" id="1_xlku8"]
+[ext_resource type="Texture2D" uid="uid://dbyc04tp46pid" path="res://assets/textures/items/icons_32/brick.png" id="1_xlku8"]
 [ext_resource type="Script" uid="uid://2k7b423aqwbe" path="res://world/scene/restart.gd" id="2_be3k0"]
 [ext_resource type="AudioStream" uid="uid://dmhm7gqiul4mw" path="res://assets/audio/nastelbom-no-copyright-music-606703.mp3" id="3_be3k0"]
 

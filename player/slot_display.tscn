@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bf4g3eqg1rjgw"]
+
+[ext_resource type="Script" uid="uid://ig8l2rpqcyty" path="res://player/slot_display.gd" id="1_eets8"]
+
+[node name="HeadSlot" type="ColorRect" unique_id=1035088746]
+custom_minimum_size = Vector2(32, 32)
+color = Color(1, 1, 1, 0.2509804)
+script = ExtResource("1_eets8")
+
+[node name="IconRect" type="TextureRect" parent="." unique_id=1835189517]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 3

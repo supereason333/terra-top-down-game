@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqdb2f85t37te"
-path="res://.godot/imported/rifle.png-1cf5ce9efb62c1f5b779bc9f4b59b68d.ctex"
+uid="uid://cbj8nq8gsj5su"
+path="res://.godot/imported/battery.png-c3d2bfcf6b3d36f4fb6d136c22a59f5c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/rifle.png"
-dest_files=["res://.godot/imported/rifle.png-1cf5ce9efb62c1f5b779bc9f4b59b68d.ctex"]
+source_file="res://assets/textures/items/icons/battery.png"
+dest_files=["res://.godot/imported/battery.png-c3d2bfcf6b3d36f4fb6d136c22a59f5c.ctex"]
 
 [params]
 

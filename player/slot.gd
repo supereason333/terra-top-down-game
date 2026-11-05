@@ -5,8 +5,10 @@ signal item_changed(new:Item2D)
 
 ## empty means anything
 @export var filter_tags: Array[StringName]
+@export var default_texture:Texture2D
 
 @onready var name_label: Label = $NameLabel
+@onready var icon_rect:TextureRect = $IconRect
 
 var item: Item2D
 
@@ -15,12 +17,35 @@ func _ready() -> void:
 	_item_changed(item)
 
 func _item_changed(itm: Item2D) -> void:
-	if itm:
+	if !itm:
+		if default_texture:
+			icon_rect.texture = default_texture
+			name_label.hide()
+			icon_rect.show()
+		else:
+			name_label.text = name
+			name_label.modulate = Color.DARK_SALMON
+			name_label.show()
+			icon_rect.hide()
+		return
+
+	var tex:Texture2D
+	var itm_res:InventoryItem = Global.item_library.lib.get(itm.id)
+	if itm_res:
+		if itm_res.icon_32:
+			tex = itm_res.icon_32
+		elif itm_res.icon:
+			tex = itm_res.icon
+
+	if tex:
+		name_label.hide()
+		icon_rect.show()
+		icon_rect.texture = tex
+	else:
+		name_label.show()
+		icon_rect.hide()
 		name_label.text = itm.id
 		name_label.modulate = Color.WHITE
-	else:
-		name_label.text = name
-		name_label.modulate = Color.DARK_SALMON
 
 func _get_drag_data(_at_position: Vector2) -> Variant:
 	if not item:

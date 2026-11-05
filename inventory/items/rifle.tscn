@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cdquepfy2xafo"]
 
 [ext_resource type="Script" uid="uid://ce21ksnhhfhnx" path="res://inventory/items/rifle.gd" id="1_44xeg"]
-[ext_resource type="Texture2D" uid="uid://djpyfp5tkg2ry" path="res://assets/textures/rifle_top.png" id="2_fdmbd"]
+[ext_resource type="Texture2D" uid="uid://djpyfp5tkg2ry" path="res://assets/textures/items/textures/rifle_top.png" id="2_fdmbd"]
 
 [node name="Rifle" type="Node2D" unique_id=297601599]
 script = ExtResource("1_44xeg")
