@@ -81,7 +81,7 @@ func load_level(level_pos:PackedInt32Array):
 
 	# Load new level
 	var contents = LevelBuilder.build_tilemap(current_level_data)
-	tilemap = contents.tilemap
+	tilemap = contents.base_tilemap
 	add_child(tilemap)
 
 	for entity in contents.entities:
@@ -93,8 +93,8 @@ func load_level(level_pos:PackedInt32Array):
 	setup_astar()
 	player.set_camera_rect(rect)
 
-	player.queue_pos_reset((current_level_data.spawn_room.position + current_level_data.spawn_room.end ) * 8)
-	teleport_thing.position = (current_level_data.spawn_room.position + current_level_data.spawn_room.end ) * 8
+	player.queue_pos_reset(current_level_data.spawn_pos * 16)
+	teleport_thing.position = current_level_data.teleport_thing_pos * 16
 	GameMngr.level += 1
 	# print("emit")
 	loaded_new_level.emit(level_position)

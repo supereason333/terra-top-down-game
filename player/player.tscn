@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bbisusbmx1xg"]
 
 [ext_resource type="Script" uid="uid://chycswj4i15xl" path="res://player/player.gd" id="1_onrkg"]
-[ext_resource type="Script" uid="uid://d21uawntskjl" path="res://scripts/health_node.gd" id="2_g1dw6"]
+[ext_resource type="Script" uid="uid://d21uawntskjl" path="res://entities/health_node.gd" id="2_g1dw6"]
 [ext_resource type="Script" uid="uid://gtsy1dgtmb5b" path="res://player/inventory.gd" id="3_kb6p2"]
 [ext_resource type="Script" uid="uid://bnrs6x0luox18" path="res://inventory/class_defs/preload_inv_item.gd" id="4_32hag"]
 [ext_resource type="Script" uid="uid://qqc2r738vc0w" path="res://player/power.gd" id="4_ebec5"]
@@ -423,7 +423,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TutorialInv" type="Label" parent="CanvasLayer/UI" unique_id=1103121575]
-visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0

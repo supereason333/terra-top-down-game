@@ -5,53 +5,65 @@ const MIN_SIZE_TILES = 60
 
 const MIN_ROOM_SIZE = 6		# for 3x3 room
 
+const MIN_ROOM_OVERLAP = 3	# overlap to be considered neighbours
+const DOOR_MIN_DIST_FROM_CORNER = 1	# dooes arnt in the corner of rooms. make sure 2x < MIN_ROOM_OVERLAP
+const WALL_THICKNESS = 2
+
+# upgrade thing "plan":
+	# remake so data structures come fies: rooms, doors, etc
+	# before any tiles need to be placed.
+	# either generator writes the tiles
+	# or the world builder can do it idk yet
+
 @warning_ignore_start("integer_division")
 # static func generate_level(level_seed:int, settings:LevelGeneratorSettings) -> LevelData:
 static func generate_level(world_seed:int, level_position:PackedInt32Array) -> LevelData:
+	# yes i know this is very unpotimised it gives me more time to display a waiting screen
+	# or something idk
 	var rand := RandomNumberGenerator.new()
 	rand.seed = SeedUtil.combine(world_seed, hash(level_position))
 	var level_size:Vector2i = Vector2i(
 		rand.randi_range(MIN_SIZE_TILES, MAX_SIZE_TILES),
 		rand.randi_range(MIN_SIZE_TILES, MAX_SIZE_TILES)
 	)
-	var level = LevelData.new(level_size)
 	var rooms:Array[Rect2i]
 	rooms.append(Rect2i(Vector2i.ZERO, level_size))
 
-	# 36 is ave room size (6*6), how many divisions for BSP
+	# yeah
 	var room_target:int = level_size.x * level_size.y / 80
-	var large_rooms:Array[int] = [0]	# Rooms that are large enough to divide
+	var large_rooms:PackedInt32Array = [0]	# Rooms that are large enough to divide
 
 	# Divide rooms
 	for div in room_target:
 		if large_rooms.is_empty(): break
 		var i = rand.randi_range(0, large_rooms.size() - 1)
 		var room = rooms[large_rooms[i]]
-		var divide := rand.randi_range(MIN_ROOM_SIZE, maxi(room.size.x, room.size.y) - MIN_ROOM_SIZE - 1)
+		var divide := rand.randi_range(MIN_ROOM_SIZE, maxi(room.size.x, room.size.y) - MIN_ROOM_SIZE - WALL_THICKNESS)
 		var new:Rect2i
 		if room.size.x > room.size.y:	# slice room verticaly
 			new = Rect2i(
-				room.position + Vector2i(divide + 1, 0),
-				Vector2i(room.size.x - divide - 1, room.size.y)
+				room.position + Vector2i(divide + WALL_THICKNESS, 0),
+				Vector2i(room.size.x - divide - WALL_THICKNESS, room.size.y)
 			)
 			rooms[large_rooms[i]].size.x = divide
 		else:
 			new = Rect2i(
-				room.position + Vector2i(0, divide + 1),
-				Vector2i(room.size.x, room.size.y - divide - 1)
+				room.position + Vector2i(0, divide + WALL_THICKNESS),
+				Vector2i(room.size.x, room.size.y - divide - WALL_THICKNESS)
 			)
 			rooms[large_rooms[i]].size.y = divide
 		rooms.append(new)
 		room = rooms[large_rooms[i]]
-		if maxi(room.size.x, room.size.y) < MIN_ROOM_SIZE * 2 + 1:
+		if maxi(room.size.x, room.size.y) < MIN_ROOM_SIZE + WALL_THICKNESS:
 			large_rooms.remove_at(i)
-		if maxi(new.size.x, new.size.y) >= MIN_ROOM_SIZE * 2 + 1:
+		if maxi(new.size.x, new.size.y) >= MIN_ROOM_SIZE + WALL_THICKNESS:
 			large_rooms.append(rooms.size() - 1)
 
 	# find and create doors
+	# runs path through randomly and creates the connections
 	var astar := AStar2D.new()
 
-	var neighbour_tree := get_neighbour_tree(rooms, 1, 3)
+	var neighbour_tree := get_neighbour_tree(rooms, WALL_THICKNESS, MIN_ROOM_OVERLAP)
 
 	for r in rooms.size():
 		astar.add_point(r, rooms[r].position)
@@ -65,7 +77,7 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 	var door_tree:Array[PackedInt32Array]
 	door_tree.resize(rooms.size())
 
-	var used: Array[int] = [rand.randi_range(0, rooms.size() - 1)]
+	var used: Array[int] = [rand.randi_range(0, rooms.size() - 1)]	# rooms that have been walked
 	for s in 40:
 		var from: int = used[rand.randi_range(0, used.size() - 1)]
 		var to := rand.randi_range(0, rooms.size() - 1)
@@ -80,6 +92,36 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 			if not used.has(path[r]):
 				used.append(path[r])
 
+	# FINISHED GENERATING ROOMS AND CONNECTING DOORS
+	# filer out to the real used rooms
+
+	# oh how i wished there was a struct please god give me a struct
+	# godot rust bindings look pretty attractive right now
+	# DOOr generation
+	var room_doors: Dictionary[int, Array] = {}  # int -> Array[Array[Vector2i]]
+	for r in rooms.size():
+		if door_tree[r].is_empty():
+			continue
+		var room := rooms[r]
+		for other in door_tree[r]:
+			if other < r:
+				continue  # this pair is handled when the lower-indexed room is visited
+
+			var doors := generate_doors(room, rooms[other], rand)
+			if doors.is_empty():
+				continue
+
+			if not room_doors.has(r):
+				room_doors[r] = []
+			room_doors[r].append(doors[0])
+
+			if not room_doors.has(other):
+				room_doors[other] = []
+			room_doors[other].append(doors[1])
+
+	# got the real rooms, generate room contents and place tiles next
+	var level = LevelData.new(level_size)
+
 	# Create mask of solid or not
 	var y_bytes := ceili(level_size.y / 8.0)
 	var mask: Array[PackedByteArray] = []
@@ -89,94 +131,113 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 		column.fill(0xFF)
 		mask.append(column)
 
-	# var door_already_connected:Array[PackedInt32Array]
-	# door_already_connected.resize(rooms.size())
+	# carve out rooms and doors from the mask
 	for r in rooms.size():
-		# carve rooms, skip if has no doors
-		if !door_tree[r].is_empty():
-			for x in range(rooms[r].position.x, rooms[r].end.x):
-				var column := mask[x]
-				for y in range(rooms[r].position.y, rooms[r].end.y):
-					column[y >> 3] &= ~(1 << (y & 7))
-				mask[x] = column
+		if door_tree[r].is_empty(): continue
+		for x in range(rooms[r].position.x, rooms[r].end.x):
+			var column := mask[x]
+			for y in range(rooms[r].position.y, rooms[r].end.y):
+				column[y >> 3] &= ~(1 << (y & 7))
+			mask[x] = column
 
 		# carve doors
-		var connected := door_tree[r]
-		for d in connected.size():
-			var other := connected[d]
-			if other < r:
-				continue  # carve each pair once
-			var a := rooms[r]
-			var b := rooms[other]
-			var y_overlap := mini(a.end.y, b.end.y) - maxi(a.position.y, b.position.y)
-			var x_overlap := mini(a.end.x, b.end.x) - maxi(a.position.x, b.position.x)
-			var pos: Vector2i
-			if y_overlap > x_overlap:
-				# side by side: vertical wall, door varies along Y
-				pos.y = maxi(a.position.y, b.position.y) + rand.randi_range(1, y_overlap - 2)
-				pos.x = a.end.x if b.position.x > a.position.x else a.position.x - 1
-			else:
-			# stacked: horizontal wall, door varies along X
-				pos.x = maxi(a.position.x, b.position.x) + rand.randi_range(1, x_overlap - 2)
-				pos.y = a.end.y if b.position.y > a.position.y else a.position.y - 1
-			var column := mask[pos.x]
-			column[pos.y >> 3] &= ~(1 << (pos.y & 7))
-			mask[pos.x] = column
+		for d in room_doors[r].size():
+			var x:int = room_doors[r][d].x
+			var y:int = room_doors[r][d].y
+			mask[x][y >> 3] &= ~(1 << (y & 7))
 
-	# Create tiles based on wether tile is solid or not
+
+
+	# Create the walls of the map based on the solid or not mask
 	for x in level_size.x:
 		for y in level_size.y:
 			var solid = mask[x][y >> 3] >> (y % 8) & 1
 			# print(solid)
 			if solid:
-				level.world_tiles[x][y] = 1
+				level.base_tiles[x][y] = 1
 			else:
-				level.world_tiles[x][y] = 0
+				level.base_tiles[x][y] = 0
 
 
-	var spawn_room:int
-
+	# figure out spawn room, spawn room and surroundings dont have enemies and stuff
+	var spawn_room:int = -1
 	var best := -1
 	var dist:float = INF
 	for r in rooms.size():
 		if door_tree[r].is_empty(): continue
 		if rooms[r].has_point(level_size / 2):
-			level.spawn_room = rooms[r]
 			spawn_room = r
 			break
 		var new_dist := rooms[r].position.distance_squared_to(level_size / 2)
 		if new_dist < dist:
 			dist = new_dist
 			best = r
-	if !level.spawn_room:
-		level.spawn_room = rooms[best]
+	if spawn_room == -1:
 		spawn_room = best
 
-	# Spawn enemies and stuff PROLLY RUSHED, WORK ON LATER AND MAKE BETTER
+	# level.spawn = (used_rooms[spawn_room].position + used_rooms[spawn_room].end) / 2
 
 	for r in rooms.size():
-		if door_tree[r].is_empty(): continue	# Unused room
-		if r == spawn_room: continue					# spawnr room
-		if door_tree[r].has(spawn_room): continue		# adj to spawn room
-
-		var room := RoomData.new()
-
-		var has_entities:bool = (rand.randf() < 0.5)
-		if has_entities:
-			var entity_count = rand.randi_range(1, 5)
-			room.entities.resize(entity_count)
-			room.entities.fill(&"basic_enemy")
-			room.rect = rooms[r]
-			for e in entity_count:
-				var pos = Vector2(
-					rand.randf_range(0.5, room.rect.size.x + 0.5),
-					rand.randf_range(0.5, room.rect.size.y + 0.5)
-				)
-				room.entity_positions.append(pos)
-
-		level.rooms.append(room)
+		if door_tree[r].is_empty(): continue
+		var room := rooms[r]
+		if r == spawn_room:
+			# spawnroom
+			_gen_spawn_room(room, level, rand)
+		elif door_tree[r].has(spawn_room):
+			# adj to spawn room
+			_gen_spawn_adj_room(room, level, rand)
+		elif mini(room.size.x, room.size.y) >= 20:
+			# large room
+			pass
+		elif mini(room.size.x, room.size.y) >= 12:
+			# medium large room
+			pass
+		else:
+			# regular room
+			pass
 	return level
 @warning_ignore_restore("integer_division")
+
+# AWDKJAWLDKJWAODJ ROOM GENERATION
+
+static func _gen_spawn_room(room:Rect2i, level:LevelData, rand:RandomNumberGenerator):
+	level.teleport_thing_pos = Vector2(
+		rand.randf_range(1, room.size.x - 1),
+		rand.randf_range(1, room.size.x - 1)
+	) + Vector2(room.position)
+	level.spawn_pos = level.teleport_thing_pos
+
+static func _gen_spawn_adj_room(room:Rect2i, level:LevelData, rand:RandomNumberGenerator):
+	pass
+
+# OTHER STUFF
+
+## generates the pair of doors for rooms a and b, retuirns arr idx 0 for a, 1 for b
+## empty arr means error
+static func generate_doors(a: Rect2i, b: Rect2i, rand: RandomNumberGenerator) -> Array[Vector2i]:
+	var x_overlap := mini(a.end.x, b.end.x) - maxi(a.position.x, b.position.x)
+	var y_overlap := mini(a.end.y, b.end.y) - maxi(a.position.y, b.position.y)
+	var min_overlap := maxi(MIN_ROOM_OVERLAP, DOOR_MIN_DIST_FROM_CORNER * 2 + 1)
+
+	# side by side
+	if y_overlap >= min_overlap and x_overlap < 0 and -x_overlap <= WALL_THICKNESS:
+		var y := rand.randi_range(
+			maxi(a.position.y, b.position.y) + DOOR_MIN_DIST_FROM_CORNER,
+			mini(a.end.y, b.end.y) - DOOR_MIN_DIST_FROM_CORNER - 1)
+		if a.position.x < b.position.x:  # a is on the left
+			return [Vector2i(a.end.x, y), Vector2i(b.position.x - 1, y)]
+		return [Vector2i(a.position.x - 1, y), Vector2i(b.end.x, y)]
+
+	# stacked
+	if x_overlap >= min_overlap and y_overlap < 0 and -y_overlap <= WALL_THICKNESS:
+		var x := rand.randi_range(
+			maxi(a.position.x, b.position.x) + DOOR_MIN_DIST_FROM_CORNER,
+			mini(a.end.x, b.end.x) - DOOR_MIN_DIST_FROM_CORNER - 1)
+		if a.position.y < b.position.y:  # a is above
+			return [Vector2i(x, a.end.y), Vector2i(x, b.position.y - 1)]
+		return [Vector2i(x, a.position.y - 1), Vector2i(x, b.end.y)]
+
+	return []
 
 static func get_neighbour_tree(rooms:Array[Rect2i], max_gap:int, min_overlap:int) -> Array[PackedInt32Array]:
 	var neighbours:Array[PackedInt32Array]
