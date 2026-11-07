@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bellf2ol2jiqj"]
 
-[ext_resource type="Script" uid="uid://d04soxc0vqde6" path="res://inventory/items/basic_knife.gd" id="1_l3es3"]
+[ext_resource type="Script" uid="uid://d04soxc0vqde6" path="res://inventory/items/basic_knife/basic_knife.gd" id="1_l3es3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_aeb26"]
 radius = 8.0

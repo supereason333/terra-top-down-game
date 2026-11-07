@@ -5,6 +5,7 @@ class_name Item2D
 # somethign something something exiting tree didnt work something somethign something
 signal gonna_be_freed
 signal used
+signal used_successfully
 
 var id:StringName
 

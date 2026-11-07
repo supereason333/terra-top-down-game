@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://dpm5230uloh4e" path="res://inventory/class_defs/item_tag.gd" id="3_2062g"]
 [ext_resource type="PackedScene" uid="uid://qypq30bhaga" path="res://inventory/ui/gun_ui.tscn" id="4_uk6kd"]
 [ext_resource type="Texture2D" uid="uid://dkig3gv2n8un5" path="res://assets/textures/items/icons_32/knife.png" id="5_2062g"]
-[ext_resource type="PackedScene" uid="uid://cp4i5fyo2minb" path="res://inventory/items/basic_knife.tscn" id="6_cnulv"]
+[ext_resource type="PackedScene" uid="uid://cp4i5fyo2minb" path="res://inventory/items/basic_knife/basic_knife.tscn" id="6_cnulv"]
 [ext_resource type="PackedScene" uid="uid://bellf2ol2jiqj" path="res://inventory/items/big_knife.tscn" id="7_wtgnx"]
 [ext_resource type="Texture2D" uid="uid://c7jcbesqduwt1" path="res://assets/textures/items/icons_32/headlamp.png" id="8_uk6kd"]
 [ext_resource type="PackedScene" uid="uid://djp5m0u73ir76" path="res://inventory/items/headlamp.tscn" id="9_nk1fe"]

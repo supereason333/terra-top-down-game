@@ -172,10 +172,10 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 		var room := rooms[r]
 		if r == spawn_room:
 			# spawnroom
-			_gen_spawn_room(room, level, rand)
+			_gen_spawn_room(room, room_doors[r], level, rand)
 		elif door_tree[r].has(spawn_room):
 			# adj to spawn room
-			_gen_spawn_adj_room(room, level, rand)
+			_gen_spawn_adj_room(room, room_doors[r], level, rand)
 		elif mini(room.size.x, room.size.y) >= 20:
 			# large room
 			pass
@@ -190,7 +190,7 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 
 # AWDKJAWLDKJWAODJ ROOM GENERATION
 
-static func _gen_spawn_room(room:Rect2i, level:LevelData, rand:RandomNumberGenerator):
+static func _gen_spawn_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
 	level.teleport_thing_pos = Vector2(
 		rand.randf_range(1, room.size.x - 1),
 		rand.randf_range(1, room.size.x - 1)
@@ -198,12 +198,15 @@ static func _gen_spawn_room(room:Rect2i, level:LevelData, rand:RandomNumberGener
 	# level.teleport_thing_pos *= 16
 	level.spawn_pos = level.teleport_thing_pos
 
-static func _gen_spawn_adj_room(room:Rect2i, level:LevelData, rand:RandomNumberGenerator):
-	pass
+static func _gen_spawn_adj_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
+	for d in doors.size():
+		var pos:Vector2i = doors[d] - room.position
+		print(pos)
 
 # OTHER STUFF
 
 ## generates the pair of doors for rooms a and b, retuirns arr idx 0 for a, 1 for b
+## door pos in world coords
 ## empty arr means error
 static func generate_doors(a: Rect2i, b: Rect2i, rand: RandomNumberGenerator) -> Array[Vector2i]:
 	var x_overlap := mini(a.end.x, b.end.x) - maxi(a.position.x, b.position.x)

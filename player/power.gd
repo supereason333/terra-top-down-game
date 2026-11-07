@@ -4,8 +4,8 @@ class_name PowerMngr
 ## for notifying if power is out and thing needs to turn off
 signal load_removed(id:int)
 
-@export var max_storage:float = 100
-@export var base_regen:float = 10	# E/s
+@export var max_storage:float = 40
+@export var base_regen:float = 3	# E/s
 @export var reserve:float = 10
 
 var energy:float = 0

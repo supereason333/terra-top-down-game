@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://cp4i5fyo2minb"]
+
+[ext_resource type="Script" uid="uid://d04soxc0vqde6" path="res://inventory/items/basic_knife/basic_knife.gd" id="1_nfv62"]
+[ext_resource type="Script" uid="uid://dqoc2sky0tm4n" path="res://inventory/items/basic_knife/animation.gd" id="2_aeb26"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_aeb26"]
+radius = 4.0
+height = 12.0
+
+[sub_resource type="PrismMesh" id="PrismMesh_nfv62"]
+size = Vector3(2.46, 4.45, 1)
+
+[node name="Knife" type="Node2D" unique_id=1417258992]
+script = ExtResource("1_nfv62")
+metadata/_custom_type_script = "uid://d4nrfgk437v0g"
+
+[node name="Area2D" type="Area2D" parent="." unique_id=906980359]
+position = Vector2(3, 0)
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=323976079]
+shape = SubResource("CapsuleShape2D_aeb26")
+
+[node name="CooldownTimer" type="Timer" parent="." unique_id=698985946]
+wait_time = 0.2
+one_shot = true
+
+[node name="KnifePivot" type="Node2D" parent="." unique_id=114498459]
+unique_name_in_owner = true
+position = Vector2(-4, 0)
+
+[node name="Knife" type="MeshInstance2D" parent="KnifePivot" unique_id=1930371596]
+unique_name_in_owner = true
+modulate = Color(1.6333059, 1.6333059, 1.6333059, 1)
+position = Vector2(4, 8)
+rotation = -0.41875887
+scale = Vector2(1, 1.6417322)
+mesh = SubResource("PrismMesh_nfv62")
+
+[node name="Animation" type="Node" parent="." unique_id=1764524766]
+script = ExtResource("2_aeb26")
+
+[connection signal="used_successfully" from="." to="Animation" method="_on_knife_used"]

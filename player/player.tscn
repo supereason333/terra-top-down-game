@@ -112,6 +112,7 @@ modulate = Color(0.69965345, 0.69965345, 0.69965345, 1)
 mesh = SubResource("SphereMesh_tlwt5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1424844302]
+visible = false
 shape = SubResource("CircleShape2D_dwbse")
 
 [node name="GunRotate" type="Node2D" parent="." unique_id=959357907]
@@ -569,8 +570,10 @@ energy = 0.15
 shadow_enabled = true
 shadow_filter = 1
 texture = SubResource("GradientTexture2D_2ieo8")
+metadata/_edit_lock_ = true
 
 [node name="Interaction" type="Area2D" parent="." unique_id=1773903231]
+visible = false
 collision_layer = 0
 collision_mask = 8
 script = ExtResource("12_ebec5")
