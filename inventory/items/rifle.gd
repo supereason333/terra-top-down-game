@@ -1,7 +1,7 @@
 extends Item2D
 
 @export var audio:AudioStream
-@export var energy_use := 5.0
+@export var energy_use := 3.0
 
 @onready var cooldown_timer:Timer = $CooldownTimer
 @onready var shoot:Marker2D = $Shoot

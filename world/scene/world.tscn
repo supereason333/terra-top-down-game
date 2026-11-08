@@ -71,6 +71,7 @@ visible = false
 energy = 0.2
 
 [node name="Player" parent="." unique_id=2021635855 instance=ExtResource("3_tlwt5")]
+position = Vector2(-1, 0)
 
 [node name="ColorRect2" type="ColorRect" parent="Player" unique_id=1183423778]
 z_index = -20

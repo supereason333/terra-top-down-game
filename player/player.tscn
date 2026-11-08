@@ -403,7 +403,10 @@ press 1 or 2 to swap between R hand
 and L and R hips
 
 Press \"f\" to interact and pick 
-up things"
+up things
+
+Z to toggle head slot item
+LMB to shoot / use R hand item"
 label_settings = SubResource("LabelSettings_e7oew")
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer/UI" unique_id=1059147995]
@@ -423,6 +426,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TutorialInv" type="Label" parent="CanvasLayer/UI" unique_id=1103121575]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
