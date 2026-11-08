@@ -68,4 +68,5 @@ func get_tile_from_str_id(id:StringName) -> Array:
 ## returns random (TODO) from tile data [source_id:int, atlas_coords:Vector2i, alternate_id:int]
 func get_tile(id:int) -> Array:
 	var data := library[id]
-	return [data.source_id[0], data.atlas_coords[0], data.alternate_id[0]]	# currently dosetn random, add that later
+	var i := randi_range(0, data.source_id.size() - 1)
+	return [data.source_id[i], data.atlas_coords[i], data.alternate_id[i]]	# currently dosetn random, add that later

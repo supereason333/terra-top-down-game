@@ -239,28 +239,86 @@ static func _gen_spawn_adj_room(room:Rect2i, doors: Array, level:LevelData, rand
 
 		level.base_tiles[room.position.x + 1][room.position.y + 3] = FLOOR_STUDDED
 
-static func _gen_large_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
-	# var type := randi_range(0, 10)	how to do different types (when i implment it ofc)
-	# if type <= 3:
-	# 	pass
-	# elif type <= 5:
-	# 	pass
-	# elif type <= 7:
-	# 	pass
-	# elif type <= 9:
-	# 	pass
-	# elif type <= 10:
-	# 	pass
+const DESK_SIZE := Vector2i(2, 3) # desk tile size, prolly upgrade to a better system for large tiles instead of hard coded stuff
+const DESK_AISLE := 1  # free rows below each desk row
+const DESK_SKIP_CHANCE := 0.08  # chance a desk slot is left empty
 
-	# large rooms will be an office space for now
-	# first find the routes between doors
+@warning_ignore_start("integer_division")
+static func _gen_large_room(room: Rect2i, doors: Array, level: LevelData, rand: RandomNumberGenerator) -> void:
+	var type := rand.randi_range(0, 1)
+	if type <= 0:	# 'natural' layout (its pretty bad and not natural at all, looks like the backrooms ig) needs a bit of love in the future
+		var OFFICE_DESK: int = Global.tile_library.id_str_lookup[&'office_desk']
+		var WALL: int = Global.tile_library.id_str_lookup[&'wall']
 
-	var path:Array[Array] = find_path_all_doors(room, doors)
-	pass
+		var path := find_path_all_doors(room, doors)
+
+		var size := room.size
+		var row_pitch := DESK_SIZE.y + DESK_AISLE
+
+		var cols := (size.x - 2) / DESK_SIZE.x
+		var x_slack := (size.x - 2) - cols * DESK_SIZE.x
+		var rows := (size.y - 1) / row_pitch
+		var y_slack := (size.y - 1) - rows * row_pitch
+		if cols < 1 or rows < 1:
+			return  # room too small
+
+		var x0 := 1 + rand.randi_range(0, x_slack)
+		var y0 := 1 + rand.randi_range(0, y_slack)
+
+		for row in rows:
+			var y := y0 + row * row_pitch
+			for col in cols:
+				var x := x0 + col * DESK_SIZE.x
+				if rand.randf() < DESK_SKIP_CHANCE:
+					continue
+				if _desk_hits_path(path, Vector2i(x, y)):
+					continue
+				level.mid_tiles[x + room.position.x][y + room.position.y] = OFFICE_DESK
+
+		var band_height := rows * row_pitch
+		var block_x_end := x0 + cols * DESK_SIZE.x
+		for lx in size.x:
+			var on_x_edge := lx == 0 or lx == size.x - 1
+			for ly in size.y:
+				if on_x_edge or ly == 0 or ly == size.y - 1:
+					continue
+				if not path.is_empty() and path[lx][ly]:
+					continue
+				var rel_y := ly - y0
+				if rel_y >= 0 and rel_y < band_height:
+					if rel_y % row_pitch >= DESK_SIZE.y:
+						continue
+					if lx >= x0 and lx < block_x_end:
+						continue
+				level.base_tiles[room.position.x + lx][room.position.y + ly] = WALL
+
+	elif type <= 1:  # 'rigid' desk generation
+		var OFFICE_DESK: int = Global.tile_library.id_str_lookup[&'office_desk']
+		var columns := (room.size.x - 2) / 2
+		var rows := (room.size.y - 2) / 4
+		var x_offset := ((room.size.x - 2) % columns) / 2
+		var y_offset := ((room.size.y - 2) % rows) / 2
+
+		for cx in columns:
+			var x := cx * 2 + 1 + room.position.x + x_offset
+			for ry in rows:
+				var y := ry * 4 + 1 + room.position.y + y_offset
+				level.mid_tiles[x][y] = OFFICE_DESK
+@warning_ignore_restore("integer_division")
+
+# helper for large room gen
+static func _desk_hits_path(path: Array[Array], local: Vector2i) -> bool:
+	if path.is_empty():
+		return false
+	for dx in DESK_SIZE.x:
+		for dy in DESK_SIZE.y:
+			if path[local.x + dx][local.y + dy]:
+				return true
+	return false
 
 static func _gen_medium_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
 	var WALL:int = Global.tile_library.id_str_lookup[&'wall']
-	var type := randi_range(0, 10)
+	var type := rand.randi_range(0, 10)
 	if type <= 1:	# 'library' type room
 		var div: bool	# true is vertical div else horizontal div
 		if room.size.x > room.size.y:
@@ -329,7 +387,7 @@ static func _gen_medium_room(room:Rect2i, doors: Array, level:LevelData, rand:Ra
 
 static func _gen_normal_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
 	var WALL:int = Global.tile_library.id_str_lookup[&'wall']
-	var type := randi_range(0, 10)
+	var type := rand.randi_range(0, 10)
 	if type <= 2:	# corridore rooms
 		var path := find_path_all_doors(room, doors)
 		for cx in path.size():
