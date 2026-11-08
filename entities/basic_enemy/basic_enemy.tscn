@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://d21uawntskjl" path="res://entities/health_node.gd" id="4_4n6jn"]
 [ext_resource type="Script" uid="uid://5xdeiu0krqs0" path="res://inventory/inventory.gd" id="5_6if4x"]
 [ext_resource type="Texture2D" uid="uid://egeurjwiyx0o" path="res://icon.svg" id="5_m7qsk"]
-[ext_resource type="PackedScene" uid="uid://ce5760s4ch8ln" path="res://things/health_display.tscn" id="6_oblg6"]
 [ext_resource type="Script" uid="uid://dq8rc4gvg1cwg" path="res://inventory/equip_point.gd" id="8_e4w74"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_e4w74"]
@@ -78,11 +77,6 @@ collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1880783119]
 shape = SubResource("CircleShape2D_xiaos")
-
-[node name="HealthDisplay" parent="." unique_id=510401543 node_paths=PackedStringArray("health") instance=ExtResource("6_oblg6")]
-light_mask = 2
-use_parent_material = true
-health = NodePath("../HealthNode")
 
 [node name="Rotate" type="Node2D" parent="." unique_id=1857921105]
 

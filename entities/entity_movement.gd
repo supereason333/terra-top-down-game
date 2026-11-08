@@ -55,9 +55,10 @@ func set_path(p:PackedVector2Array, type:PathType):
 
 func set_target(targ:Vector2, pathfind:bool = true):
 	if pathfind:
-		var from:Vector2i = world.tilemap.local_to_map(entity.position)
-		var to:Vector2i = world.tilemap.local_to_map(targ)
+		var from:Vector2i = world.base_tilemap.local_to_map(entity.position)
+		var to:Vector2i = world.base_tilemap.local_to_map(targ)
 		var new:PackedVector2Array = world.astar.get_point_path(from, to)
+		print(new)
 		for i in new.size():
 			new[i] += Vector2(6, 6)
 		set_path(new, PathType.POINTS)

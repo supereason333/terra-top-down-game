@@ -17,7 +17,7 @@ func _draw() -> void:
 
 	for x in world.current_level_data.base_tiles.size():
 		for y in world.current_level_data.base_tiles[x].size():
-			if world.current_level_data.base_tiles[x][y] == 1:
+			if (world.pathfind_mask[x][y >> 3] >> (y & 7)) & 1:
 				var rect = Rect2i(x * RECT_SIZE, y * RECT_SIZE, RECT_SIZE, RECT_SIZE)
 				draw_rect(rect, Color.WHITE)
 

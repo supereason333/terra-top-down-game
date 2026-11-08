@@ -17,6 +17,7 @@ var top_tilemap:TileMapLayer
 # @onready var enemy_movement:EntityMovement = $BasicEnemy/EntityMovement
 
 var astar := AStarGrid2D.new()
+var pathfind_mask:Array[PackedByteArray]
 
 # game world stuff
 var world_data:WorldData
@@ -29,25 +30,6 @@ func _ready() -> void:
 	var s := randi()
 	print("Seed: %d" % s)
 	init_world(s)
-
-# TODO: FIX Astar based on the nav solid mask thing
-# func setup_astar():
-# 	var used_rect: Rect2i = tilemap.get_used_rect()
-# 	astar.region = used_rect
-# 	astar.cell_size = tilemap.tile_set.tile_size
-# 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER # Adjust as needed
-# 	astar.update()
-#
-# 	update_astar_tiles()
-#
-# func update_astar_tiles():
-# 	for cell in tilemap.get_used_cells():
-# 		var source_id := tilemap.get_cell_source_id(cell)
-# 		if source_id == -1: continue
-# 		var tile := tilemap.get_cell_tile_data(cell)
-# 		if tile == null: continue
-# 		if tile.get_collision_polygons_count(0) > 0:
-# 			astar.set_point_solid(cell)
 
 func init_world(world_seed:int):
 	world_data = WorldData.new(world_seed)
@@ -109,7 +91,8 @@ func load_level(level_pos:PackedInt32Array):
 	var rect:Rect2i = base_tilemap.get_used_rect()
 	rect.position *= base_tilemap.tile_set.tile_size
 	rect.size *= base_tilemap.tile_set.tile_size
-	# setup_astar()
+	pathfind_mask = contents.solid_mask
+	setup_astar()
 	# player.set_camera_rect(rect)		# change: DONT SET CAMERA RECT, if not good reset this here!!!!! it might make world feel bigger idk
 
 	player.queue_pos_reset(current_level_data.spawn_pos * 16)
@@ -118,7 +101,18 @@ func load_level(level_pos:PackedInt32Array):
 	# print("emit")
 	loaded_new_level.emit(level_position)
 
+func setup_astar() -> void:
+	var level_size := current_level_data.level_size
+	astar.region = Rect2i(Vector2i.ZERO, level_size)
+	astar.cell_size = Vector2(base_tilemap.tile_set.tile_size)
+	# astar.offset = astar.cell_size * 0.5
+	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
+	astar.update()
 
+	for cx in level_size.x:
+		for ry in level_size.y:
+			if (pathfind_mask[cx][ry >> 3] >> (ry & 7)) & 1:
+				astar.set_point_solid(Vector2i(cx, ry))
 
 func get_projectiles() -> ProjectileMngr:
 	return projectiles

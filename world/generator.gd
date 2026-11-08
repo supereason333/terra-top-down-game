@@ -125,7 +125,7 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 		column.resize(y_bytes)
 		column.fill(0xFF)
 		mask.append(column)
-	level.solid_mask = mask
+
 	for x in level.base_tiles.size():
 		level.base_tiles[x].fill(WALL)
 	# carve out rooms and doors and makr mask
@@ -193,6 +193,9 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 		else:
 			# print("REGULAR")
 			_gen_normal_room(room, room_doors[r], level, rand)
+
+	print("World generated")
+	print("Generated %s entities" % level.entities.size())
 	return level
 @warning_ignore_restore("integer_division")
 
@@ -203,19 +206,14 @@ static func _gen_spawn_room(room:Rect2i, doors: Array, level:LevelData, rand:Ran
 	# 	rand.randf_range(1, room.size.x - 1),
 	# 	rand.randf_range(1, room.size.x - 1)
 	# ) + Vector2(room.position)
-	var OFFICE_DESK:int = Global.tile_library.id_str_lookup[&'office_desk']
 	level.teleport_thing_pos = Vector2(room.position) + Vector2(1, 1)
 	level.spawn_pos = level.teleport_thing_pos
 
-	level.props.append(&"cache_box")
-	level.prop_positions.append(Vector2(room.end) - Vector2(2, 2))
-	var prop_data:CacheBoxDataResource = CacheBoxDataResource.new()
-	prop_data.stored_item = "heal"
-	level.prop_data[level.props.size() - 1] = prop_data
-
-	var x := room.position.x + 3
-	var y := room.position.y + 3
-	level.mid_tiles[x][y] = OFFICE_DESK
+	# level.props.append(&"cache_box")
+	# level.prop_positions.append(Vector2(room.end) - Vector2(2, 2))
+	# var prop_data:CacheBoxDataResource = CacheBoxDataResource.new()
+	# prop_data.stored_item = "heal"
+	# level.prop_data[level.props.size() - 1] = prop_data
 
 static func _gen_spawn_adj_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
 	var FLOOR:int = Global.tile_library.id_str_lookup[&'floor']
@@ -229,15 +227,19 @@ static func _gen_spawn_adj_room(room:Rect2i, doors: Array, level:LevelData, rand
 	for x in range(room.position.x + 1, room.end.x - 1):
 		for y in range(room.position.y + 1, room.end.y - 1):
 			level.base_tiles[x][y] = WALL
-			level.solid_mask[x][y >> 3] &= ~(1 << (y & 7))
 
 	if mini(room.size.x, room.size.y) >= 6:
 		for x in range(room.position.x + 2, room.end.x - 2):
 			for y in range(room.position.y + 2, room.end.y - 2):
 				level.base_tiles[x][y] = FLOOR
-				level.solid_mask[x][y >> 3] &= (1 << (y & 7))
 
 		level.base_tiles[room.position.x + 1][room.position.y + 3] = FLOOR_STUDDED
+
+
+	level.entities.append(&"basic_enemy")
+	var pos := Vector2(0.5, 0.5) + Vector2(room.position)
+
+	level.entity_positions.append(pos)
 
 const DESK_SIZE := Vector2i(2, 3) # desk tile size, prolly upgrade to a better system for large tiles instead of hard coded stuff
 const DESK_AISLE := 1  # free rows below each desk row
@@ -382,6 +384,19 @@ static func _gen_medium_room(room:Rect2i, doors: Array, level:LevelData, rand:Ra
 					var x := cx + room.position.x
 					var y := ry + room.position.y
 					level.base_tiles[x][y] = WALL
+	else:	# empty room, chance to spawn enemies
+		if rand.randf() < 0.5:
+			var enemies := rand.randi_range(1, 3)
+
+			for e in enemies:
+				level.entities.append(&"basic_enemy")
+				var pos := Vector2(
+					rand.randf_range(0.5, room.size.x - 0.5),
+					rand.randf_range(0.5, room.size.y - 0.5)
+				) + Vector2(room.position)
+
+				level.entity_positions.append(pos)
+
 
 
 
@@ -396,6 +411,18 @@ static func _gen_normal_room(room:Rect2i, doors: Array, level:LevelData, rand:Ra
 					var x := cx + room.position.x
 					var y := ry + room.position.y
 					level.base_tiles[x][y] = WALL
+	else:	# empty room, chance to spawn enemies
+		if rand.randf() < 0.5:
+			var enemies := rand.randi_range(1, 3)
+
+			for e in enemies:
+				level.entities.append(&"basic_enemy")
+				var pos := Vector2(
+					rand.randf_range(0.5, room.size.x - 0.5),
+					rand.randf_range(0.5, room.size.y - 0.5)
+				) + Vector2(room.position)
+
+				level.entity_positions.append(pos)
 
 
 # OTHER STUFF
