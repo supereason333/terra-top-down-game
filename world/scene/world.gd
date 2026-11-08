@@ -6,9 +6,10 @@ signal loaded_new_level(pos:PackedInt32Array)
 @onready var player:Player = $Player
 @onready var teleport_thing:Node2D = $TeleportThing
 
-@onready var projectiles:ProjectileMngr = $Projectiles
-@onready var entities:EntityMngr = $Entities
-@onready var items:ItemDropMngr = $Items
+@onready var projectiles:ProjectileMngr = %Projectiles
+@onready var entities:EntityMngr = %Entities
+@onready var items:ItemDropMngr = %Items
+@onready var props:Node2D = %Props
 var tilemap:TileMapLayer
 
 # @onready var enemy_movement:EntityMovement = $BasicEnemy/EntityMovement
@@ -62,6 +63,8 @@ func load_level(level_pos:PackedInt32Array):
 		child.queue_free()
 	for child in entities.get_children():
 		child.queue_free()
+	for child in props.get_children():
+		child.queue_free()
 
 	if tilemap:
 		tilemap.queue_free()
@@ -83,6 +86,9 @@ func load_level(level_pos:PackedInt32Array):
 	var contents = LevelBuilder.build_tilemap(current_level_data)
 	tilemap = contents.base_tilemap
 	add_child(tilemap)
+
+	for prop in contents.props:
+		props.add_child(prop)
 
 	for entity in contents.entities:
 		entities.register_entity(entity)

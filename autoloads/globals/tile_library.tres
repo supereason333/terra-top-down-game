@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://edutqjuu4dqw" path="res://world/class_defs/tile_data.gd" id="1_b3o6r"]
 [ext_resource type="Script" uid="uid://ojt026mtmq8j" path="res://world/class_defs/tile_library.gd" id="2_ykg3h"]
-[ext_resource type="TileSet" uid="uid://dqubbr6lxdhb0" path="res://assets/textures/tilesets/bland_tileset.tres" id="3_ypjmi"]
+[ext_resource type="TileSet" uid="uid://did5j3h0j0r1a" path="res://assets/textures/tilesets/bland_tileset.tres" id="3_ypjmi"]
 
 [sub_resource type="Resource" id="Resource_qqinv"]
 script = ExtResource("1_b3o6r")
@@ -16,11 +16,25 @@ display_name = "Floor"
 id = &"floor"
 metadata/_custom_type_script = "uid://edutqjuu4dqw"
 
+[sub_resource type="Resource" id="Resource_ykg3h"]
+script = ExtResource("1_b3o6r")
+display_name = "Floor"
+id = &"floor_studded"
+metadata/_custom_type_script = "uid://edutqjuu4dqw"
+
+[sub_resource type="Resource" id="Resource_ypjmi"]
+script = ExtResource("1_b3o6r")
+display_name = "Floor"
+id = &"floor_checkered"
+metadata/_custom_type_script = "uid://edutqjuu4dqw"
+
 [resource]
 script = ExtResource("2_ykg3h")
 library = Dictionary[int, ExtResource("1_b3o6r")]({
 1: SubResource("Resource_qqinv"),
-2: SubResource("Resource_fvhao")
+2: SubResource("Resource_fvhao"),
+3: SubResource("Resource_ykg3h"),
+4: SubResource("Resource_ypjmi")
 })
 tileset = ExtResource("3_ypjmi")
 metadata/_custom_type_script = "uid://ojt026mtmq8j"

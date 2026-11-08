@@ -112,6 +112,11 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 	# got the real rooms, generate room contents and place tiles next
 	var level = LevelData.new(level_size)
 
+	var FLOOR:int = Global.tile_library.id_str_lookup[&'floor']
+	var WALL:int = Global.tile_library.id_str_lookup[&'wall']
+	var FLOOR_STUDDED:int = Global.tile_library.id_str_lookup[&'floor_studded']
+	var FLOOR_CHECKERED:int = Global.tile_library.id_str_lookup[&'floor_checkered']
+
 	# Create mask of solid or not
 	var y_bytes := ceili(level_size.y / 8.0)
 	var mask: Array[PackedByteArray] = []
@@ -120,14 +125,17 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 		column.resize(y_bytes)
 		column.fill(0xFF)
 		mask.append(column)
-
-	# carve out rooms and doors from the mask
+	level.solid_mask = mask
+	for x in level.base_tiles.size():
+		level.base_tiles[x].fill(WALL)
+	# carve out rooms and doors and makr mask
 	for r in rooms.size():
 		if door_tree[r].is_empty(): continue
 		for x in range(rooms[r].position.x, rooms[r].end.x):
 			var column := mask[x]
 			for y in range(rooms[r].position.y, rooms[r].end.y):
 				column[y >> 3] &= ~(1 << (y & 7))
+				level.base_tiles[x][y] = FLOOR_CHECKERED
 			mask[x] = column
 
 		# carve doors
@@ -135,18 +143,18 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 			var x:int = room_doors[r][d].x
 			var y:int = room_doors[r][d].y
 			mask[x][y >> 3] &= ~(1 << (y & 7))
+			level.base_tiles[x][y] = FLOOR_STUDDED
 
-
-
-	# Create the walls of the map based on the solid or not mask
-	for x in level_size.x:
-		for y in level_size.y:
-			var solid = mask[x][y >> 3] >> (y % 8) & 1
-			# print(solid)
-			if solid:
-				level.base_tiles[x][y] = 1
-			else:
-				level.base_tiles[x][y] = 0
+#
+# 	# Create the walls of the map based on the solid or not mask
+# 	for x in level_size.x:
+# 		for y in level_size.y:
+# 			var solid = mask[x][y >> 3] >> (y % 8) & 1
+# 			# print(solid)
+# 			if solid:
+# 				level.base_tiles[x][y] = 1
+# 			else:
+# 				level.base_tiles[x][y] = 0
 
 
 	# figure out spawn room, spawn room and surroundings dont have enemies and stuff
@@ -176,14 +184,14 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 		elif door_tree[r].has(spawn_room):
 			# adj to spawn room
 			_gen_spawn_adj_room(room, room_doors[r], level, rand)
-		elif mini(room.size.x, room.size.y) >= 20:
-			# large room
+		elif mini(room.size.x, room.size.y) >= 10:
+			print("LARGE")
 			pass
-		elif mini(room.size.x, room.size.y) >= 12:
-			# medium large room
+		elif mini(room.size.x, room.size.y) >= 6:
+			print("MEDIUM")
 			pass
 		else:
-			# regular room
+			print("REGULAR")
 			pass
 	return level
 @warning_ignore_restore("integer_division")
@@ -191,17 +199,49 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 # AWDKJAWLDKJWAODJ ROOM GENERATION
 
 static func _gen_spawn_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
-	level.teleport_thing_pos = Vector2(
-		rand.randf_range(1, room.size.x - 1),
-		rand.randf_range(1, room.size.x - 1)
-	) + Vector2(room.position)
-	# level.teleport_thing_pos *= 16
+	# level.teleport_thing_pos = Vector2(
+	# 	rand.randf_range(1, room.size.x - 1),
+	# 	rand.randf_range(1, room.size.x - 1)
+	# ) + Vector2(room.position)
+	level.teleport_thing_pos = Vector2(room.position) + Vector2(1, 1)
 	level.spawn_pos = level.teleport_thing_pos
 
+	level.props.append(&"cache_box")
+	level.prop_positions.append(Vector2(room.end) - Vector2(2, 2))
+	var prop_data:CacheBoxDataResource = CacheBoxDataResource.new()
+	prop_data.stored_item = "heal"
+	level.prop_data[level.props.size() - 1] = prop_data
+
 static func _gen_spawn_adj_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
-	for d in doors.size():
-		var pos:Vector2i = doors[d] - room.position
-		print(pos)
+	var FLOOR:int = Global.tile_library.id_str_lookup[&'floor']
+	var WALL:int = Global.tile_library.id_str_lookup[&'wall']
+	var FLOOR_STUDDED:int = Global.tile_library.id_str_lookup[&'floor_studded']
+	var FLOOR_CHECKERED:int = Global.tile_library.id_str_lookup[&'floor_checkered']
+
+	# for d in doors.size():
+	# 	var pos:Vector2i = doors[d] - room.position
+	# 	print(pos)
+	for x in range(room.position.x + 1, room.end.x - 1):
+		for y in range(room.position.y + 1, room.end.y - 1):
+			level.base_tiles[x][y] = WALL
+			level.solid_mask[x][y >> 3] &= ~(1 << (y & 7))
+
+	if mini(room.size.x, room.size.y) >= 6:
+		for x in range(room.position.x + 2, room.end.x - 2):
+			for y in range(room.position.y + 2, room.end.y - 2):
+				level.base_tiles[x][y] = FLOOR
+				level.solid_mask[x][y >> 3] &= (1 << (y & 7))
+
+		level.base_tiles[room.position.x + 1][room.position.y + 3] = FLOOR_STUDDED
+
+static func _gen_large_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
+	pass
+
+static func _gen_medium_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
+	pass
+
+static func _gen_normal_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
+	pass
 
 # OTHER STUFF
 
@@ -288,3 +328,9 @@ static func get_branching(world_seed:int, position:PackedInt32Array) -> Array[Le
 		branches.append(branch)
 
 	return branches
+
+
+# STUFF:
+	# make the prop library
+	# place chests with loot around the world
+	# make the astar pathfinding based on a pathing mask independly set from the tilemap stuff

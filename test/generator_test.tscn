@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b2psc33bxd8dw"]
 
 [ext_resource type="Script" uid="uid://j0rm1lembxxx" path="res://test/generator_test.gd" id="1_shdia"]
-[ext_resource type="TileSet" uid="uid://dqubbr6lxdhb0" path="res://assets/textures/tilesets/bland_tileset.tres" id="2_jjdam"]
+[ext_resource type="TileSet" uid="uid://dqubbr6lxdhb0" path="res://assets/textures/tilesets/tileset.tres" id="2_jjdam"]
 [ext_resource type="Script" uid="uid://cwfj088wmh6tw" path="res://test/camera.gd" id="3_itq8k"]
 
 [node name="GeneratorTest" type="Node2D" unique_id=547449156]

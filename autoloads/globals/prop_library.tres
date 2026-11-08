@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PropLibrary" format=3 uid="uid://dau4ylj60ofi6"]
+
+[ext_resource type="Script" uid="uid://ctx34t0x86uux" path="res://world/class_defs/prop_library.gd" id="1_e8yrk"]
+[ext_resource type="Script" uid="uid://mtk4xc7xnaky" path="res://world/class_defs/prop_resource.gd" id="1_kx1ud"]
+[ext_resource type="PackedScene" uid="uid://cxcg884rkqxnc" path="res://world/props/cache_box.tscn" id="2_gsyoj"]
+
+[sub_resource type="Resource" id="Resource_8nxel"]
+script = ExtResource("1_kx1ud")
+scene = ExtResource("2_gsyoj")
+metadata/_custom_type_script = "uid://mtk4xc7xnaky"
+
+[resource]
+script = ExtResource("1_e8yrk")
+lib = Dictionary[StringName, ExtResource("1_kx1ud")]({
+&"cache_box": SubResource("Resource_8nxel")
+})
+metadata/_custom_type_script = "uid://ctx34t0x86uux"

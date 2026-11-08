@@ -1,6 +1,6 @@
-[gd_resource type="TileSet" format=3 uid="uid://dqubbr6lxdhb0"]
+[gd_resource type="TileSet" format=3 uid="uid://did5j3h0j0r1a"]
 
-[ext_resource type="Texture2D" uid="uid://cick0ve78jefy" path="res://assets/textures/tilesets/bland_tileset.png" id="1_deknx"]
+[ext_resource type="Texture2D" uid="uid://bhnk1tkoq5fqg" path="res://assets/textures/tilesets/bland_tileset.png" id="1_deknx"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_7ocn2"]
 polygon = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
@@ -13,6 +13,10 @@ texture = ExtResource("1_deknx")
 1:0/0/custom_data_0 = 1
 0:0/0 = 0
 0:0/0/custom_data_0 = 2
+0:1/0 = 0
+0:1/0/custom_data_0 = 4
+2:0/0 = 0
+2:0/0/custom_data_0 = 3
 
 [resource]
 occlusion_layer_0/light_mask = 1

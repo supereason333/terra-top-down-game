@@ -1,0 +1,4 @@
+extends PropDataResource
+class_name CacheBoxDataResource
+
+var stored_item:StringName

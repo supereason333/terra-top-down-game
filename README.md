@@ -30,4 +30,5 @@ You can download the release binaries for the latest build from the release or p
   - different enemies
 - enemy spawning in each level on top of pregeneration
 - Character classes
-- Final bossfight?????
+- bossfight?????
+- charms / upgrades / accessories etc

@@ -5,12 +5,14 @@ class_name TileLibrary
 ## Tileset ext resource, should only be read
 @export var tileset:TileSet
 
+var id_str_lookup:Dictionary[StringName, int]
+
 var initilized := false
 
 func initilize():
 	# sets stuff each tile resource
 	for key in library.keys():
-		pass
+		id_str_lookup.set(library[key].id, key)
 
 	var total_tiles_checked := 0
 	var registered_tiles := 0
@@ -59,5 +61,11 @@ func register_tile(tile:TileData, source_id:int, atlas_coords:Vector2i, alternat
 
 	return true
 
-func id_from_num_id(id:int) -> StringName:
-	return ""
+## returns random (TODO) from tile data [source_id:int, atlas_coords:Vector2i, alternate_id:int]
+func get_tile_from_str_id(id:StringName) -> Array:
+	return get_tile(id_str_lookup[id])
+
+## returns random (TODO) from tile data [source_id:int, atlas_coords:Vector2i, alternate_id:int]
+func get_tile(id:int) -> Array:
+	var data := library[id]
+	return [data.source_id[0], data.atlas_coords[0], data.alternate_id[0]]	# currently dosetn random, add that later
