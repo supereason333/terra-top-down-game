@@ -1,15 +1,16 @@
 # Top down shooter game
 
-this is a prototype rougelike game made in godot. You play as a person in a prodecually generated complex and you fight red circles which case you. To win the game, you have to get to level 4 which and each level requires 3 power cells to power the teleporter in order to proced into the next level.
+this is a prototype rougelike game made in godot. You play as a person in a prodecually generated complex and you fight red circles which case you. To win the game, you have to get to level 4 and each level requires 3 power cells to power the teleporter in order to proced into the next level.
 
 ## Controls
 
-- "f" to interact and pick up stuff
-- "e" to open inventory
-- "shift" to sprint
-- "q" to switch L and R hands
-- "1" and "2" to switch R hand with L and R hip slots
+- F to interact and pick up stuff
+- E to open inventory
+- SHIFT to sprint
+- Q to switch L and R hands
+- 1 and 2 to switch R hand with L and R hip slots
 - WASD to move and point and click
+- Z to toggle head slot item
 
 ## How it was made
 
