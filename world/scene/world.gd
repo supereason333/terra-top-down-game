@@ -110,7 +110,7 @@ func load_level(level_pos:PackedInt32Array):
 	rect.position *= base_tilemap.tile_set.tile_size
 	rect.size *= base_tilemap.tile_set.tile_size
 	# setup_astar()
-	player.set_camera_rect(rect)
+	# player.set_camera_rect(rect)		# change: DONT SET CAMERA RECT, if not good reset this here!!!!! it might make world feel bigger idk
 
 	player.queue_pos_reset(current_level_data.spawn_pos * 16)
 	teleport_thing.position = current_level_data.teleport_thing_pos * 16

@@ -259,18 +259,84 @@ static func _gen_large_room(room:Rect2i, doors: Array, level:LevelData, rand:Ran
 	pass
 
 static func _gen_medium_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
-	pass
+	var WALL:int = Global.tile_library.id_str_lookup[&'wall']
+	var type := randi_range(0, 10)
+	if type <= 1:	# 'library' type room
+		var div: bool	# true is vertical div else horizontal div
+		if room.size.x > room.size.y:
+			div = true
+		else:
+			div = false
+
+		var path := find_path_all_doors(room, doors)
+
+		# door pathing edge cases
+		if doors.size() == 1:
+			if doors[0].x < room.position.x or doors[0].x >= room.end.x:
+				div = true
+			else:
+				div = false
+		else:
+			# pass vert and horizontal line test to test for continuity whether there is a path that passes
+			# through the whole room either horizontaly or vertically
+			var row:Array[bool]
+			row.resize(room.size.y)
+			row.fill(false)
+			var collumn:Array[bool]
+			collumn.resize(room.size.x)
+			collumn.fill(false)
+			for cx in path.size():
+				for ry in path[cx].size():
+					if path[cx][ry]:
+						collumn[cx] = true
+						row[ry] = true
+
+			var hori := collumn.has(false)	# hotizontally not continous dosent pass vertical line test
+			var vert := row.has(false)		# vertically not continous
+
+			if hori and vert:
+				# likely path is 'L' shape, cannot generate room type with orphaned area
+				# so make a path that links the divs
+				if div:	# vertical div so run horizontal path up at up and down just to make sure
+					_fill_row(path, 0, 0, path[0].size() - 1)
+					_fill_row(path, path[0].size() - 1, 0, path.size() - 1)
+				else:
+					_fill_col(path, 0, 0, path[0].size() - 1)
+					_fill_col(path, path.size() - 1, 0, path[0].size() - 1)
+			elif hori:	# if horizontaly not continous div horizontaly
+				div = false
+			elif vert:
+				div = true
+
+		if div:
+			# wide room, div vertically
+			for cx in room.size.x:
+				if (cx + 1) % 2 != 0: continue
+				_fill_col(path, cx, 0, path[cx].size() - 1)
+		else:
+			for ry in room.size.y:
+				if (ry + 1) % 2 != 0: continue
+				_fill_row(path, ry, 0, path.size() - 1)
+
+		for cx in path.size():
+			for ry in path[cx].size():
+				if !path[cx][ry]:
+					var x := cx + room.position.x
+					var y := ry + room.position.y
+					level.base_tiles[x][y] = WALL
+
+
 
 static func _gen_normal_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
 	var WALL:int = Global.tile_library.id_str_lookup[&'wall']
 	var type := randi_range(0, 10)
 	if type <= 2:	# corridore rooms
 		var path := find_path_all_doors(room, doors)
-		for rx in path.size():
-			for cy in path[rx].size():
-				if !path[rx][cy]:
-					var x := rx + room.position.x
-					var y := cy + room.position.y
+		for cx in path.size():
+			for ry in path[cx].size():
+				if !path[cx][ry]:
+					var x := cx + room.position.x
+					var y := ry + room.position.y
 					level.base_tiles[x][y] = WALL
 
 
@@ -392,13 +458,13 @@ static func _extend_to_path(path: Array[Array], from: Vector2i, dir: Vector2i, s
 		p += dir
 	return false
 
-static func _fill_row(path: Array[Array], y: int, x0: int, x1: int) -> void:
+static func _fill_row(path: Array[Array], y: int, x0: int, x1: int, value = true) -> void:
 	for x in range(mini(x0, x1), maxi(x0, x1) + 1):
-		path[x][y] = true
+		path[x][y] = value
 
-static func _fill_col(path: Array[Array], x: int, y0: int, y1: int) -> void:
+static func _fill_col(path: Array[Array], x: int, y0: int, y1: int, value = true) -> void:
 	for y in range(mini(y0, y1), maxi(y0, y1) + 1):
-		path[x][y] = true
+		path[x][y] = value
 
 
 
