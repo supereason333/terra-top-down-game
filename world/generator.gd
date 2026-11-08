@@ -185,14 +185,14 @@ static func generate_level(world_seed:int, level_position:PackedInt32Array) -> L
 			# adj to spawn room
 			_gen_spawn_adj_room(room, room_doors[r], level, rand)
 		elif mini(room.size.x, room.size.y) >= 10:
-			print("LARGE")
-			pass
+			# print("LARGE")
+			_gen_large_room(room, room_doors[r], level, rand)
 		elif mini(room.size.x, room.size.y) >= 6:
-			print("MEDIUM")
-			pass
+			# print("MEDIUM")
+			_gen_medium_room(room, room_doors[r], level, rand)
 		else:
-			print("REGULAR")
-			pass
+			# print("REGULAR")
+			_gen_normal_room(room, room_doors[r], level, rand)
 	return level
 @warning_ignore_restore("integer_division")
 
@@ -203,6 +203,7 @@ static func _gen_spawn_room(room:Rect2i, doors: Array, level:LevelData, rand:Ran
 	# 	rand.randf_range(1, room.size.x - 1),
 	# 	rand.randf_range(1, room.size.x - 1)
 	# ) + Vector2(room.position)
+	var OFFICE_DESK:int = Global.tile_library.id_str_lookup[&'office_desk']
 	level.teleport_thing_pos = Vector2(room.position) + Vector2(1, 1)
 	level.spawn_pos = level.teleport_thing_pos
 
@@ -211,6 +212,10 @@ static func _gen_spawn_room(room:Rect2i, doors: Array, level:LevelData, rand:Ran
 	var prop_data:CacheBoxDataResource = CacheBoxDataResource.new()
 	prop_data.stored_item = "heal"
 	level.prop_data[level.props.size() - 1] = prop_data
+
+	var x := room.position.x + 3
+	var y := room.position.y + 3
+	level.mid_tiles[x][y] = OFFICE_DESK
 
 static func _gen_spawn_adj_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
 	var FLOOR:int = Global.tile_library.id_str_lookup[&'floor']
@@ -235,15 +240,169 @@ static func _gen_spawn_adj_room(room:Rect2i, doors: Array, level:LevelData, rand
 		level.base_tiles[room.position.x + 1][room.position.y + 3] = FLOOR_STUDDED
 
 static func _gen_large_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
+	# var type := randi_range(0, 10)	how to do different types (when i implment it ofc)
+	# if type <= 3:
+	# 	pass
+	# elif type <= 5:
+	# 	pass
+	# elif type <= 7:
+	# 	pass
+	# elif type <= 9:
+	# 	pass
+	# elif type <= 10:
+	# 	pass
+
+	# large rooms will be an office space for now
+	# first find the routes between doors
+
+	var path:Array[Array] = find_path_all_doors(room, doors)
 	pass
 
 static func _gen_medium_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
 	pass
 
 static func _gen_normal_room(room:Rect2i, doors: Array, level:LevelData, rand:RandomNumberGenerator):
-	pass
+	var WALL:int = Global.tile_library.id_str_lookup[&'wall']
+	var type := randi_range(0, 10)
+	if type <= 2:	# corridore rooms
+		var path := find_path_all_doors(room, doors)
+		for rx in path.size():
+			for cy in path[rx].size():
+				if !path[rx][cy]:
+					var x := rx + room.position.x
+					var y := cy + room.position.y
+					level.base_tiles[x][y] = WALL
+
 
 # OTHER STUFF
+
+## gets the path that reaches all doors in a room (not optimal but like she'll be right)
+## doors are worldspace vec2i
+static func find_path_all_doors(room: Rect2i, doors: Array) -> Array[Array]:
+	var size := room.size
+	var ins: Array[Vector2i] = []   # tile inside the room next to each door
+	var dirs: Array[Vector2i] = []  # direction pointing into the room from each door
+	var hori: Array[int] = []       # horizontal L/R doors
+	var vert: Array[int] = []       # vert doors
+
+	for door in doors:
+		var world_pos: Vector2i = door
+		var entry := _door_entry(world_pos - room.position, size)
+		if entry.is_empty():
+			continue
+		if entry[1].x != 0:
+			hori.append(ins.size())
+		else:
+			vert.append(ins.size())
+		ins.append(entry[0])
+		dirs.append(entry[1])
+
+	if ins.is_empty():
+		return []
+
+	var path: Array[Array] = []
+	for x in size.x:
+		var column: Array[bool] = []
+		column.resize(size.y)
+		column.fill(false)
+		path.append(column)
+
+	# if only one door it does straight line across the room
+	if ins.size() == 1:
+		if dirs[0].x != 0:
+			_fill_row(path, ins[0].y, 0, size.x - 1)
+		else:
+			_fill_col(path, ins[0].x, 0, size.y - 1)
+		return path
+
+	# gen first path that joings the first two doors
+	var ry: int	# row y
+	var cx: int	# collumn x if later paths dont hit used, extend one of these and join to it
+	var used: Array[int]
+
+	if !hori.is_empty() and !vert.is_empty():
+		# both vert and hoizonal doors, generate 'L' shape
+		var h := hori[0]
+		var v := vert[0]
+		ry = ins[h].y
+		cx = ins[v].x
+		_fill_row(path, ry, ins[h].x, cx)
+		_fill_col(path, cx, ry, ins[v].y)
+		used = [h, v]
+	elif hori.is_empty():
+		# only vert
+		var a := vert[0]
+		var b := vert[1]
+		ry = ins[a].y
+		cx = ins[b].x
+		_fill_row(path, ry, ins[a].x, cx)
+		_fill_col(path, cx, ry, ins[b].y)
+		used = [a, b]
+	else:
+		# only horizontal
+		var a := hori[0]
+		var b := hori[1]
+		cx = ins[a].x
+		ry = ins[b].y
+		_fill_col(path, cx, ins[a].y, ry)
+		_fill_row(path, ry, cx, ins[b].x)
+		used = [a, b]
+
+	# extent remaning doors to existing path
+	for d in ins.size():
+		if used.has(d):
+			continue
+		if _extend_to_path(path, ins[d], dirs[d], size):
+			continue
+		if dirs[d].x != 0:
+			# horizontal door run to extended ry
+			_fill_col(path, cx, ins[d].y, ry)
+			_fill_row(path, ins[d].y, ins[d].x, cx)
+		else:
+			# vertical door run to extended cx
+			_fill_row(path, ry, ins[d].x, cx)
+			_fill_col(path, ins[d].x, ins[d].y, ry)
+
+	return path
+
+# returns [inside_tile, inward_direction] if door isnt touching room []
+static func _door_entry(local: Vector2i, size: Vector2i) -> Array[Vector2i]:
+	if local.y >= 0 and local.y < size.y:
+		if local.x < 0:
+			return [Vector2i(0, local.y), Vector2i.RIGHT]
+		if local.x >= size.x:
+			return [Vector2i(size.x - 1, local.y), Vector2i.LEFT]
+	if local.x >= 0 and local.x < size.x:
+		if local.y < 0:
+			return [Vector2i(local.x, 0), Vector2i.DOWN]
+		if local.y >= size.y:
+			return [Vector2i(local.x, size.y - 1), Vector2i.UP]
+	return []
+
+# walks from from with dir if it hits anythign it fills the path else dosent do anything and retuns false
+static func _extend_to_path(path: Array[Array], from: Vector2i, dir: Vector2i, size: Vector2i) -> bool:
+	var run: Array[Vector2i] = []
+	var p := from
+	while p.x >= 0 and p.y >= 0 and p.x < size.x and p.y < size.y:
+		if path[p.x][p.y]:
+			for c in run:
+				path[c.x][c.y] = true
+			return true
+		run.append(p)
+		p += dir
+	return false
+
+static func _fill_row(path: Array[Array], y: int, x0: int, x1: int) -> void:
+	for x in range(mini(x0, x1), maxi(x0, x1) + 1):
+		path[x][y] = true
+
+static func _fill_col(path: Array[Array], x: int, y0: int, y1: int) -> void:
+	for y in range(mini(y0, y1), maxi(y0, y1) + 1):
+		path[x][y] = true
+
+
+
+
 
 ## generates the pair of doors for rooms a and b, retuirns arr idx 0 for a, 1 for b
 ## door pos in world coords
@@ -328,9 +487,3 @@ static func get_branching(world_seed:int, position:PackedInt32Array) -> Array[Le
 		branches.append(branch)
 
 	return branches
-
-
-# STUFF:
-	# make the prop library
-	# place chests with loot around the world
-	# make the astar pathfinding based on a pathing mask independly set from the tilemap stuff

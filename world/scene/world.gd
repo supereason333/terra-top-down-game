@@ -10,7 +10,9 @@ signal loaded_new_level(pos:PackedInt32Array)
 @onready var entities:EntityMngr = %Entities
 @onready var items:ItemDropMngr = %Items
 @onready var props:Node2D = %Props
-var tilemap:TileMapLayer
+var base_tilemap:TileMapLayer
+var mid_tilemap:TileMapLayer
+var top_tilemap:TileMapLayer
 
 # @onready var enemy_movement:EntityMovement = $BasicEnemy/EntityMovement
 
@@ -28,23 +30,24 @@ func _ready() -> void:
 	print("Seed: %d" % s)
 	init_world(s)
 
-func setup_astar():
-	var used_rect: Rect2i = tilemap.get_used_rect()
-	astar.region = used_rect
-	astar.cell_size = tilemap.tile_set.tile_size
-	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER # Adjust as needed
-	astar.update()
-
-	update_astar_tiles()
-
-func update_astar_tiles():
-	for cell in tilemap.get_used_cells():
-		var source_id := tilemap.get_cell_source_id(cell)
-		if source_id == -1: continue
-		var tile := tilemap.get_cell_tile_data(cell)
-		if tile == null: continue
-		if tile.get_collision_polygons_count(0) > 0:
-			astar.set_point_solid(cell)
+# TODO: FIX Astar based on the nav solid mask thing
+# func setup_astar():
+# 	var used_rect: Rect2i = tilemap.get_used_rect()
+# 	astar.region = used_rect
+# 	astar.cell_size = tilemap.tile_set.tile_size
+# 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER # Adjust as needed
+# 	astar.update()
+#
+# 	update_astar_tiles()
+#
+# func update_astar_tiles():
+# 	for cell in tilemap.get_used_cells():
+# 		var source_id := tilemap.get_cell_source_id(cell)
+# 		if source_id == -1: continue
+# 		var tile := tilemap.get_cell_tile_data(cell)
+# 		if tile == null: continue
+# 		if tile.get_collision_polygons_count(0) > 0:
+# 			astar.set_point_solid(cell)
 
 func init_world(world_seed:int):
 	world_data = WorldData.new(world_seed)
@@ -66,9 +69,15 @@ func load_level(level_pos:PackedInt32Array):
 	for child in props.get_children():
 		child.queue_free()
 
-	if tilemap:
-		tilemap.queue_free()
-		tilemap = null
+	if base_tilemap:
+		base_tilemap.queue_free()
+		base_tilemap = null
+	if mid_tilemap:
+		mid_tilemap.queue_free()
+		mid_tilemap = null
+	if top_tilemap:
+		top_tilemap.queue_free()
+		top_tilemap = null
 
 	current_level_data = null
 
@@ -84,8 +93,12 @@ func load_level(level_pos:PackedInt32Array):
 
 	# Load new level
 	var contents = LevelBuilder.build_tilemap(current_level_data)
-	tilemap = contents.base_tilemap
-	add_child(tilemap)
+	base_tilemap = contents.base_tilemap
+	mid_tilemap = contents.mid_tilemap
+	top_tilemap = contents.uppper_tilemap
+	add_child(base_tilemap)
+	add_child(mid_tilemap)
+	add_child(top_tilemap)
 
 	for prop in contents.props:
 		props.add_child(prop)
@@ -93,10 +106,10 @@ func load_level(level_pos:PackedInt32Array):
 	for entity in contents.entities:
 		entities.register_entity(entity)
 
-	var rect:Rect2i = tilemap.get_used_rect()
-	rect.position *= tilemap.tile_set.tile_size
-	rect.size *= tilemap.tile_set.tile_size
-	setup_astar()
+	var rect:Rect2i = base_tilemap.get_used_rect()
+	rect.position *= base_tilemap.tile_set.tile_size
+	rect.size *= base_tilemap.tile_set.tile_size
+	# setup_astar()
 	player.set_camera_rect(rect)
 
 	player.queue_pos_reset(current_level_data.spawn_pos * 16)

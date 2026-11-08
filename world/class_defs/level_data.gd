@@ -5,7 +5,7 @@ class_name LevelData
 var level_size:Vector2i
 
 var base_tiles:Array[PackedInt32Array]	# main tiles like walls and floors
-var mid_tiles:Array[PackedInt32Array]	# little details between the world tiles and functional tiles like stains etc
+var mid_tiles:Array[PackedInt32Array]	# little details between the world tiles and non functional tiles like stains etc
 var upper_tiles:Array[PackedInt32Array]	# functional stuff like chests
 var solid_mask:Array[PackedByteArray]	# wether the tile is solid or not; 1 is solid, 0 is not
 
